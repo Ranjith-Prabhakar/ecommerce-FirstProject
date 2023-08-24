@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <% if(users.length) {%>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>User Name</th>
+                    <th>Verified</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let user of users) { %>
+                    <tr>
+                        <td>
+                            <%= user.firstName + " " + user.lastName %>
+                        </td>
+                        <td>
+                            <%= user.email%>
+                        </td>
+                        <td>
+                            <%= user.phone%>
+                        </td>
+                        <td>
+                            <%= user.userName%>
+                        </td>
+                        <td>
+                            <%= user.isVerified%>
+                        </td>
+                        <td>
+                            <% if(user.status) {%>
+                                Active
+                                <% } else{%>
+                                    Blocked
+                                    <% } %>
+                        </td>
+                        <td>
+                            <form action="/digiWorld/admin/userManagement/editRequest" method="post"> 
+                                <input type="hidden" name="id" value="<%= user._id %>">
+                                <input type="submit" value="edit">
+                                </form>
+
+                            <form action="/digiWorld/admin/userManagement/deleteRequest" method="post"> 
+                                <input type="hidden" name="id" value="<%= user._id %>">
+                                <input type="submit" value="delete">
+                                </form>
+                        </td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+
+        <%} %>
+
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User SignUp</title>
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <!-- custome css -->
+    <link rel="stylesheet" href="/style/userSingUp.css">
+</head>
+
+<body>
+    <form action="/digiWorld/user/userSignUp" method="post">
+        <% locals.errorMessage?locals.errorMessage:'' %>
+            <% if(locals.errorMessage) {%>
+                <h3>
+                    <%= locals.errorMessage %>
+                </h3>
+                <% } %>
+                    <input required type="text" name="firstName" placeholder="First Name"><br><br>
+                    <input required type="text" name="lastName" placeholder="Last Name"><br><br>
+                    <input required type="text" name="email" placeholder="email"><br><br>
+                    <input required type="text" name="phone" placeholder="phone"><br><br>
+                    <input required type="text" name="userName" placeholder="User Name"><br><br>
+                    <input required type="password" name="password" placeholder="Password"><br><br>
+                    <input required type="submit" value="Submit">
+    </form>
+</body>
+
+</html>
