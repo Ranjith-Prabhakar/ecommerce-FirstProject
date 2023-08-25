@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
+<%- include('../layout/admin/header') %>
     <form action="/digiWorld/admin/adminLogin" method="post">
         <% locals.unAutherisedAdmin ||''%>
             <% if(locals.unAutherisedAdmin) {%>
@@ -19,10 +10,8 @@
                         <% locals.loginErrorMessage %>
                     </h3>
                     <% } %>
-                    <input type="text" name="userName" placeholder="userName"><br><br>
-                    <input type="password" name="password" placeholder="password"><br><br>
-                    <input type="submit" value="submit">
+                        <input type="text" name="userName" placeholder="userName"><br><br>
+                        <input type="password" name="password" placeholder="password"><br><br>
+                        <input type="submit" value="submit">
     </form>
-</body>
-
-</html>
+    <%- include('../layout/admin/footer') %>

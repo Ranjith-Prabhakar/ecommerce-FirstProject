@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<%- include('../layout/admin/header') %>
     <h1>adminPanel</h1>
     <form action="/digiWorld/admin/adminLogout" method="post">
         <button type="submit">logout</button>
@@ -21,5 +14,4 @@
     <div>
         <a href="/digiWorld/admin/catagoryManagement">catagoryManagement</a>
     </div>
-</body>
-</html>
+    <%- include('../layout/admin/footer') %>

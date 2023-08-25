@@ -1,20 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<%- include('../layout/user/header') %>
     <% locals.otpErrorMessage?locals.otpErrorMessage:'' %>
-            <% if(locals.otpErrorMessage) {%>
-                <h3>
-                    <%= locals.otpErrorMessage %>
-                </h3>
-                <% } %>
-    <form action="/digiWorld/user/userOtpVerificationCode" method="post">
-    <input type="text" name="otp" placeholder="enter the otp">
-    <input type="submit" value="submit">
-</form>
-</body>
-</html>
+        <% if(locals.otpErrorMessage) {%>
+            <h3>
+                <%= locals.otpErrorMessage %>
+            </h3>
+            <% } %>
+                <form action="/digiWorld/user/userOtpVerificationCode" method="post">
+                    <input type="text" name="otp" placeholder="enter the otp">
+                    <input type="submit" value="submit">
+                </form>
+                <%- include('../layout/user/footer') %>

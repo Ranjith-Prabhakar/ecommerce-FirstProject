@@ -21,6 +21,9 @@ const userRoute = require('./routes/userRoute')
 
 //static file managment
 app.use(express.static('public'))
+app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
+
 
 //body parsing
 app.use(express.urlencoded({ extended: true }))
@@ -57,7 +60,7 @@ app.use((req, res, next) => {
 //activating routes
 app.use('/digiWorld/admin', adminRoute)
 app.use('/digiWorld/user', userRoute)
-app.use('/',commonRoute)
+app.use('/', commonRoute)
 
 
 app.listen(PORT, () => console.log(`server has started on the port http://localhost:${PORT}`))

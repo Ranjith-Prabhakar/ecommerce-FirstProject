@@ -1,18 +1,5 @@
-<%- include('../layout/header') %>
-    <form action="/digiworld/user/userLogin" method="get">
-        <button type="submit">LogIn</button>
-    </form>
-    <form action="/digiworld/user/userSignUp" method="get">
-        <button type="submit">SignUp</button>
-    </form>
-    <form action="/digiworld/user/userLogOut" method="post">
-        <button type="submit">LogOut</button>
-    </form>
+<%- include('../layout/user/header') %>
 
-    <% locals.userName || "" %>
-        <% if(locals.userName) {%>
-            <h1 style="color: white;">  <!--- have to remove this styling from inline-->
-                <%= locals.userName %>
-            </h1>
-            <% } %>
-                <%- include('../layout/footer') %>
+  
+
+                <%- include('../layout/user/footer') %>
