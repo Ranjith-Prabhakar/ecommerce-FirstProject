@@ -54,7 +54,12 @@ const Product = mongoose.Schema({
             type: String,
             required: true
         },
-    }
+    },
+    freez: {
+        type: String,
+        required: true,
+        default:"active"
+    },
 
 })
 

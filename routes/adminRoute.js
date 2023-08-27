@@ -56,6 +56,8 @@ router.post('/userManagement/deleteConfirm',validateUserId, adminController.post
 router.get('/productManagement',validateUserId, adminController.getProductManagement)
 router.get('/productManagement/createProduct',validateUserId, adminController.getCreateProductManagement)
 router.post('/productManagement/createProduct',validateUserId,upload.array('gallery',3), adminController.postCreateProductManagement)
+router.post('/productManagement/addOrRemove',validateUserId,adminController.postUpdateStock)
+
 //catagory management
 router.get('/catagoryManagement',validateUserId,adminController.getBrandManagement)/////
 router.get('/catagoryManagement/createBrand',validateUserId,adminController.getCreateBrand)/////

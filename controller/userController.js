@@ -19,13 +19,11 @@ const userHome = async (req, res) => {
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find()
             let banner = await BannerModal.find()
-            console.log(banner);
             res.render('./users/userHome', { userName: userName.firstName, brands: brands, products,banner })/// 
         } else {
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find()
             let banner = await BannerModal.find()
-            console.log(banner);
             res.render('./users/userHome', { brands: brands, products,banner})
         }
     } catch (error) {

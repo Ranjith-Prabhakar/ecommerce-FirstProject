@@ -243,6 +243,19 @@ const postCreateProductManagement = async (req, res) => {
     }
 }
 
+const postUpdateStock = async (req, res) => {
+    try {
+        const productId = req.body.productId;
+        const newQuantity = req.body.quantity;
+        const updatedQuantity = await ProductModal.updateOne({ _id: productId }, { $set: { quantity: newQuantity } })
+        res.json({ success: true, updatedQuantity });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
 // catagory management
 const getBrandManagement = (req, res) => {
     try {
@@ -353,6 +366,7 @@ module.exports = {
     getProductManagement,
     getCreateProductManagement,
     postCreateProductManagement,
+    postUpdateStock,
     getBrandManagement,
     getCreateBrand,
     postCreateBrand,

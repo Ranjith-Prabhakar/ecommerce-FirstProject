@@ -13,6 +13,7 @@
                             <th scope="col">Model</th>
                             <th scope="col">In Stock</th>
                             <th scope="col">Unit Price</th>
+                            <th scope="col">Add/Remove</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -28,13 +29,26 @@
                                     <td>
                                         <%= product.productName %>
                                     </td>
-                                    <td>
+                                    <td class="quantity">
                                         <%= product.quantity %>
                                     </td>
 
                                     <td>
                                         <%= product.unitPrice %>
                                     </td>
+                                    <td>
+                                        <!-- Inside the form in the table cell -->
+                                        <form action="/digiWorld/admin/productManagement/addOrRemove"
+                                            class="quantity-form ">
+                                            <input type="hidden" name="productId" value="<%= product._id %>">
+                                            <input class="form-control w-25  d-inline" type="number" name="quantity"
+                                                step="1" value="<%= product.quantity %>">
+                                            <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                                        </form>
+
+                                        
+                                    </td>
+                                 
 
 
                                 </tr>
@@ -44,4 +58,5 @@
                 </table>
             </div>
             <% } %>
+                <script src="/javaScript/admin/productManagement.js" defer></script>
                 <%- include('../../layout/admin/footer') %>
