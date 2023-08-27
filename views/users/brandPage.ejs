@@ -1,35 +1,5 @@
 <%- include('../layout/user/header') %>
-
-    <!-- banner -->
-    <% locals.banner || '' %>
-        <% if(locals.banner.length) {%>
-            <!--  -->
-            <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-
-                    <!--  -->
-
-                    <% locals.banner.forEach(bannerItem=>{%>
-                        <div class="carousel-item active bannerSize"><img class="w-100 h-100  "
-                                src="/productImages/<%=bannerItem.images%>" alt="" srcset=""></div>
-                        <% }) %>
-                            <!--  -->
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-            <!--  -->
-            <hr class="mt-5">
-
-            <% } %>
+ 
                 <!-- filter and product -->
                 <div class="container-fluid">
                     <div class="row">
@@ -53,7 +23,7 @@
                                 <% } %>
                         </div>
                         <!-- products-->
-                        <% locals.products || "" %>
+                        <% locals.filterProducts || "" %>
                             <% if(locals.products.length) {%>
                                 <div class="col-9">
                                     <div class="container">
@@ -66,9 +36,10 @@
                                                 </div>
                                                 <!-- product data -->
                                                 <div class="col-6">
-                                                    <form action="/digiWorld/user/brandPage" method="post">
+                                                    <form action="/digiWorld/user/singleProductPage" method="post">
+                                                        <input type="hidden" name="id" value="<%=product._id%>">
                                                         <input class="fs-2 fw-bold nav-link " type="submit"
-                                                            name="brandName" value="<%=product.brandName%>">
+                                                            value="<%=product.productName %>">
                                                     </form>
                                                     <h5><span>
                                                             <%=product.specification.ram%>

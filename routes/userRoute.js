@@ -9,7 +9,10 @@ const validator = (req,res,next)=>{
     }
     next()
 }
+
+
 router.get('/userHome',userController.userHome)
+// router.post('/search',userController.postSearch)
 router.get('/userSignUp',validator,userController.getUserSignUp)
 router.post('/userSignUp',validator,userController.postUserSignUp)
 router.get('/userOtpVerificationCode',validator,userController.getUserOtpVerificationCode)
@@ -17,5 +20,10 @@ router.post('/userOtpVerificationCode',validator,userController.postUserOtpVerif
 router.get('/userLogin',validator,userController.getUserLogin)
 router.post('/userLogin',validator,userController.postUserLogin)
 router.post('/userLogOut',userController.postUserLogOut)
+router.post('/brandsfilter',userController.postBrandFilter)
+
+
+router.post('/brandPage',userController.postBrandPage)
+router.post('/singleProductPage',userController.postSingleProductPage)
 
 module.exports = router

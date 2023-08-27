@@ -1,17 +1,32 @@
 <%- include('../layout/admin/header') %>
-    <form action="/digiWorld/admin/adminLogin" method="post">
-        <% locals.unAutherisedAdmin ||''%>
-            <% if(locals.unAutherisedAdmin) {%>
-                <h3>
-                    <% locals.unAutherisedAdmin %>
-                </h3>
-                <% } else if(locals.loginErrorMessage) {%>
-                    <h3>
-                        <% locals.loginErrorMessage %>
-                    </h3>
-                    <% } %>
-                        <input type="text" name="userName" placeholder="userName"><br><br>
-                        <input type="password" name="password" placeholder="password"><br><br>
-                        <input type="submit" value="submit">
-    </form>
+
+    <div class="container">
+        <div class="row vh-100 justify-content-center justify-content-sm-end  align-items-center ">
+            <div class="col-4">
+                <form action="/digiWorld/admin/adminLogin" method="post">
+                    <% locals.unAutherisedAdmin ||''%>
+                        <% locals.loginErrorMessage ||''%>
+                            <% if(locals.unAutherisedAdmin) {%>
+                                <h6 class="text-warning ">
+                                    <%= locals.unAutherisedAdmin %>
+                                </h6>
+                                <% } else if(locals.loginErrorMessage) {%>
+                                    <h6 class="text-warning ">
+                                        <%= locals.loginErrorMessage %>
+                                    </h6>
+                                    <% } %>
+                                        <label class="form-label text-white " for="userName">User Name</label>
+                                        <input class="form-control w-75 " type="text" name="userName"
+                                            placeholder="userName" id="userName" required>
+                                        <label class="form-label text-white " for="password">Password</label>
+                                        <input class="form-control w-75 mb-3" id="password" type="password"
+                                            name="password" placeholder="password" required>
+                                        <button type="submit"
+                                            class="btn btn-primary w-50 loginButtonColor">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
     <%- include('../layout/admin/footer') %>

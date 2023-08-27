@@ -1,12 +1,27 @@
 <%- include('../layout/user/header') %>
-    <% locals.otpErrorMessage?locals.otpErrorMessage:'' %>
-        <% if(locals.otpErrorMessage) {%>
-            <h3>
-                <%= locals.otpErrorMessage %>
-            </h3>
-            <% } %>
+
+    <div class="container">
+        <div class="row vh-100 justify-content-center align-items-center ">
+            <div class="col-4 text-center ">
                 <form action="/digiWorld/user/userOtpVerificationCode" method="post">
-                    <input type="text" name="otp" placeholder="enter the otp">
-                    <input type="submit" value="submit">
+                    <% locals.otpErrorMessage?locals.otpErrorMessage:'' %>
+                        <% locals.notVerified?locals.notVerified:'' %>
+                            <% if(locals.otpErrorMessage) {%>
+                                <h6 class="text-danger ">
+                                    <%= locals.otpErrorMessage %>
+                                </h6>
+                                <% } else if(locals.notVerified){%>
+                                    <h6 class="text-warning  ">
+                                        <%= locals.notVerified %>
+                                    </h6>
+                                    <% } %>
+                                        <input class="form-control mb-3 " type="text" name="otp"
+                                            placeholder="enter the otp">
+                                        <button type="submit" class="btn btn-primary ">Submit</button>
                 </form>
-                <%- include('../layout/user/footer') %>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../layout/user/footer') %>

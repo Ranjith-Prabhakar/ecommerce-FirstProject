@@ -1,17 +1,26 @@
 <%- include('../layout/admin/header') %>
-    <h1>adminPanel</h1>
-    <form action="/digiWorld/admin/adminLogout" method="post">
-        <button type="submit">logout</button>
-    </form>
 
-    <div>
-        <a href="/digiWorld/admin/userManagement">userManagement</a>
-    </div>
-    <div>
-        <a href="/digiWorld/admin/productManagement">productManagement</a>
-    </div>
 
-    <div>
-        <a href="/digiWorld/admin/catagoryManagement">catagoryManagement</a>
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <div class="box  p-2 rounded-4  m-3 mt-4  text-center">
+                <a class="nav-link text-white fs-5" href="/digiWorld/admin/userManagement">userManagement</a>
+            </div>
+            <div class="box  p-2 rounded-4  m-3 mt-4  text-center">
+                <a class="nav-link text-white fs-5" href="/digiWorld/admin/productManagement">productManagement</a>
+            </div>
+
+            <div class="box  p-2 rounded-4  m-3 mt-4  text-center">
+                <a class="nav-link text-white fs-5"
+                    href="/digiWorld/admin/catagoryManagement">catagoryManagement</a>
+            </div>
+            <div class="box  p-2 rounded-4  m-3 mt-4  text-center">
+                <a class="nav-link text-white fs-5"
+                    href="/digiWorld/admin/bannerManagement">bannerManagement</a>
+            </div>
+        </div>
     </div>
+</div>
+ 
     <%- include('../layout/admin/footer') %>

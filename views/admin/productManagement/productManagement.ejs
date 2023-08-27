@@ -1,3 +1,47 @@
 <%- include('../../layout/admin/header') %>
-    <a href="/digiWorld/admin/productManagement/createProduct">createProduct</a>
-    <%- include('../../layout/admin/footer') %>
+    <%- include('../../layout/admin/generalManagement') %>
+
+        <div class="col-2 box  p-2 rounded-4  m-3 mt-4  text-center"><a class="nav-link text-white fs-5"
+                href="/digiWorld/admin/productManagement/createProduct">createProduct</a></div>
+        <% if(products.length) {%>
+            <div class="container-fluid">
+                <table class="table table-dark table-hover  box">
+                    <thead>
+                        <tr>
+                            <th scope="col">Number</th>
+                            <th scope="col">Brand</th>
+                            <th scope="col">Model</th>
+                            <th scope="col">In Stock</th>
+                            <th scope="col">Unit Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let count=1 %>
+                            <% for (let product of products) { %>
+                                <tr>
+                                    <td>
+                                        <%= count %>
+                                    </td>
+                                    <td>
+                                        <%= product.brandName %>
+                                    </td>
+                                    <td>
+                                        <%= product.productName %>
+                                    </td>
+                                    <td>
+                                        <%= product.quantity %>
+                                    </td>
+
+                                    <td>
+                                        <%= product.unitPrice %>
+                                    </td>
+
+
+                                </tr>
+                                <% count++ %>
+                                    <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+                <%- include('../../layout/admin/footer') %>

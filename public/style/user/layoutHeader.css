@@ -10,3 +10,40 @@ body{
 .navbar a{
     color: #F9EFEF;
 }
+/* userHome */
+.bannerSize{
+    height: 300px;
+    width: 100vw;
+    overflow: hidden;
+}
+/* common for userHome brandPage singleProductPage */
+.brandBox{
+    background-color: rgba(125, 90, 170, 0.2);  
+   
+}
+.filter{
+    background-color: rgba(25, 16, 34, 0.2); 
+}
+/* buttons*/
+.searchButton{
+    background: transparent;
+    border-color: #F9EFEF;
+    color:#F9EFEF ;
+}
+.searchButton:hover{
+    background-color: rgba(25, 16, 34, 0.2);
+}
+
+.loginButtonColor{
+    background-color:#351a58 ;
+    border: none;
+}
+.loginButtonColor:hover{
+    background-color:#351a58 ;
+    opacity: .5;
+}
+/* singleProductPage */
+.gallery-img-size{
+    width: 100px;
+    height: 100px;
+}

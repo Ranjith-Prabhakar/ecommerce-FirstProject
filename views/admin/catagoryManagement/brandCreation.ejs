@@ -1,0 +1,10 @@
+<%- include('../../layout/admin/header') %>
+<form action="/digiWorld/admin/catagoryManagement/createBrand" method="post">
+    <%locals.brandCreation || '' %>
+    <% if(locals.brandCreation) {%>
+        <h6><%=locals.brandCreation %></h6>
+        <% } %>
+    <input type="text" name="brandName" required placeholder="brandName"><br>
+    <input type="submit" value="create">
+</form>
+<%- include('../../layout/admin/footer') %>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="/digiWorld/admin/bannerManagement/createBanner" method="post" enctype="multipart/form-data">
+
+        <% if(locals.brand.length) {%>
+
+            <select class="form-control w-75 mt-2 " id="brand" name="brandName">
+
+                <% locals.brand.forEach(brandName=> {%>
+                    <option value="<%=brandName%>">
+                        <%=brandName%>
+                    </option>
+                    <% }) %>
+            </select>
+            <% } else{%>
+                <input type="text" name="brandName" placeholder="brandName">
+                <% } %>
+
+                    <br><input type="text" name="productName" placeholder="productName" id="">
+                    <br><input type="text" name="discription" placeholder="discription" id="">
+                    <br><input type="text" name="unitPrice" placeholder="unitPrice" id="">
+                    <br><input type="text" name="launchDate" placeholder="launchDate" id="">
+                    <br><input type="file" name="gallery" placeholder="images" id="">
+                    <br><button type="submit">submit</button>
+    </form>
+</body>
+
+</html>

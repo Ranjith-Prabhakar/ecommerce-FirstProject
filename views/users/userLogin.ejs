@@ -1,30 +1,35 @@
 <%- include('../layout/user/header') %>
     <div class="container">
-        <div class="d-flex justify-content-end align-items-center ">
-            <div>
+        <div class="row vh-100 justify-content-center justify-content-sm-end  align-items-center ">
+            <div class="col-4">
                 <form action="/digiWorld/user/userLogin" method="post">
                     <% locals.userSignUpSuccess || '' %>
                         <% locals.loginErrorMessage || '' %>
                             <% locals.block || '' %>
 
                                 <% if(locals.userSignUpSuccess) {%>
-                                    <h3>
+                                    <h6 class="text-success ">
                                         <%= userSignUpSuccess %>
-                                    </h3>
+                                    </h6>
                                     <% } else if(locals.loginErrorMessage) {%>
-                                        <h3>
+                                        <h6 class="text-danger  ">
                                             <%= loginErrorMessage %>
-                                        </h3>
+                                        </h6>
                                         <% } else if(locals.block) {%>
-                                            <h3>
+                                            <h6 class="text-warning ">
                                                 <%= block %>
-                                            </h3>
+                                            </h6>
                                             <% } %>
-                                                <input type="text" name="userName" placeholder="userName"><br><br>
-                                                <input type="password" name="password" placeholder="password"><br><br>
-                                                <input type="submit" value="submit">
+                                                <label class="form-label text-white " for="userName">User Name</label>
+                                                <input class="form-control w-75 " type="text" name="userName"
+                                                    placeholder="userName" id="userName" required>
+                                                <label class="form-label text-white " for="password">Password</label>
+                                                <input class="form-control w-75  mb-3" type="password" name="password"
+                                                    placeholder="password" id="password" required>
+                                                <button type="submit"
+                                                    class="btn btn-primary loginButtonColor w-50">Submit</button>
                 </form>
-                <a href="/digiworld/user/userSignUp">Don`t have an Account</a>
+                <a class="nav-link mt-3 text-white " href="/digiworld/user/userSignUp">Don`t have an Account</a>
             </div>
         </div>
     </div>

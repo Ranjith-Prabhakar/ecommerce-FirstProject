@@ -1,18 +1,6 @@
-body{
-    background-color:#08030f ;
-}
-.navbarBg{
-    background-color:#351a58 ;
-}
-
-.navbar a{
-    color: #F9EFEF;
-}
-/* adminPanel , catagory management ,product management, usermanagement*/
 .box{
     background-color: rgba(125, 90, 170, 0.2);  
 }
-
 
 /* buttons*/
 .searchButton{
@@ -32,4 +20,3 @@ body{
     background-color:#351a58 ;
     opacity: .5;
 }
-
