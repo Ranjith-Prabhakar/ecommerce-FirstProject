@@ -7,14 +7,15 @@
                     <!-- product gallery -->
                     <div class="col-2 d-flex flex-column gap-1  ">
                         <% locals.product.gallery.forEach(image=>{%>
-                            <img id="<%=image%>" class="rounded-1 gallery-img-size" src="/productImages/<%=image%>" alt="phone"
-                            srcset="">
-                        <%}) %>
-                       
+                            <img id="<%=image%>" class="rounded-1 gallery-img-size" src="/productImages/<%=image%>"
+                                alt="phone" srcset="">
+                            <%}) %>
+
                     </div>
                     <!-- product image -->
-                    <div class="col-3 ">
-                        <img id="mainImage" class="rounded-1" src="/productImages/<%=product.gallery[0]%>" alt="phone" srcset="">
+                    <div class="col-3 img-zoom-container">
+                        <img id="mainImage" class="rounded-1" src="/productImages/<%=product.gallery[0]%>" alt="phone"
+                            srcset="">
                     </div>
                     <!-- product data -->
                     <div class="col-5">
@@ -42,6 +43,11 @@
                             <%=product.specification.processor%>
                         </h5>
 
+                        <h5 class="text-success ">
+                            <%= Intl.NumberFormat('en-IN', { style: 'currency' , currency: 'INR' ,
+                                minimumFractionDigits: 0 }).format(product.unitPrice) %>
+
+                        </h5>
                         <% if(product.quantity < 10 && product.quantity> 0) {%>
                             <h5>instock : <span class="text-warning ">Left Only
                                     <%=product.quantity %>
@@ -52,13 +58,9 @@
                                     <h5 class="text-success  ">instock </h5>
                                     <% } %>
                     </div>
-                    <!-- product price -->
-                    <div class="col-1">
-                        <h5 class="text-success ">
-                            <%= Intl.NumberFormat('en-IN', { style: 'currency' , currency: 'INR' ,
-                                minimumFractionDigits: 0 }).format(product.unitPrice) %>
-
-                        </h5>
+                    <!-- product zoom image -->
+                    <div class="col-1 img-zoom-container">
+                        <div id="myresult" class="img-zoom-result"></div>
                     </div>
 
                     <hr class="mt-5 ">
