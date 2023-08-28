@@ -3,22 +3,27 @@
     <% locals.product || "" %>
         <% if(locals.product) {%>
             <div class="container">
-                <div class="row align-items-center mt-5 text-white ">
-                    <!-- product gallery -->
-                    <div class="col-2 d-flex flex-column gap-1  ">
-                        <% locals.product.gallery.forEach(image=>{%>
-                            <img id="<%=image%>" class="rounded-1 gallery-img-size" src="/productImages/<%=image%>"
+                <div class="d-flex  align-items-center mt-5 text-white ">
+                    <div>
+                        <!-- product image -->
+                        <div class="img-zoom-container me-5">
+                            <img id="mainImage" class="rounded-1 imgSize" src="/productImages/<%=product.gallery[0]%>"
                                 alt="phone" srcset="">
-                            <%}) %>
+                        </div>
+
+                        <!-- product gallery -->
+                        <div class=" d-flex  gap-1 mt-3 me-3 ">
+                            <% locals.product.gallery.forEach(image=>{%>
+                                <img id="<%=image%>" class="rounded-1 gallery-img-size" src="/productImages/<%=image%>"
+                                    alt="phone" srcset="">
+                                <%}) %>
+
+                        </div>
+
 
                     </div>
-                    <!-- product image -->
-                    <div class="col-3 img-zoom-container">
-                        <img id="mainImage" class="rounded-1 imgSize" src="/productImages/<%=product.gallery[0]%>"
-                            alt="phone" srcset="">
-                    </div>
                     <!-- product data -->
-                    <div class="col-5">
+                    <div class="mx-5">
                         <h3>
                             <%=product.productName %>
                         </h3>
@@ -63,19 +68,19 @@
                                         </div>
                     </div>
                     <!-- product zoom image -->
-                    <div class="col-1 img-zoom-container">
+                    <div class=" img-zoom-container ms-4">
                         <div id="myresult" class="img-zoom-result"></div>
                     </div>
-
-                    <hr class="mt-5 ">
-                    <div>
-                        <h4>Discription</h4>
-                        <p>
-                            <%=product.discription %>
-                        </p>
-                    </div>
-
                 </div>
+                <hr class="mt-5 ">
+                <div class="text-white ">
+                    <h4 >Discription</h4>
+                    <p>
+                        <%=product.discription %>
+                    </p>
+                </div>
+
+
                 <% } %>
 
 
