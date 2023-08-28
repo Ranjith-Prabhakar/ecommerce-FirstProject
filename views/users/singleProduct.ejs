@@ -14,8 +14,8 @@
                     </div>
                     <!-- product image -->
                     <div class="col-3 img-zoom-container">
-                        <img id="mainImage" class="rounded-1" src="/productImages/<%=product.gallery[0]%>" alt="phone"
-                            srcset="">
+                        <img id="mainImage" class="rounded-1 imgSize" src="/productImages/<%=product.gallery[0]%>"
+                            alt="phone" srcset="">
                     </div>
                     <!-- product data -->
                     <div class="col-5">
@@ -57,6 +57,10 @@
                                 <% } else{ %>
                                     <h5 class="text-success  ">instock </h5>
                                     <% } %>
+                                        <div>
+                                            <a class="btn btn-outline-light " href="#">Buy Now</a>
+                                            <a class="btn btn-outline-light " href="#">Add To Cart</a>
+                                        </div>
                     </div>
                     <!-- product zoom image -->
                     <div class="col-1 img-zoom-container">
@@ -64,12 +68,17 @@
                     </div>
 
                     <hr class="mt-5 ">
-
+                    <div>
+                        <h4>Discription</h4>
+                        <p>
+                            <%=product.discription %>
+                        </p>
+                    </div>
 
                 </div>
                 <% } %>
 
 
 
-<script src="/javaScript/user/singleProduct.js"></script>
-<%- include('../layout/user/footer') %>
+                    <script src="/javaScript/user/singleProduct.js"></script>
+                    <%- include('../layout/user/footer') %>

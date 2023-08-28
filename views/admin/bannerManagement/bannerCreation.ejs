@@ -1,36 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('../../layout/admin/header') %>
+    <div class="container w-75 ">
+        <form action="/digiWorld/admin/bannerManagement/createBanner" method="post" enctype="multipart/form-data">
+            <h1 class="text-white mb-3">Create Banner</h1>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+            <% if(locals.brand.length) {%>
 
-<body>
-    <form action="/digiWorld/admin/bannerManagement/createBanner" method="post" enctype="multipart/form-data">
+                <select class="form-select w-25 mt-2 " id="brand" name="brandName">
 
-        <% if(locals.brand.length) {%>
+                    <% locals.brand.forEach(brandName=> {%>
+                        <option value="<%=brandName%>">
+                            <%=brandName%>
+                        </option>
+                        <% }) %>
+                </select>
+                <% } else{%>
+                    <input type="text" name="brandName" placeholder="brandName">
+                    <% } %>
 
-            <select class="form-control w-75 mt-2 " id="brand" name="brandName">
-
-                <% locals.brand.forEach(brandName=> {%>
-                    <option value="<%=brandName%>">
-                        <%=brandName%>
-                    </option>
-                    <% }) %>
-            </select>
-            <% } else{%>
-                <input type="text" name="brandName" placeholder="brandName">
-                <% } %>
-
-                    <br><input type="text" name="productName" placeholder="productName" id="">
-                    <br><input type="text" name="discription" placeholder="discription" id="">
-                    <br><input type="text" name="unitPrice" placeholder="unitPrice" id="">
-                    <br><input type="text" name="launchDate" placeholder="launchDate" id="">
-                    <br><input type="file" name="gallery" placeholder="images" id="">
-                    <br><button type="submit">submit</button>
-    </form>
-</body>
-
-</html>
+                        <br><input class="form-control w-25 " type="text" name="productName" placeholder="productName"
+                            id="">
+                        <br><input class="form-control w-25 " type="text" name="discription" placeholder="discription"
+                            id="">
+                        <br><input class="form-control w-25 " type="text" name="unitPrice" placeholder="unitPrice"
+                            id="">
+                        <br><input class="form-control w-25 " type="text" name="launchDate" placeholder="launchDate"
+                            id="">
+                        <br><input class="form-control w-25 " type="file" name="gallery" placeholder="images" id="">
+                        <br><button class="btn w-25 btn-outline-secondary " type="submit">submit</button>
+        </form>
+    </div>
+    <%- include('../../layout/admin/footer') %>

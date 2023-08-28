@@ -17,41 +17,55 @@ const userHome = async (req, res) => {
         else if (req.session.userId) {
             let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
             let brands = await BrandModal.distinct('brandName')
-            let products = await ProductModal.find()
+            let products = await ProductModal.find({ freez: { $eq: 'active' } })
             let banner = await BannerModal.find()
-            res.render('./users/userHome', { userName: userName.firstName, brands: brands, products,banner })/// 
+            res.render('./users/userHome', { userName: userName.firstName, brands, products, banner })/// 
         } else {
             let brands = await BrandModal.distinct('brandName')
-            let products = await ProductModal.find()
+            let products = await ProductModal.find({ freez: { $eq: 'active' } })
             let banner = await BannerModal.find()
-            res.render('./users/userHome', { brands: brands, products,banner})
+            res.render('./users/userHome', { brands: brands, products, banner })
         }
     } catch (error) {
         console.log(error.message);
     }
 }
 ///have to check it
-// const postSearch = async (req, res) => {
-//     try {
-//         if (req.session.isAdmin) {
-//             res.redirect('/digiWorld/admin/adminPanel')
-//         }
-//         else if (req.session.userId) {
-//             let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
-//             let brands = await BrandModal.distinct('brandName')
-//             let products = await ProductModal.find({ productName: { $regex: new RegExp(`^${req.body.search}`, 'i') } })
-//             res.render('./users/userHome', { userName: userName.firstName, brands: brands, products })/// 
-//         } else {
-//             let brands = await BrandModal.distinct('brandName')
-//             let products = await ProductModal.find({ productName: { $regex: new RegExp(`^${req.body.search}`, 'i') } })
-//             console.log(req.body.search);
-//             res.render('./users/userHome', { brands: brands, products })
-//         }
-//     } catch (error) {
-//         console.log(error.message);
+const postSearch = async (req, res) => {
+    try {
+        if (req.session.isAdmin) {
+            res.redirect('/digiWorld/admin/adminPanel')
+        }
+        else if (req.session.userId) {
+            let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
+            let brands = await BrandModal.distinct('brandName')
+            let products = await ProductModal.find({
+                $or: [
+                    { productName: { $regex: new RegExp(`^${req.body.search}`, 'i') } },
+                    { brandName: { $regex: new RegExp(`^${req.body.search}`, 'i') } }
+                ]
+            });
 
-//     }
-// }
+            let banner = await BannerModal.find()
+            res.render('./users/userHome', { userName: userName.firstName, brands: brands, products, banner })/// 
+        } else {
+            let brands = await BrandModal.distinct('brandName')
+            let products = await ProductModal.find({
+                $or: [
+                    { productName: { $regex: new RegExp(`^${req.body.search}`, 'i') } },
+                    { brandName: { $regex: new RegExp(`^${req.body.search}`, 'i') } }
+                ]
+            });
+
+            let banner = await BannerModal.find()
+            console.log(req.body.search);
+            res.render('./users/userHome', { brands: brands, products, banner })
+        }
+    } catch (error) {
+        console.log(error.message);
+
+    }
+}
 
 const getUserLogin = async (req, res) => {
     try {
@@ -285,12 +299,12 @@ const postBrandPage = async (req, res) => {
     try {
         if (!req.session.userId) {
             let brands = await BrandModal.distinct('brandName')
-            let products = await ProductModal.find({ brandName: req.body.brandName })
+            let products = await ProductModal.find({ brandName: req.body.brandName, freez: { $eq: 'active' } })
             res.render('./users/brandPage', { brands, products })
         } else {
             let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
             let brands = await BrandModal.distinct('brandName')
-            let products = await ProductModal.find({ brandName: req.body.brandName })
+            let products = await ProductModal.find({ brandName: req.body.brandName, freez: { $eq: 'active' } })
             res.render('./users/brandPage', { brands, products, userName: userName.firstName })
         }
 
@@ -305,13 +319,25 @@ const postBrandPage = async (req, res) => {
 const postBrandFilter = async (req, res) => {
     try {
         if (!req.session.userId) {
+            let brand = []
+            if (typeof req.body.brand === 'string') {
+                brand.push(req.body.brand)
+            } else {
+                brand = [...req.body.brand]
+            }
             let brands = await BrandModal.distinct('brandName')
-            const filterProducts = await ProductModal.find({ brandName: { $in: [...req.body.brand] } }).sort({ brandName: 1 })
+            const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] } }).sort({ brandName: 1 })
             res.render('./users/productFilter', { filterProducts, brands })
         } else {
+            let brand = []
+            if (typeof req.body.brand === 'string') {
+                brand.push(req.body.brand)
+            } else {
+                brand = [...req.body.brand]
+            }
             let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
             let brands = await BrandModal.distinct('brandName')
-            const filterProducts = await ProductModal.find({ brandName: { $in: [...req.body.brand] } }).sort({ brandName: 1 })
+            const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] } }).sort({ brandName: 1 })
             res.render('./users/productFilter', { brands, filterProducts, userName: userName.firstName })
         }
     } catch (error) {
@@ -340,7 +366,7 @@ const postSingleProductPage = async (req, res) => {
 
 module.exports = {
     userHome,
-    // postSearch,
+    postSearch,
     getUserSignUp,
     postUserSignUp,
     getUserOtpVerificationCode,

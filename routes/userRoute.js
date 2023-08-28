@@ -12,7 +12,7 @@ const validator = (req,res,next)=>{
 
 
 router.get('/userHome',userController.userHome)
-// router.post('/search',userController.postSearch)
+router.post('/search',userController.postSearch)
 router.get('/userSignUp',validator,userController.getUserSignUp)
 router.post('/userSignUp',validator,userController.postUserSignUp)
 router.get('/userOtpVerificationCode',validator,userController.getUserOtpVerificationCode)

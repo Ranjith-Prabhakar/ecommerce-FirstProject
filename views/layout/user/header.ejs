@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DigiWorld</title>
+    <!-- font awsome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- bootrstrap -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <!-- custome css for general -->
@@ -76,20 +78,46 @@
         </div>
     </nav>
     <!-- brand bar -->
-    <% locals.brands || '' %>
-        <% if(locals.brands && locals.brands.length) {%>
-            <div class="container">
-                <div class="row text-white">
-                    <% locals.brands.forEach(brand=>{%>
-                        <div class="brandBox col-2  p-4 rounded-4  m-3 mt-4  text-center ">
-                            <form action="/digiWorld/user/brandPage" method="post">
-                                <input class="fs-2 fw-bold nav-link " type="submit" name="brandName" value="<%=brand%>">
-                            </form>
 
-                        </div>
 
-                        <%}) %>
-                            <hr class="mt-3 ">
-                </div>
+    <div class="container">
+        <div id="brandCarousel" class="carousel">
+            <div class="carousel-inner">
+                <% locals.brands || '' %>
+
+                    <% if(locals.brands && locals.brands.length) { %>
+                        <% let brandChunks=[]; %>
+                            <% for (let i=0; i < locals.brands.length; i +=5) { %>
+                                <% brandChunks.push(locals.brands.slice(i, i + 5)); %>
+                                    <% } %>
+
+                                        <% brandChunks.forEach((chunk, index)=> { %>
+                                            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                                <div class="scroller d-flex text-white">
+                                                    <% chunk.forEach(brand=> { %>
+                                                        <div
+                                                            class="brandBox col-2  p-4 rounded-4  m-3 mt-4  text-center ">
+                                                            <form action="/digiWorld/user/brandPage" method="post">
+                                                                <input class="fs-2 fw-bold nav-link " type="submit"
+                                                                    name="brandName" value="<%= brand %>">
+                                                            </form>
+                                                        </div>
+                                                        <% }); %>
+                                                </div>
+                                            </div>
+                                            <% }); %>
+                                                <% } %>
+
+
             </div>
-            <% } %>
+            <button class="carousel-control-prev carousal-button-prev" type="button" data-bs-target="#brandCarousel"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next carousal-button-next" type="button" data-bs-target="#brandCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>

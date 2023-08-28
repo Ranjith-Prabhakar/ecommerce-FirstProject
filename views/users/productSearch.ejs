@@ -7,9 +7,9 @@
                     <% locals.brands.forEach(brand=>{%>
                         <div class="banner col-2  p-4 rounded-4  m-3 mt-4  text-center ">
                             <form action="/digiWorld/user/brandPage" method="post">
-                                <input class="fs-2 fw-bold nav-link "  type="submit" name="brandName" value="<%=brand%>" > 
+                                <input class="fs-2 fw-bold nav-link " type="submit" name="brandName" value="<%=brand%>">
                             </form>
-                           
+
                         </div>
 
                         <%}) %>
@@ -38,7 +38,8 @@
                                                 <!-- product data -->
                                                 <div class="col-6">
                                                     <form action="/digiWorld/user/brandPage" method="post">
-                                                        <input class="fs-2 fw-bold nav-link "  type="submit" name="brandName" value="<%=product.brandName%>" > 
+                                                        <input class="fs-2 fw-bold nav-link " type="submit"
+                                                            name="brandName" value="<%=product.brandName%>">
                                                     </form>
                                                     <h5><span>
                                                             <%=product.specification.ram%>
@@ -74,10 +75,11 @@
                                                 <!-- product price -->
                                                 <div class="col-2">
                                                     <h5 class="text-success ">
-                                                        <%= Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(product.unitPrice) %>
+                                                        <%= Intl.NumberFormat('en-IN', { style: 'currency' ,
+                                                            currency: 'INR' }).format(product.unitPrice) %>
                                                     </h5>
                                                 </div>
-                                                
+
                                                 <hr class="mt-5 ">
                                                 <%}) %>
 

@@ -5,6 +5,11 @@ const Brand = mongoose.Schema({
         type:String,
         required:true
     },
+    noOfModels:{
+        type:Number,
+        required:true,
+        default:0
+    }
 })
 
 module.exports = new mongoose.model('brand',Brand)

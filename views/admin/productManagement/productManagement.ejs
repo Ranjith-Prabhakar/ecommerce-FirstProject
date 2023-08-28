@@ -14,6 +14,7 @@
                             <th scope="col">In Stock</th>
                             <th scope="col">Unit Price</th>
                             <th scope="col">Add/Remove</th>
+                            <th scope="col">Freez</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,10 +46,13 @@
                                                 step="1" value="<%= product.quantity %>">
                                             <button class="btn btn-outline-secondary" type="submit">Submit</button>
                                         </form>
-
-                                        
                                     </td>
-                                 
+                                    <td>
+                                        <form action="/digiWorld/admin/productManagement/softDelete" class="softDelete">
+                                            <input type="hidden" name="productId" value="<%= product._id %>">
+                                            <input type="submit" name="freez" value="<%= product.freez %>">
+                                        </form>
+                                    </td>
 
 
                                 </tr>

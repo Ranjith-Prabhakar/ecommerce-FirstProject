@@ -17,9 +17,9 @@ const Product = mongoose.Schema({
         type: String,
         required: true
     },
-    gallery:{
-        type:Array,
-        required:true
+    gallery: {
+        type: Array,
+        required: true
     },
     discription: {
         type: String,
@@ -58,9 +58,11 @@ const Product = mongoose.Schema({
     freez: {
         type: String,
         required: true,
-        default:"active"
+        default: "active"
     },
 
+}, {
+    timestamps: true // Add timestamps option
 })
 
 module.exports = new mongoose.model('product', Product)

@@ -202,8 +202,14 @@ const getProductManagement = async (req, res) => {
 const getCreateProductManagement = async (req, res) => {
     try {
         if (req.session.isAdmin) {
-            const brand = await BrandModal.distinct('brandName')
-            res.render('./admin/productManagement/createProduct', { brand })
+            if (req.session.existingProduct) {
+                const brand = await BrandModal.distinct('brandName')
+                res.render('./admin/productManagement/createProduct', { brand, existingProduct: req.session.existingProduct })
+            } else {
+                const brand = await BrandModal.distinct('brandName')
+                res.render('./admin/productManagement/createProduct', { brand })
+            }
+
         }
     } catch (error) {
         console.log(error.message)
@@ -217,26 +223,34 @@ const postCreateProductManagement = async (req, res) => {
         for (let i = 0; i < req.files.length; i++) {
             arrImages[i] = req.files[i].filename
         }
+        let validation = await ProductModal.findOne({ brandName: req.body.brandName, productName: req.body.productName })
+        if (!validation) {
+            await BrandModal.updateOne({ brandName: { $eq: req.body.brandName } }, { $inc: { noOfModels: 1 } })
+            const newProduct = await ProductModal({
+                brandName: req.body.brandName,
+                productName: req.body.productName,
+                quantity: req.body.quantity,
+                unitPrice: req.body.unitPrice,
+                gallery: arrImages,
+                discription: req.body.discription,
+                specification: {
+                    frontCamera: req.body.frontCamera,
+                    backCamera: req.body.backCamera,
+                    ram: req.body.ram,
+                    internalStorage: req.body.internalStorage,
+                    battery: req.body.battery,
+                    processor: req.body.processor,
+                    chargerType: req.body.chargerType,
+                }
+            })
+            await newProduct.save()
+            res.redirect('/digiWorld/admin/productManagement')
+        } else {
+            req.session.existingProduct = "Product already exist"
+            res.redirect('/digiWorld/admin/productManagement/createProduct')
+        }
 
-        const newProduct = await ProductModal({
-            brandName: req.body.brandName,
-            productName: req.body.productName,
-            quantity: req.body.quantity,
-            unitPrice: req.body.unitPrice,
-            gallery: arrImages,
-            discription: req.body.discription,
-            specification: {
-                frontCamera: req.body.frontCamera,
-                backCamera: req.body.backCamera,
-                ram: req.body.ram,
-                internalStorage: req.body.internalStorage,
-                battery: req.body.battery,
-                processor: req.body.processor,
-                chargerType: req.body.chargerType,
-            }
-        })
-        await newProduct.save()
-        res.redirect('/digiWorld/admin/productManagement')
+
     } catch (error) {
         console.log(error.message)
 
@@ -253,22 +267,54 @@ const postUpdateStock = async (req, res) => {
         console.log(error.message);
     }
 }
+const postSoftDelete = async (req, res) => {
+    try {
+        if (req.body.freezValue === "active") {
+            req.body.freezValue = "freez"
+        } else {
+            req.body.freezValue = 'active'
+        }
+
+        const productFreez = await ProductModal.updateOne({ _id: req.body.productId }, { $set: { freez: req.body.freezValue } })
+        if (productFreez.acknowledged) {
+            res.json({ success: true, newFreezValue: req.body.freezValue })
+        }
+    } catch (error) {
+        console.log(error.message);
+
+    }
+}
 
 
 
 // catagory management
-const getBrandManagement = (req, res) => {
+const getBrandManagement = async (req, res) => {
     try {
         if (req.session.isAdmin) {
-            res.render('./admin/catagoryManagement/catagoryManagement', { catagoryManagement: true })
+            // const brandAggregation = await ProductModal.aggregate([
+            //     {
+            //         $group: {
+            //             _id: "$brandName",
+            //             totalProducts: { $sum: 1 }
+            //         }
+            //     },
+            //     {
+            //         $sort: {
+            //             _id: 1
+            //         }
+            //     }
+            // ]);
+            const brands = await BrandModal.find()
+            res.render('./admin/catagoryManagement/catagoryManagement', { catagoryManagement: true, brands });
         } else {
-            req.session.loginErrorMessage = 'Login First'
-            res.redirect('/digiworld/admin/adminLogin')
+            req.session.loginErrorMessage = 'Login First';
+            res.redirect('/digiworld/admin/adminLogin');
         }
     } catch (error) {
-
+        console.log(error.message);
     }
 }
+
 
 const getCreateBrand = (req, res) => {
     try {
@@ -290,12 +336,19 @@ const getCreateBrand = (req, res) => {
 
 const postCreateBrand = async (req, res) => {
     try {
-        const newBrand = await BrandModal({
-            brandName: req.body.brandName
-        })
-        await newBrand.save()
-        req.session.brandCreation = 'Brand has created try new one'
-        res.redirect('/digiWorld/admin/catagoryManagement/createBrand')
+        const validation = await BrandModal.findOne({ brandName: req.body.brandName })
+        if (!validation) {
+            const newBrand = await BrandModal({
+                brandName: req.body.brandName
+            })
+            await newBrand.save()
+            req.session.brandCreation = 'Brand has created try new one'
+            res.redirect('/digiWorld/admin/catagoryManagement/createBrand')
+        } else {
+            req.session.brandCreation = 'Brand already exist'
+            res.redirect('/digiWorld/admin/catagoryManagement/createBrand')
+        }
+
 
     } catch (error) {
         console.log(error.message);
@@ -367,6 +420,7 @@ module.exports = {
     getCreateProductManagement,
     postCreateProductManagement,
     postUpdateStock,
+    postSoftDelete,
     getBrandManagement,
     getCreateBrand,
     postCreateBrand,

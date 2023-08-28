@@ -35,6 +35,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-   
+    //    soft delete
+
+    const freezForms = document.querySelectorAll('.softDelete')
+
+    freezForms.forEach((form) => {
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const productId = form.productId.value
+            const freezValue = form.freez.value
+
+            try {
+                const response = await fetch('/digiWorld/admin/productManagement/softDelete', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productId, freezValue })
+                })
+                const data = await response.json()
+                if (data.success) {
+                    form.freez.value = data.newFreezValue
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        })
+    })
+
 
 });
