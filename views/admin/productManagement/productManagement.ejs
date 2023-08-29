@@ -13,8 +13,9 @@
                             <th scope="col">Model</th>
                             <th scope="col">In Stock</th>
                             <th scope="col">Unit Price</th>
-                            <th scope="col">Add/Remove</th>
+                            <th scope="col">Edit</th>
                             <th scope="col">Freez</th>
+                            <th scope="col">Add/Remove</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,20 +38,31 @@
                                     <td>
                                         <%= product.unitPrice %>
                                     </td>
+
+
                                     <td>
-                                        <!-- Inside the form in the table cell -->
-                                        <form action="/digiWorld/admin/productManagement/addOrRemove"
-                                            class="quantity-form ">
-                                            <input type="hidden" name="productId" value="<%= product._id %>">
-                                            <input class="form-control w-25  d-inline" type="number" name="quantity"
-                                                step="1" value="<%= product.quantity %>">
-                                            <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                                        <form action="/digiWorld/admin/productManagement/editRequest" method="post">
+                                            <input type="hidden" name="id" value="<%= product._id %>">
+                                            <button class="btn btn-outline-secondary" type="submit">Edit</button>
                                         </form>
                                     </td>
+
                                     <td>
                                         <form action="/digiWorld/admin/productManagement/softDelete" class="softDelete">
                                             <input type="hidden" name="productId" value="<%= product._id %>">
                                             <input type="submit" name="freez" value="<%= product.freez %>">
+                                        </form>
+                                    </td>
+
+                                    <!-- Inside the form in the table cell -->
+                                    <td>
+
+                                        <form action="/digiWorld/admin/productManagement/addOrRemove"
+                                            class="quantity-form w-50 p-0 m-0 ">
+                                            <input type="hidden" name="productId" value="<%= product._id %>">
+                                            <input class="form-control w-50  d-inline" type="number" name="quantity"
+                                                step="1" value="<%= product.quantity %>">
+                                            <button class="btn btn-outline-secondary" type="submit">Submit</button>
                                         </form>
                                     </td>
 

@@ -41,8 +41,8 @@ const postSearch = async (req, res) => {
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({
                 $or: [
-                    { productName: { $regex: new RegExp(`^${req.body.search}`, 'i') } },
-                    { brandName: { $regex: new RegExp(`^${req.body.search}`, 'i') } }
+                    { productName: { $regex: new RegExp(`^${req.body.search}`, 'i') }, freez: 'active' },
+                    { brandName: { $regex: new RegExp(`^${req.body.search}`, 'i') }, freez: 'active' }
                 ]
             });
 
@@ -52,8 +52,8 @@ const postSearch = async (req, res) => {
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({
                 $or: [
-                    { productName: { $regex: new RegExp(`^${req.body.search}`, 'i') } },
-                    { brandName: { $regex: new RegExp(`^${req.body.search}`, 'i') } }
+                    { productName: { $regex: new RegExp(`^${req.body.search}`, 'i') }, freez: 'active' },
+                    { brandName: { $regex: new RegExp(`^${req.body.search}`, 'i') }, freez: 'active' }
                 ]
             });
 
@@ -326,7 +326,7 @@ const postBrandFilter = async (req, res) => {
                 brand = [...req.body.brand]
             }
             let brands = await BrandModal.distinct('brandName')
-            const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] } }).sort({ brandName: 1 })
+            const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] }, freez: 'active' }).sort({ brandName: 1 })
             res.render('./users/productFilter', { filterProducts, brands })
         } else {
             let brand = []

@@ -257,6 +257,39 @@ const postCreateProductManagement = async (req, res) => {
     }
 }
 
+const postProductEditRequest = async (req, res) => {
+    try {
+        const product = await ProductModal.findOne({ _id: req.body.id })
+        res.render('./admin/productManagement/productEdit', { product })
+    } catch (error) {
+        console.log(error.message);
+
+    }
+}
+const postProductEditConfirm = async (req, res) => {
+    try {
+        await ProductModal.updateOne({ _id: req.body.id }, {
+            brandName: req.body.brandName,
+            productName: req.body.productName,
+            quantity: req.body.quantity,
+            unitPrice: req.body.unitPrice,
+            specification: {
+                frontCamera: req.body.frontCamera,
+                backCamera: req.body.backCamera,
+                ram: req.body.ram,
+                internalStorage: req.body.internalStorage,
+                battery: req.body.battery,
+                processor: req.body.processor,
+                chargerType: req.body.chargerType,
+            }
+        });
+        res.redirect('/digiWorld/admin/productManagement')
+    } catch (error) {
+        console.log(error.message);
+
+    }
+}
+
 const postUpdateStock = async (req, res) => {
     try {
         const productId = req.body.productId;
@@ -354,6 +387,8 @@ const postCreateBrand = async (req, res) => {
         console.log(error.message);
     }
 }
+
+
 ///bannerManagement
 const getBannerManagement = (req, res) => {
     try {
@@ -419,6 +454,8 @@ module.exports = {
     getProductManagement,
     getCreateProductManagement,
     postCreateProductManagement,
+    postProductEditRequest,
+    postProductEditConfirm,
     postUpdateStock,
     postSoftDelete,
     getBrandManagement,

@@ -60,6 +60,11 @@ const Product = mongoose.Schema({
         required: true,
         default: "active"
     },
+    brandFreez: {
+        type: String,
+        required: true,
+        default: "active"
+    },
 
 }, {
     timestamps: true // Add timestamps option
