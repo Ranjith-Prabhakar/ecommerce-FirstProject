@@ -6,7 +6,7 @@
                 <div class="row text-white">
                     <% locals.brands.forEach(brand=>{%>
                         <div class="banner col-2  p-4 rounded-4  m-3 mt-4  text-center ">
-                            <form action="/digiWorld/user/brandPage" method="post">
+                            <form action="/brandPage" method="post">
                                 <input class="fs-2 fw-bold nav-link " type="submit" name="brandName" value="<%=brand%>">
                             </form>
 
@@ -37,7 +37,7 @@
                                                 </div>
                                                 <!-- product data -->
                                                 <div class="col-6">
-                                                    <form action="/digiWorld/user/brandPage" method="post">
+                                                    <form action="/brandPage" method="post">
                                                         <input class="fs-2 fw-bold nav-link " type="submit"
                                                             name="brandName" value="<%=product.brandName%>">
                                                     </form>

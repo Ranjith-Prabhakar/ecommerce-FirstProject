@@ -8,7 +8,7 @@
 
 
         <% if(locals.product) {%>
-            <form action="/digiWorld/admin/productManagement/editConfirm" method="post" >
+            <form action="/productEditConfirm" method="post" >
                 <div class="d-flex">
                     <div class="one mt-3 ">
 
@@ -33,8 +33,8 @@
 
 
 
-
-                        <!-- <input class="form-control w-75 " type="file" name="gallery0"
+<!-- 
+                        <input class="form-control w-75 " type="file" name="gallery0"
                             value="<%=locals.product.gallery[0] %>" placeholder="<%=locals.product.gallery[0] %>"><br>
                         <input class="form-control w-75 " type="file" name="gallery1"
                             value="<%=locals.product.gallery[1] %>" placeholder="<%=locals.product.gallery[1] %>" ><br>

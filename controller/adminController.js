@@ -1,13 +1,9 @@
 const AdminModal = require('../model/adminModal')
-const UserModal = require('../model/userModal')
-const BrandModal = require('../model/brandModal')
-const ProductModal = require('../model/productModal')
-const BannerModal = require('../model/bannarModal')
 require('dotenv').config()
 const randomString = require('randomstring')
 const bcrypt = require('bcrypt')
 const nodeMailer = require('nodemailer')
-const productModal = require('../model/productModal')
+const  {errorHandler} = require('../middleWare/errorMiddleWare')
 
 ////////////////
 
@@ -31,8 +27,9 @@ const productModal = require('../model/productModal')
 //     res.end()
 // }
 
-const getAdminLogin = (req, res) => {
-    if (req.session.unAutherisedAdmin) {
+const getAdminLogin = (req, res,next) => {
+   try{ if (req.session.unAutherisedAdmin) {
+    
         res.render('./admin/adminLogin', { unAutherisedAdmin: req.session.unAutherisedAdmin, login: true })////
         req.session.unAutherisedAdmin = ""
     } else if (req.session.loginErrorMessage) {
@@ -41,6 +38,8 @@ const getAdminLogin = (req, res) => {
     }
     else {
         res.render('./admin/adminLogin', { login: true })////
+    }}catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
@@ -81,12 +80,12 @@ const postAdminLogin = async (req, res) => {
                                 console.log('Error sending email:', error);
                             } else {
                                 req.session.otp = otp
-                                res.redirect('/digiworld/admin/adminOtpVerificationCode')
+                                res.redirect('/adminOtpVerificationCode')
                             }
                         });
                     } else {
                         req.session.unAutherisedAdmin = 'You are  unautherised to login'
-                        res.redirect('/digiWorld/admin/adminLogin')
+                        res.redirect('/adminLogin')
                     }
                 }
             });
@@ -97,17 +96,19 @@ const postAdminLogin = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error.message);
+        errorHandler(err, req, res, next);
     }
 }
 
 
 
 const getAdminOtpVerificationCode = async (req, res) => {
-    if (req.session.otpErrorMessage) {
+    try{if (req.session.otpErrorMessage) {
         res.render('./admin/adminOtpVerificationCode', { otpErrorMessage: req.session.otpErrorMessage, otp: true })/////
     } else {
         res.render('./admin/adminOtpVerificationCode', { otp: true })/////
+    }}catch(err){
+        errorHandler(err, req, res, next);
     }
 
 }
@@ -115,325 +116,56 @@ const getAdminOtpVerificationCode = async (req, res) => {
 
 
 const postAdminOtpVerificationCode = async (req, res) => {
-    if (req.body.otp === req.session.otp) {
+   try{ if (req.body.otp === req.session.otp) {
         req.session.otp = ''
         req.session.isAdmin = true
         res.cookie('password', 'helloWorld')
-        res.redirect('/digiWorld/admin/adminPanel')
+        res.redirect('/adminPanel')
     } else {
         req.session.otpErrorMessage = 'invalid otp'
-        res.redirect('/digiworld/admin/adminOtpVerificationCode')
+        res.redirect('/adminOtpVerificationCode')
+    }}catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
 const getAdminPanel = (req, res) => {
 
-    if (req.session.isAdmin) {
+   try{ if (req.session.isAdmin) {
         res.render('./admin/adminPanel', { adminPanel: true })
     } else {
         req.body.unAutherisedAdmin = 'login first'
-        res.redirect('/digiWorld/admin/adminLogin')
+        res.redirect('/adminLogin')
+    }}catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
 const postAdminLogout = (req, res) => {
     try {
-        req.session.destroy((err) => {
+        
+
+        if(req.session.userId){
+            delete req.session.isAdmin
+            res.clearCookie('password')
+            res.redirect('/adminLogin')
+        }else{
+
+             req.session.destroy((err) => {
             if (err) {
                 console.log(err.message);
             } else {
                 res.clearCookie('password')
-                res.redirect('/digiWorld/admin/adminLogin')
+                res.redirect('/adminLogin')
             }
         })
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-// UserManagement =======================================================================================================
-
-const getUserManagement = async (req, res) => {
-    const users = await UserModal.find()
-    res.render('./admin/userManagement/userManagement', { users, userManagement: true })
-}
-
-const postEditUserManagement = async (req, res) => {
-    req.session.confirmEditUserManagement_id = req.body.id
-    res.render('./admin/userManagement/editUserManagement')
-}
-
-const postEditSubmit = async (req, res) => {
-    req.session.confirmEditUserManagement_status = req.body.status
-    res.render('./admin/userManagement/confirmEditUserManagement')
-}
-
-const postEditConfirm = async (req, res) => {
-    await UserModal.updateOne({ _id: req.session.confirmEditUserManagement_id }, { $set: { status: req.session.confirmEditUserManagement_status } })
-    req.session.confirmEditUserManagement_id = ''
-    req.session.confirmEditUserManagement_status = ''
-    res.redirect('/digiWorld/admin/userManagement')
-}
-
-const postDeleteUserManagement = async (req, res) => {
-    req.session.deleteId = req.body.id,
-        res.render('./admin/userManagement/confirmDeleteUserManagement')
-}
-
-const postDeleteConfirm = async (req, res) => {
-    await UserModal.deleteOne({ _id: req.session.deleteId })
-    req.session.deleteId = ''
-    res.redirect('/digiWorld/admin/userManagement')
-}
-
-// ProductManagement =======================================================================================================
-
-const getProductManagement = async (req, res) => {
-    try {
-        const products = await ProductModal.find().sort({ unitPrice: 1 })
-        res.render('./admin/productManagement/productManagement', { products, productManagement: true })
-
-    } catch (error) {
-        console.log(error.message)
-
-    }
-}
-
-const getCreateProductManagement = async (req, res) => {
-    try {
-        if (req.session.isAdmin) {
-            if (req.session.existingProduct) {
-                const brand = await BrandModal.distinct('brandName')
-                res.render('./admin/productManagement/createProduct', { brand, existingProduct: req.session.existingProduct })
-            } else {
-                const brand = await BrandModal.distinct('brandName')
-                res.render('./admin/productManagement/createProduct', { brand })
-            }
-
         }
-    } catch (error) {
-        console.log(error.message)
-
-    }
-}
-
-const postCreateProductManagement = async (req, res) => {
-    try {
-        let arrImages = []
-        for (let i = 0; i < req.files.length; i++) {
-            arrImages[i] = req.files[i].filename
-        }
-        let validation = await ProductModal.findOne({ brandName: req.body.brandName, productName: req.body.productName })
-        if (!validation) {
-            await BrandModal.updateOne({ brandName: { $eq: req.body.brandName } }, { $inc: { noOfModels: 1 } })
-            const newProduct = await ProductModal({
-                brandName: req.body.brandName,
-                productName: req.body.productName,
-                quantity: req.body.quantity,
-                unitPrice: req.body.unitPrice,
-                gallery: arrImages,
-                discription: req.body.discription,
-                specification: {
-                    frontCamera: req.body.frontCamera,
-                    backCamera: req.body.backCamera,
-                    ram: req.body.ram,
-                    internalStorage: req.body.internalStorage,
-                    battery: req.body.battery,
-                    processor: req.body.processor,
-                    chargerType: req.body.chargerType,
-                }
-            })
-            await newProduct.save()
-            res.redirect('/digiWorld/admin/productManagement')
-        } else {
-            req.session.existingProduct = "Product already exist"
-            res.redirect('/digiWorld/admin/productManagement/createProduct')
-        }
-
-
-    } catch (error) {
-        console.log(error.message)
-
-    }
-}
-
-const postProductEditRequest = async (req, res) => {
-    try {
-        const product = await ProductModal.findOne({ _id: req.body.id })
-        res.render('./admin/productManagement/productEdit', { product })
-    } catch (error) {
-        console.log(error.message);
-
-    }
-}
-const postProductEditConfirm = async (req, res) => {
-    try {
-        await ProductModal.updateOne({ _id: req.body.id }, {
-            brandName: req.body.brandName,
-            productName: req.body.productName,
-            quantity: req.body.quantity,
-            unitPrice: req.body.unitPrice,
-            specification: {
-                frontCamera: req.body.frontCamera,
-                backCamera: req.body.backCamera,
-                ram: req.body.ram,
-                internalStorage: req.body.internalStorage,
-                battery: req.body.battery,
-                processor: req.body.processor,
-                chargerType: req.body.chargerType,
-            }
-        });
-        res.redirect('/digiWorld/admin/productManagement')
-    } catch (error) {
-        console.log(error.message);
-
-    }
-}
-
-const postUpdateStock = async (req, res) => {
-    try {
-        const productId = req.body.productId;
-        const newQuantity = req.body.quantity;
-        const updatedQuantity = await ProductModal.updateOne({ _id: productId }, { $set: { quantity: newQuantity } })
-        res.json({ success: true, updatedQuantity });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-const postSoftDelete = async (req, res) => {
-    try {
-        if (req.body.freezValue === "active") {
-            req.body.freezValue = "freez"
-        } else {
-            req.body.freezValue = 'active'
-        }
-
-        const productFreez = await ProductModal.updateOne({ _id: req.body.productId }, { $set: { freez: req.body.freezValue } })
-        if (productFreez.acknowledged) {
-            res.json({ success: true, newFreezValue: req.body.freezValue })
-        }
-    } catch (error) {
-        console.log(error.message);
-
+    } catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
 
-
-// catagory management
-const getBrandManagement = async (req, res) => {
-    try {
-        if (req.session.isAdmin) {
-            // const brandAggregation = await ProductModal.aggregate([
-            //     {
-            //         $group: {
-            //             _id: "$brandName",
-            //             totalProducts: { $sum: 1 }
-            //         }
-            //     },
-            //     {
-            //         $sort: {
-            //             _id: 1
-            //         }
-            //     }
-            // ]);
-            const brands = await BrandModal.find()
-            res.render('./admin/catagoryManagement/catagoryManagement', { catagoryManagement: true, brands });
-        } else {
-            req.session.loginErrorMessage = 'Login First';
-            res.redirect('/digiworld/admin/adminLogin');
-        }
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-
-const getCreateBrand = (req, res) => {
-    try {
-        if (req.session.isAdmin) {
-            if (req.session.brandCreation) {
-                res.render('./admin/catagoryManagement/brandCreation', { brandCreation: req.session.brandCreation })
-            } else {
-                res.render('./admin/catagoryManagement/brandCreation')
-            }
-
-        } else {
-            req.session.loginErrorMessage = 'Login First'
-            res.redirect('/digiworld/admin/adminLogin')
-        }
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const postCreateBrand = async (req, res) => {
-    try {
-        const validation = await BrandModal.findOne({ brandName: req.body.brandName })
-        if (!validation) {
-            const newBrand = await BrandModal({
-                brandName: req.body.brandName
-            })
-            await newBrand.save()
-            req.session.brandCreation = 'Brand has created try new one'
-            res.redirect('/digiWorld/admin/catagoryManagement/createBrand')
-        } else {
-            req.session.brandCreation = 'Brand already exist'
-            res.redirect('/digiWorld/admin/catagoryManagement/createBrand')
-        }
-
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-
-///bannerManagement
-const getBannerManagement = (req, res) => {
-    try {
-        if (req.session.isAdmin) {
-            res.render('./admin/bannerManagement/bannerManagement')
-        } else {
-            req.session.loginErrorMessage = 'Login First'
-            res.redirect('/digiworld/admin/adminLogin')
-        }
-    } catch (error) {
-
-    }
-}
-
-const getCreateBanner = async (req, res) => {
-    try {
-        if (req.session.isAdmin) {
-            const brand = await BrandModal.distinct('brandName')
-            res.render('./admin/bannerManagement/bannerCreation', { brand })
-        } else {
-            req.session.loginErrorMessage = 'Login First'
-            res.redirect('/digiworld/admin/adminLogin')
-        }
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const postCreateBanner = async (req, res) => {
-    try {
-        const newBanner = await BannerModal({
-            brandName: req.body.brandName,
-            productName: req.body.productName,
-            discription: req.body.discription,
-            unitPrice: req.body.unitPrice,
-            launchDate: req.body.launchDate,
-            images: req.file.filename
-        })
-        await newBanner.save()
-        res.redirect('/digiWorld/admin/bannerManagement')
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 
 module.exports = {
@@ -445,23 +177,8 @@ module.exports = {
     postAdminOtpVerificationCode,
     getAdminPanel,
     postAdminLogout,
-    getUserManagement,
-    postEditUserManagement,
-    postEditSubmit,
-    postEditConfirm,
-    postDeleteUserManagement,
-    postDeleteConfirm,
-    getProductManagement,
-    getCreateProductManagement,
-    postCreateProductManagement,
-    postProductEditRequest,
-    postProductEditConfirm,
-    postUpdateStock,
-    postSoftDelete,
-    getBrandManagement,
-    getCreateBrand,
-    postCreateBrand,
-    getBannerManagement,
-    getCreateBanner,
-    postCreateBanner,
+ 
+ 
+   
+    
 }

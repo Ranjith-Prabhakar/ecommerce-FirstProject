@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <% locals.user || "" %>
+        <div class="data">
+            <div class="">
+                <h5>Name</h5>
+                <h5>
+                    <%locals.user.firstName + locals.user.lastName %>
+                </h5>
+            </div>
+            <div class="">
+                <h5>Email</h5>
+                <h5>
+                    <%locals.user.email>
+                </h5>
+            </div>
+            <div class="">
+                <h5>Phone</h5>
+                <h5>
+                    <%locals.user.phone>
+                </h5>
+            </div>
+            <div class="">
+                <h5>User Name</h5>
+                <h5>
+                    <%locals.user.userName>
+                </h5>
+            </div>
+            <%if(locals.user.shippingAddress.length) {%>
+                <% for(let i=0;i<locals.user.shippingAddress){%>
+                    <div class="">
+                        <h5>Address</h5>
+                        <h5>
+                            <%locals.user.shippingAddress[i]>
+                        </h5>
+                    </div>
+                    <%}%>
+                        <%}%>
+
+        </div>
+        <div class="image"></div>
+</body>
+
+</html>

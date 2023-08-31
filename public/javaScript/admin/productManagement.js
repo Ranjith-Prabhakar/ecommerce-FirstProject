@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const tableRow = form.closest('tr'); // Get the parent row of the form
 
             try {
-                const response = await fetch('/digiWorld/admin/productManagement/addOrRemove', {
+                const response = await fetch('/productAddOrRemove', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const freezValue = form.freez.value
 
             try {
-                const response = await fetch('/digiWorld/admin/productManagement/softDelete', {
+                const response = await fetch('/productSoftDelete', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

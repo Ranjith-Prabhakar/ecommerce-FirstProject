@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row vh-100 justify-content-center align-items-center ">
             <div class="col-4 text-center ">
-                <form action="/digiWorld/admin/adminOtpVerificationCode" method="post">
+                <form action="/adminOtpVerificationCode" method="post">
                     <% locals.otpErrorMessage?locals.otpErrorMessage:'' %>
                         <% if(locals.otpErrorMessage) {%>
                             <h6 class="text-warning ">

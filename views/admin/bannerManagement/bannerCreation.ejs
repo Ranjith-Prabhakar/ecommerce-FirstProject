@@ -1,7 +1,7 @@
 <%- include('../../layout/admin/header') %>
     <%- include('../../layout/admin/generalManagement') %>
         <div class="container w-75 ">
-            <form action="/digiWorld/admin/bannerManagement/createBanner" method="post" enctype="multipart/form-data">
+            <form action="/createBanner" method="post" enctype="multipart/form-data">
                 <h1 class="text-white mb-3">Create Banner</h1>
 
                 <% if(locals.brand.length) {%>

@@ -4,20 +4,19 @@ const app = express()
 require('dotenv').config()
 const PORT = process.env.PORT || 5000
 
-//mongoose
-const mongoose = require('mongoose')
-mongoose.connect(process.env.MongoDbCollection)
-    .then(() => console.log('mongoDb server also started exicution'))
-    .catch((error) => console.log(error.message))
-
+// data base
+const  mongoDb = require('./configuration/mongoDb')
+mongoDb()
 //importing routers
-const commonRoute = require('./routes/commonRoute')
 const adminRoute = require('./routes/adminRoute')
 const userRoute = require('./routes/userRoute')
+const userManagementRoute = require('./routes/userManagementRoute')
+const bannerRoute = require('./routes/bannerRoute')
+const brandRoute = require('./routes/brandRoute')
+const productRoute = require('./routes/productRoute')
 
-// morgan
-// const morgan = require('morgan')
-// app.use(morgan('tiny'))
+
+
 
 //static file managment
 app.use(express.static('public'))
@@ -58,9 +57,14 @@ app.use((req, res, next) => {
 })
 
 //activating routes
-app.use('/digiWorld/admin', adminRoute)
-app.use('/digiWorld/user', userRoute)
-app.use('/', commonRoute)
+app.use(userRoute)
+app.use(adminRoute)
+app.use(bannerRoute)
+app.use(brandRoute)
+app.use(userManagementRoute)
+app.use(productRoute)
+
+
 
 
 app.listen(PORT, () => console.log(`server has started on the port http://localhost:${PORT}`))

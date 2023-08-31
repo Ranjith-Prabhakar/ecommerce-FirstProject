@@ -38,8 +38,8 @@
                             <% if(locals.brands.length) {%>
                                 <h5 class="mt-2 ">Brand</h5>
 
-                                <form class="text-start " id="brands" action="/digiWorld/user/brandsfilter"
-                                    method="POST">
+                                <form class="text-start " id="brands" action="/brandsfilter"
+                                    method="get">
                                     <% locals.brands.forEach(brand=>{%>
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="brand"
@@ -68,7 +68,7 @@
                                                     </div>
                                                     <!-- product data -->
                                                     <div class="col-6">
-                                                        <form action="/digiWorld/user/singleProductPage" method="post">
+                                                        <form action="/singleProductPage" method="get">
                                                             <input type="hidden" name="id" value="<%=product._id%>">
                                                             <input class="fs-2 fw-bold nav-link " type="submit"
                                                                 value="<%=product.productName %>">

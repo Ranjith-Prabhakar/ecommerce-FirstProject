@@ -1,9 +1,9 @@
 <%- include('../layout/user/header') %>
 
     <div class="container">
-        <div class="row vh-100 justify-content-center justify-content-sm-end  align-items-center">
+        <div class="row vh-100 justify-content-center justify-content-sm-end  align-items-start mt-4">
             <div class="col-4">
-                <form action="/digiWorld/user/userSignUp" method="post">
+                <form action="/userSignUp" method="post">
                     <% locals.errorMessage?locals.errorMessage:'' %>
                         <% if(locals.errorMessage) {%>
                             <h6 class="text-danger ">
@@ -13,9 +13,9 @@
                                 <label class="form-label text-white " for="firstName">First Name</label>
                                 <input class="form-control w-75 " id="firstName" required type="text" name="firstName"
                                     placeholder="First Name">
-                                <label class="form-label text-white " for="lastName">Last Name</label>
+                                <!-- <label class="form-label text-white " for="lastName">Last Name</label>
                                 <input class="form-control w-75 " id="lastName" type="text" name="lastName"
-                                    placeholder="Last Name">
+                                    placeholder="Last Name"> -->
                                 <label class="form-label text-white " for="email">Email</label>
                                 <input class="form-control w-75 " id="email" required type="text" name="email"
                                     placeholder="email">
@@ -28,6 +28,8 @@
                                 <label class="form-label text-white " for="password">Password</label>
                                 <input class="form-control w-75 mb-3" id="password" required type="password"
                                     name="password" placeholder="Password">
+
+                             
                                 <button type="submit" class="btn btn-primary w-50  loginButtonColor">Submit</button>
                 </form>
             </div>

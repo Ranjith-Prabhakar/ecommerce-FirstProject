@@ -16,7 +16,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbarBg">
         <div class="container-fluid">
-            <a class="navbar-brand " href="/digiWorld/admin/adminLogin">DigiWorld</a>
+            <a class="navbar-brand " href="/adminLogin">DigiWorld</a>
 
             <%= locals.login || "" %>
                 <%= locals.otp || '' %>
@@ -35,7 +35,7 @@
                             </form>
                             <ul class="navbar-nav  me-5 mb-2 mb-lg-0">
                                 <li class="nav-item">
-                                    <form action="/digiWorld/admin/adminLogout" method="post">
+                                    <form action="/adminLogout" method="post">
                                         <button class="btn btn-outline-danger searchButton" type="submit">LogOut</button>
                                     </form>
                                 </li>

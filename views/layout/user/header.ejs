@@ -17,14 +17,14 @@
 
     <nav class="navbar navbar-expand-lg navbarBg ">
         <div class="container-fluid">
-            <a class="navbar-brand " href="/digiWorld/user/userHome">DigiWorld</a>
+            <a class="navbar-brand " href="Home">DigiWorld</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex ms-auto" role="search" action="/digiWorld/user/search" method="post">
+                <form class="d-flex ms-auto" role="search" action="/search" method="get">
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
                         name="search">
                     <button class="btn btn-outline-success searchButton " type="submit">Search</button>
@@ -35,7 +35,7 @@
                     <% locals.userName || "" %>
                         <% if(!locals.userName) {%>
                             <li class="nav-item">
-                                <a class="nav-link  " aria-current="page" href="/digiworld/user/userLogin">
+                                <a class="nav-link  " aria-current="page" href="/userLogin">
                                     LogIn
                                 </a>
                             </li>
@@ -51,7 +51,7 @@
                                         <%= locals.userName %>
                                     </a>
                                     <ul class="dropdown-menu navbarBg">
-                                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                                        <li><a class="dropdown-item" href="">Profile</a></li>
                                         <li><a class="dropdown-item" href="#">Orders</a></li>
                                         <li><a class="dropdown-item" href="#">WishList</a></li>
                                         <li><a class="dropdown-item" href="#">Notifications</a></li>
@@ -59,7 +59,7 @@
                                             <hr class="dropdown-divider">
                                         </li>
                                         <li>
-                                            <form action="/digiworld/user/userLogOut" method="post">
+                                            <form action="/userLogOut" method="post">
                                                 <button class="dropdown-item text-danger " type="submit">LogOut</button>
                                             </form>
                                         </li>
@@ -97,7 +97,7 @@
                                                     <% chunk.forEach(brand=> { %>
                                                         <div
                                                             class="brandBox col-2  p-4 rounded-4  m-3 mt-4  text-center ">
-                                                            <form action="/digiWorld/user/brandPage" method="post">
+                                                            <form action="/brandPage" method="get">
                                                                 <input class="fs-2 fw-bold nav-link " type="submit"
                                                                     name="brandName" value="<%= brand %>">
                                                             </form>

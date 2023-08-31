@@ -45,12 +45,12 @@
                                     </td>
                                     <td>
                                         <div class="d-flex gap-1 ">
-                                            <form action="/digiWorld/admin/userManagement/editRequest" method="post">
+                                            <form action="/userEditRequest" method="post">
                                                 <input type="hidden" name="id" value="<%= user._id %>">
                                                 <button class="btn btn-outline-warning " type="submit">Edit</button>
                                             </form>
 
-                                            <form action="/digiWorld/admin/userManagement/deleteRequest" method="post">
+                                            <form action="/userDeleteRequest" method="post">
                                                 <input type="hidden" name="id" value="<%= user._id %>">
                                                 <button class="btn btn-outline-danger" type="submit">Delete</button>
                                             </form>

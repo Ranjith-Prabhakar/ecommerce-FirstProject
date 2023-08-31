@@ -12,6 +12,7 @@ const User = mongoose.Schema({
     lastName: {
         type: String,
         required: true,
+        trim: true,
     },
     profImage: String,
     email: {

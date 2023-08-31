@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row vh-100 justify-content-center justify-content-sm-end  align-items-center ">
             <div class="col-4">
-                <form action="/digiWorld/user/userLogin" method="post">
+                <form action="/userLogin" method="post">
                     <% locals.userSignUpSuccess || '' %>
                         <% locals.loginErrorMessage || '' %>
                             <% locals.block || '' %>
@@ -29,7 +29,7 @@
                                                 <button type="submit"
                                                     class="btn btn-primary loginButtonColor w-50">Submit</button>
                 </form>
-                <a class="nav-link mt-3 text-white " href="/digiworld/user/userSignUp">Don`t have an Account</a>
+                <a class="nav-link mt-3 text-white " href="/userSignUp">Don`t have an Account</a>
             </div>
         </div>
     </div>

@@ -6,32 +6,31 @@ const bcrypt = require('bcrypt')
 const nodeMailer = require('nodemailer')
 const randomString = require('randomstring')
 require('dotenv').config()
+const  {errorHandler} = require('../middleWare/errorMiddleWare')
 
 
 
 const userHome = async (req, res) => {
     try {
-        if (req.session.isAdmin) {
-            res.redirect('/digiWorld/admin/adminPanel')
-        }
-        else if (req.session.userId) {
+    if (req.session.userId) {
             let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({ freez: { $eq: 'active' } })
             let banner = await BannerModal.find()
-            res.render('./users/userHome', { userName: userName.firstName, brands, products, banner })/// 
+            res.render('./users/userHome', { userName: userName.firstName, brands, products, banner })
         } else {
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({ freez: { $eq: 'active' } })
             let banner = await BannerModal.find()
             res.render('./users/userHome', { brands: brands, products, banner })
         }
-    } catch (error) {
-        console.log(error.message);
+    }  catch(err){
+        errorHandler(err, req, res, next);
     }
 }
+
 ///have to check it
-const postSearch = async (req, res) => {
+const getSearch = async (req, res) => {
     try {
         if (req.session.isAdmin) {
             res.redirect('/digiWorld/admin/adminPanel')
@@ -41,8 +40,8 @@ const postSearch = async (req, res) => {
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({
                 $or: [
-                    { productName: { $regex: new RegExp(`^${req.body.search}`, 'i') }, freez: 'active' },
-                    { brandName: { $regex: new RegExp(`^${req.body.search}`, 'i') }, freez: 'active' }
+                    { productName: { $regex: new RegExp(`^${req.query.search}`, 'i') }, freez: 'active' },
+                    { brandName: { $regex: new RegExp(`^${req.query.search}`, 'i') }, freez: 'active' }
                 ]
             });
 
@@ -52,8 +51,8 @@ const postSearch = async (req, res) => {
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({
                 $or: [
-                    { productName: { $regex: new RegExp(`^${req.body.search}`, 'i') }, freez: 'active' },
-                    { brandName: { $regex: new RegExp(`^${req.body.search}`, 'i') }, freez: 'active' }
+                    { productName: { $regex: new RegExp(`^${req.query.search}`, 'i') }, freez: 'active' },
+                    { brandName: { $regex: new RegExp(`^${req.query.search}`, 'i') }, freez: 'active' }
                 ]
             });
 
@@ -61,9 +60,8 @@ const postSearch = async (req, res) => {
             console.log(req.body.search);
             res.render('./users/userHome', { brands: brands, products, banner })
         }
-    } catch (error) {
-        console.log(error.message);
-
+    } catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
@@ -81,8 +79,8 @@ const getUserLogin = async (req, res) => {
         } else {
             res.render('./users/userLogin')
         }
-    } catch (error) {
-        console.log(error.message);
+    } catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
@@ -92,7 +90,7 @@ const postUserLogin = async (req, res) => {
         if (userData) {
             if (!userData.status) {
                 req.session.block = 'you are blocked by admin'
-                res.redirect('/digiWorld/user/userLogin')
+                res.redirect('/userLogin')
             } else if (!userData.isVerified) {
                 // Create a Nodemailer transporter
                 let transporter = nodeMailer.createTransport({
@@ -123,7 +121,7 @@ const postUserLogin = async (req, res) => {
                         req.session.otp = otp
                         req.session.userEmail = userData.email
                         req.session.notVerified = 'you have to verify fist to login'
-                        res.redirect('/digiworld/user/userOtpVerificationCode')
+                        res.redirect('/userOtpVerificationCode')
                     }
                 });
             }
@@ -134,11 +132,11 @@ const postUserLogin = async (req, res) => {
                     } else {
                         if (result) {
                             req.session.userId = userData._id
-                            res.cookie('password', req.body.password)
-                            res.redirect('/digiWorld/user/userHome',)
+                            res.cookie('userId', req.body.password)
+                            res.redirect('/Home',)
                         } else {
                             req.session.loginErrorMessage = 'invalid username or password'
-                            res.redirect('/digiWorld/user/userLogin')
+                            res.redirect('/userLogin')
                         }
                     }
                 });
@@ -146,10 +144,10 @@ const postUserLogin = async (req, res) => {
 
         } else {
             req.session.loginErrorMessage = 'invalid username or password'
-            res.redirect('/digiWorld/user/userLogin')
+            res.redirect('/userLogin')
         }
-    } catch (error) {
-        console.log(error.message);
+    } catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
@@ -164,8 +162,8 @@ const getUserSignUp = async (req, res) => {
             res.render('./users/userSignUp')
         }
 
-    } catch (error) {
-        console.log(error.message);
+    }catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
@@ -206,12 +204,12 @@ const postUserSignUp = async (req, res) => {
                         console.log('Error sending email:', error);
                     } else {
                         req.session.otp = otp
-                        res.redirect('/digiworld/user/userOtpVerificationCode')
+                        res.redirect('/userOtpVerificationCode')
                     }
                 });
             } else {
                 req.session.errorMessage = 'invalid userName or password'
-                res.redirect('/digiworld/user/userSignUp')
+                res.redirect('/userSignUp')
             }
 
         } else {
@@ -234,13 +232,12 @@ const postUserSignUp = async (req, res) => {
                     console.log('Error sending email:', error);
                 } else {
                     req.session.otp = otp
-                    res.redirect('/digiworld/user/userOtpVerificationCode')
+                    res.redirect('/userOtpVerificationCode')
                 }
             });
         }
-    }
-    catch (error) {
-        console.log(error.message);
+    }catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
@@ -248,7 +245,7 @@ const postUserSignUp = async (req, res) => {
 
 
 const getUserOtpVerificationCode = async (req, res) => {
-    if (req.session.otpErrorMessage) {
+   try{ if (req.session.otpErrorMessage) {
         res.render('./users/userOtpVerificationCode', { otpErrorMessage: req.session.otpErrorMessage })
         req.session.otpErrorMessage = ''
     } else if (req.session.notVerified) {
@@ -257,21 +254,25 @@ const getUserOtpVerificationCode = async (req, res) => {
     }
     else {
         res.render('./users/userOtpVerificationCode')
+    }}catch(err){
+        errorHandler(err, req, res, next);
     }
 
 }
 
 const postUserOtpVerificationCode = async (req, res) => {
 
-    if (req.body.otp === req.session.otp) {
+   try{ if (req.body.otp === req.session.otp) {
         await UserModel.updateOne({ email: req.session.userEmail }, { $set: { isVerified: true } })
         req.session.userSignUpSuccess = 'signedUp successfully, Login Now'
-        res.redirect('/digiWorld/user/userLogin')
+        res.redirect('/userLogin')
         req.session.userEmail = ''
         req.session.otp = ''
     } else {
         req.session.otpErrorMessage = 'invalid otp'
-        res.redirect('/digiworld/user/userOtpVerificationCode')
+        res.redirect('/userOtpVerificationCode')
+    }}catch(err){
+        errorHandler(err, req, res, next);
     }
 
 }
@@ -279,94 +280,99 @@ const postUserOtpVerificationCode = async (req, res) => {
 
 const postUserLogOut = (req, res) => {
     try {
-        req.session.destroy((err) => {
-            if (err) {
-                console.log(err.message);
-            } else {
-                res.clearCookie('password')
-                res.redirect('/digiWorld/user/userHome')
-            }
-        })
-    } catch (error) {
-        console.log(error.message);
+        if (req.session.isAdmin) {
+
+            delete req.session.userId;
+            res.clearCookie('userId')
+            res.redirect('/Home')
+        } else {
+            req.session.destroy((err) => {
+                if (err) {
+                    console.log(err.message);
+                } else {
+                    res.clearCookie('userId')
+                    res.redirect('/Home')
+                }
+            })
+        }
+
+    }catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
 
 
 // brand page
-const postBrandPage = async (req, res) => {
+const getBrandPage = async (req, res) => {
     try {
         if (!req.session.userId) {
             let brands = await BrandModal.distinct('brandName')
-            let products = await ProductModal.find({ brandName: req.body.brandName, freez: { $eq: 'active' } })
+            let products = await ProductModal.find({ brandName: req.query.brandName, freez: { $eq: 'active' } })
             res.render('./users/brandPage', { brands, products })
         } else {
             let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
             let brands = await BrandModal.distinct('brandName')
-            let products = await ProductModal.find({ brandName: req.body.brandName, freez: { $eq: 'active' } })
+            let products = await ProductModal.find({ brandName: req.query.brandName, freez: { $eq: 'active' } })
             res.render('./users/brandPage', { brands, products, userName: userName.firstName })
         }
 
 
-    } catch (error) {
-        console.log(error.message)
-
+    } catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
 // filter
-const postBrandFilter = async (req, res) => {
+const getBrandFilter = async (req, res) => {
     try {
         if (!req.session.userId) {
             let brand = []
-            if (typeof req.body.brand === 'string') {
-                brand.push(req.body.brand)
+            if (typeof req.query.brand === 'string') {
+                brand.push(req.query.brand)
             } else {
-                brand = [...req.body.brand]
+                brand = [...req.query.brand]
             }
             let brands = await BrandModal.distinct('brandName')
             const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] }, freez: 'active' }).sort({ brandName: 1 })
             res.render('./users/productFilter', { filterProducts, brands })
         } else {
             let brand = []
-            if (typeof req.body.brand === 'string') {
-                brand.push(req.body.brand)
+            if (typeof req.query.brand === 'string') {
+                brand.push(req.query.brand)
             } else {
-                brand = [...req.body.brand]
+                brand = [...req.query.brand]
             }
             let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
             let brands = await BrandModal.distinct('brandName')
             const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] } }).sort({ brandName: 1 })
             res.render('./users/productFilter', { brands, filterProducts, userName: userName.firstName })
         }
-    } catch (error) {
-        console.log(error.message);
-
+    }catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
-const postSingleProductPage = async (req, res) => {
+const getSingleProductPage = async (req, res) => {
     try {
         if (!req.session.userId) {
             let brands = await BrandModal.distinct('brandName')
-            let product = await ProductModal.findOne({ _id: req.body.id })
+            let product = await ProductModal.findOne({ _id: req.query.id })
             res.render('./users/singleProduct', { brands, product })
         } else {
             let userName = await UserModel.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
             let brands = await BrandModal.distinct('brandName')
-            let product = await ProductModal.findOne({ _id: req.body.id })
+            let product = await ProductModal.findOne({ _id: req.query.id })
             res.render('./users/singleProduct', { brands, product, userName: userName.firstName })
         }
-    } catch (error) {
-        console.log(error.message);
-
+    } catch(err){
+        errorHandler(err, req, res, next);
     }
 }
 
 module.exports = {
     userHome,
-    postSearch,
+    getSearch,
     getUserSignUp,
     postUserSignUp,
     getUserOtpVerificationCode,
@@ -374,7 +380,7 @@ module.exports = {
     getUserLogin,
     postUserLogin,
     postUserLogOut,
-    postBrandFilter,
-    postBrandPage,
-    postSingleProductPage
+    getBrandFilter,
+    getBrandPage,
+    getSingleProductPage
 }
