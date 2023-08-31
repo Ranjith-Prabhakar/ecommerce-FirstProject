@@ -1,52 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('../layout/user/header') %>
+    <% if (locals.user) { %>
+        <div class="d-flex">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
 
-<body>
-    <% locals.user || "" %>
-        <div class="data">
-            <div class="">
-                <h5>Name</h5>
-                <h5>
-                    <%locals.user.firstName + locals.user.lastName %>
-                </h5>
+            <div class="data">
+                <div class="d-flex ">
+                    <h5>Name :</h5>
+                    <h5>
+                        <%= locals.user.firstName + " " + locals.user.lastName %>
+                    </h5>
+                </div>
+                <div class="d-flex ">
+                    <h5>Email :</h5>
+                    <h5>
+                        <%= locals.user.email %>
+                    </h5>
+                </div>
+                <div class="d-flex ">
+                    <h5>Phone :</h5>
+                    <h5>
+                        <%= locals.user.phone %>
+                    </h5>
+                </div>
+                <div class="d-flex ">
+                    <h5>User Name :</h5>
+                    <h5>
+                        <%= locals.user.userName %>
+                    </h5>
+                </div>
+                <% if (locals.user.shippingAddress.length) { %>
+                    <% for (let i=0; i < locals.user.shippingAddress.length; i++) { %>
+                        <div class="d-flex ">
+                            <h5>Address :</h5>
+                            <h5>
+                                <%= locals.user.shippingAddress[i] %>
+                            </h5>
+                        </div>
+                        <% } %>
+                            <% } %>
             </div>
-            <div class="">
-                <h5>Email</h5>
-                <h5>
-                    <%locals.user.email>
-                </h5>
-            </div>
-            <div class="">
-                <h5>Phone</h5>
-                <h5>
-                    <%locals.user.phone>
-                </h5>
-            </div>
-            <div class="">
-                <h5>User Name</h5>
-                <h5>
-                    <%locals.user.userName>
-                </h5>
-            </div>
-            <%if(locals.user.shippingAddress.length) {%>
-                <% for(let i=0;i<locals.user.shippingAddress){%>
-                    <div class="">
-                        <h5>Address</h5>
-                        <h5>
-                            <%locals.user.shippingAddress[i]>
-                        </h5>
-                    </div>
-                    <%}%>
-                        <%}%>
+            <div class="image">
+                <% if(locals.user.profImage){ %>
+                    <img src="/userImages/<%=locals.user.profImage%>" alt="profile-Image" srcset="">
+                    <% } else {%>
+                        <img class="profile-photo-add-icon" src="/userImages/profile photo adder icon.png"
+                            alt="profile-Image" srcset="">
+                        <% } %>
 
+                            <form id="addProfilePhoto" class="d-none " action="addProfileImage" method="post"
+                                enctype="multipart/form-data">
+                                <input type="hidden" name="userId" value="<%=locals.user._id%>" id="">
+                                <input type="file" name="profileImage">
+                                <button type="submit">Upload</button>
+                            </form>
+            </div>
         </div>
-        <div class="image"></div>
-</body>
-
-</html>
+        <% } %>
+            <script src="/javaScript/user/userProfile.js"></script>
+            <%- include('../layout/user/footer') %>

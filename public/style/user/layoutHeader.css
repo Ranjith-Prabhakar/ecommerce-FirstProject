@@ -93,3 +93,11 @@ body{
     right:-160px;
     padding-left: 100px;
 }
+
+/* profile image adder */
+.profile-photo-add-icon{
+    border-radius: 100%;
+    height: 100px;
+    width: 100px;
+ 
+}
