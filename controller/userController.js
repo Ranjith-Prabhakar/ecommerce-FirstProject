@@ -387,8 +387,6 @@ const getProfile = async (req, res, next) => {
 
 const postaddProfileImage = async (req, res, next) => {
     try {
-        console.log(req.body.userId);
-        console.log(req.file); // Access the uploaded profile image using req.file
         await UserModel.updateOne({ _id: req.body.userId }, { $set: { profImage: req.file.filename } })
         res.redirect(`/profile?userId=${req.body.userId}`);
     } catch (error) {

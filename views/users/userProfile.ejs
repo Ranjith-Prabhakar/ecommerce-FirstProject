@@ -50,28 +50,28 @@
                                     <label for="country">Country</label>
                                     <input id="country" type="text" name="country"
                                         value="<%= locals.user.shippingAddress[i].country %>"><br>
-                                        <label for="state">State</label>
-                                        <input id="state" type="text" name="state"
+                                    <label for="state">State</label>
+                                    <input id="state" type="text" name="state"
                                         value="<%= locals.user.shippingAddress[i].state %>"><br>
-                                        <label for="state">District</label>
+                                    <label for="state">District</label>
                                     <input id="state" type="text" name="district"
                                         value="<%= locals.user.shippingAddress[i].district %>"><br>
-                                        <label for="City">City</label>
+                                    <label for="City">City</label>
                                     <input id="City" type="text" name="city"
                                         value="<%= locals.user.shippingAddress[i].city %>"><br>
-                                        <label for="Pincode">Pincode</label>
+                                    <label for="Pincode">Pincode</label>
                                     <input id="Pincode" type="text" name="pincode"
                                         value="<%= locals.user.shippingAddress[i].pincode %>"><br>
-                                        <label for="Street">Street</label>
+                                    <label for="Street">Street</label>
                                     <input id="Street" type="text" name="street"
                                         value="<%= locals.user.shippingAddress[i].street %>"><br>
-                                        <label for="House Name">House Name</label>
+                                    <label for="House Name">House Name</label>
                                     <input id="House Name" type="text" name="houseName"
                                         value="<%= locals.user.shippingAddress[i].houseName %>"><br>
-                                        <label for="Building No">Building No</label>
+                                    <label for="Building No">Building No</label>
                                     <input id="Building No" type="text" name="buildingNo"
                                         value="<%= locals.user.shippingAddress[i].buildingNo %>"><br>
-                                        <label for="Land Mark">Land Mark</label>
+                                    <label for="Land Mark">Land Mark</label>
                                     <input id="Land Mark" type="text" name="landMark"
                                         value="<%= locals.user.shippingAddress[i].landMark %>"><br>
                                     <input class="btn btn-outline-light submitProfileEdit" type="submit" value="submit">
@@ -109,8 +109,8 @@
                         <img class="profile-photo-add-icon" src="/userImages/profile photo adder icon.png"
                             alt="profile-Image" srcset="">
                         <% } %>
-
-                            <form id="addProfilePhoto" class="d-none " action="addProfileImage" method="post"
+                            <button class="profile-image-upload">Edit Image</button>
+                            <form id="addProfilePhoto" class="d-none " action="/addProfileImage" method="post"
                                 enctype="multipart/form-data">
                                 <input type="hidden" name="userId" value="<%=locals.user._id%>" id="">
                                 <input type="file" name="profileImage">
