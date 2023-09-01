@@ -1,10 +1,10 @@
 const router = require('express').Router()
 const brandController = require('../controller/brandController')
-const { adminSessionHandler} = require('../middleWare/adminValidator')
+const { adminValidation} = require('../middleWare/adminValidator')
 
-router.get('/catagoryManagement', adminSessionHandler, brandController.getBrandManagement)/////
-router.get('/createBrand',adminSessionHandler, brandController.getCreateBrand)/////
-router.post('/createBrand', adminSessionHandler, brandController.postCreateBrand)
+router.get('/catagoryManagement', adminValidation, brandController.getBrandManagement)/////
+router.get('/createBrand',adminValidation, brandController.getCreateBrand)/////
+router.post('/createBrand', adminValidation, brandController.postCreateBrand)
 
 
 module.exports = router

@@ -1,16 +1,16 @@
 const router = require('express').Router()
 const adminController = require('../controller/adminController')
-const { validateAdmin,adminSessionHandler} = require('../middleWare/adminValidator')
+const { adminRestriction,adminSessionHandler,adminValidation} = require('../middleWare/adminValidator')
 
 
-// router.get('/adminSignUp',adminController.getAdminSignUp)
-// router.post('/adminSignUp',adminController.postAdminSignUp)
-router.get('/adminLogin', validateAdmin, adminController.getAdminLogin)
-router.post('/adminLogin', validateAdmin, adminController.postAdminLogin)
-router.get('/adminOtpVerificationCode', validateAdmin, adminController.getAdminOtpVerificationCode)
-router.post('/adminOtpVerificationCode', validateAdmin, adminController.postAdminOtpVerificationCode)
-router.get('/adminPanel', adminSessionHandler, adminController.getAdminPanel)///
-router.post('/adminLogout', adminSessionHandler,adminController.postAdminLogout)
+// router.get('/adminSignUp',adminSessionHandler,adminRestriction,adminController.getAdminSignUp)
+// router.post('/adminSignUp',adminSessionHandler,adminRestriction,adminController.postAdminSignUp)
+router.get('/adminLogin',adminSessionHandler, adminRestriction, adminController.getAdminLogin)
+router.post('/adminLogin',adminSessionHandler,  adminRestriction, adminController.postAdminLogin)
+router.get('/adminOtpVerificationCode', adminSessionHandler, adminRestriction, adminController.getAdminOtpVerificationCode)
+router.post('/adminOtpVerificationCode',adminSessionHandler,  adminRestriction, adminController.postAdminOtpVerificationCode)
+router.get('/adminPanel',adminValidation, adminSessionHandler,  adminController.getAdminPanel)///
+router.post('/adminLogout',adminValidation, adminSessionHandler,adminController.postAdminLogout)
 
 
 

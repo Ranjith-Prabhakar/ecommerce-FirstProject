@@ -127,13 +127,15 @@ const postUserLogin = async (req, res, next) => {
                 });
             }
             else {
-                bcrypt.compare(req.body.password, userData.password, (err, result) => {
+                bcrypt.compare(req.body.password, userData.password, async(err, result) => {
                     if (err) {
                         console.error('Error comparing passwords:', err);
                     } else {
                         if (result) {
                             req.session.userId = userData._id
-                            res.cookie('userId', req.body.password)
+                            let hash = await bcrypt.hash(req.body.password, 2)
+                            req.session.userHash = hash
+                            res.cookie('userId', hash)
                             res.redirect('/Home',)
                         } else {
                             req.session.loginErrorMessage = 'invalid username or password'

@@ -1,8 +1,9 @@
-
+const BrandModal = require('../model/brandModal')
+const BannerModal = require('../model/bannarModal')
 const  {errorHandler} = require('../middleWare/errorMiddleWare')
 
 
-const getBannerManagement = (req, res) => {
+const getBannerManagement = (req, res,next) => {
     try {
         if (req.session.isAdmin) {
             res.render('./admin/bannerManagement/bannerManagement')
@@ -15,10 +16,9 @@ const getBannerManagement = (req, res) => {
     }
 }
 
-const BannerModal = require('../model/bannarModal')
 
 
-const getCreateBanner = async (req, res) => {
+const getCreateBanner = async (req, res,next) => {
     try {
         if (req.session.isAdmin) {
             const brand = await BrandModal.distinct('brandName')
@@ -32,7 +32,7 @@ const getCreateBanner = async (req, res) => {
     }
 }
 
-const postCreateBanner = async (req, res) => {
+const postCreateBanner = async (req, res,next) => {
     try {
         const newBanner = await BannerModal({
             brandName: req.body.brandName,
