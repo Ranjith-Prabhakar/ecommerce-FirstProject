@@ -25,5 +25,8 @@ router.get('/singleProductPage', userController.getSingleProductPage)
 
 router.get('/profile',userSessionHandler,userController.getProfile)
 router.post('/addProfileImage',profileImageUpload.single('profileImage'),userSessionHandler,userController.postaddProfileImage)
+router.post('/createAddress',userSessionHandler,userController.postCreateAddress)
+router.post('/editAddress',userSessionHandler,userController.postEditAddress)
+router.post('/deleteAddress',userSessionHandler,userController.postDeleteAddress)
 
 module.exports = router

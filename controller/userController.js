@@ -7,6 +7,7 @@ const nodeMailer = require('nodemailer')
 const randomString = require('randomstring')
 require('dotenv').config()
 const { errorHandler } = require('../middleWare/errorMiddleWare')
+const userModal = require('../model/userModal')
 
 
 
@@ -389,12 +390,49 @@ const postaddProfileImage = async (req, res, next) => {
         console.log(req.body.userId);
         console.log(req.file); // Access the uploaded profile image using req.file
         await UserModel.updateOne({ _id: req.body.userId }, { $set: { profImage: req.file.filename } })
-        res.redirect('/profile');
+        res.redirect(`/profile?userId=${req.body.userId}`);
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 }
 
+const postCreateAddress = async (req, res, next) => {
+    try {
+
+        const formDataObject = req.body.formDataObject; // Assign formDataObject from request body
+
+        await UserModel.updateOne(
+            { _id: formDataObject.userId },
+            { $push: { shippingAddress: formDataObject } }
+        );
+        res.json({ success: true })
+    } catch (error) {
+        errorHandler(error, req, res, next);
+    }
+};
+
+const postEditAddress = async (req, res, next) => {
+    try {
+        let userId = req.body.newAddressFormData.userId
+        let index = req.body.index
+        let newObject = req.body.newAddressFormData
+        delete newObject.userId
+        await UserModel.updateOne({ _id: userId }, { $set: { [`shippingAddress.${index}`]: newObject } })
+        res.json({ success: true })
+    } catch (error) {
+        errorHandler(error, req, res, next)
+    }
+}
+
+const postDeleteAddress = async (req, res, next) => {
+    try {
+        const { userId, index, objectId } = req.body
+        await UserModel.updateOne({ _id: userId }, { $pull: { shippingAddress: { _id: objectId } } });
+        res.json({ success: true })
+    } catch (error) {
+        errorHandler(error, req, res, next)
+    }
+}
 
 module.exports = {
     userHome,
@@ -410,5 +448,8 @@ module.exports = {
     getBrandPage,
     getSingleProductPage,
     getProfile,
-    postaddProfileImage
+    postaddProfileImage,
+    postCreateAddress,
+    postEditAddress,
+    postDeleteAddress
 }

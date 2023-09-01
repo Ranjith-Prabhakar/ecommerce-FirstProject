@@ -31,13 +31,76 @@
                 <% if (locals.user.shippingAddress.length) { %>
                     <% for (let i=0; i < locals.user.shippingAddress.length; i++) { %>
                         <div class="d-flex ">
-                            <h5>Address :</h5>
-                            <h5>
-                                <%= locals.user.shippingAddress[i] %>
-                            </h5>
+                            <!-- address -->
+                            <div class="d-block">
+                                <h5>Address :</h5>
+                                <h5>
+                                    <%= locals.user.shippingAddress[i] %>
+                                </h5>
+                                <button class="btn btn-outline-light addressEdit"
+                                    data-address-index="<%= i %>">Edit</button>
+                                <button class="btn btn-outline-light addressDelete" data-userId="<%= locals.user._id %>"
+                                    data-objectId="<%= locals.user.shippingAddress[i]._id %>"
+                                    data-address-index="<%= i %>">Delete</button>
+                            </div>
+                            <!-- address edit division -->
+                            <div id="addressHiddenDiv<%= i %>" class="d-none">
+                                <form name="editAddress<%= i %>" action="/editAddress">
+                                    <input type="hidden" name="userId" value="<%= locals.user._id %>"><br>
+                                    <label for="country">Country</label>
+                                    <input id="country" type="text" name="country"
+                                        value="<%= locals.user.shippingAddress[i].country %>"><br>
+                                        <label for="state">State</label>
+                                        <input id="state" type="text" name="state"
+                                        value="<%= locals.user.shippingAddress[i].state %>"><br>
+                                        <label for="state">District</label>
+                                    <input id="state" type="text" name="district"
+                                        value="<%= locals.user.shippingAddress[i].district %>"><br>
+                                        <label for="City">City</label>
+                                    <input id="City" type="text" name="city"
+                                        value="<%= locals.user.shippingAddress[i].city %>"><br>
+                                        <label for="Pincode">Pincode</label>
+                                    <input id="Pincode" type="text" name="pincode"
+                                        value="<%= locals.user.shippingAddress[i].pincode %>"><br>
+                                        <label for="Street">Street</label>
+                                    <input id="Street" type="text" name="street"
+                                        value="<%= locals.user.shippingAddress[i].street %>"><br>
+                                        <label for="House Name">House Name</label>
+                                    <input id="House Name" type="text" name="houseName"
+                                        value="<%= locals.user.shippingAddress[i].houseName %>"><br>
+                                        <label for="Building No">Building No</label>
+                                    <input id="Building No" type="text" name="buildingNo"
+                                        value="<%= locals.user.shippingAddress[i].buildingNo %>"><br>
+                                        <label for="Land Mark">Land Mark</label>
+                                    <input id="Land Mark" type="text" name="landMark"
+                                        value="<%= locals.user.shippingAddress[i].landMark %>"><br>
+                                    <input class="btn btn-outline-light submitProfileEdit" type="submit" value="submit">
+                                    <!-- <input class="btn btn-outline-light cancellProfileEdit"
+                                        data-address-cancell="<%= i %>" type="submit" value="cancell">  -->
+                                    <a class="btn btn-outline-light cancellProfileEdit"
+                                        data-address-cancell-index="<%= i %>" href="">cancell</a>
+                                </form>
+                            </div>
+
                         </div>
                         <% } %>
                             <% } %>
+                                <!-- form creation -->
+                                <form name="addressForm" action="/createAddress" class="d-none add-address">
+                                    <input type="hidden" name="userId" value="<%= locals.user._id %>">
+                                    <input type="text" name="country" placeholder="country"><br>
+                                    <input type="text" name="state" placeholder="state"><br>
+                                    <input type="text" name="district" placeholder="district"><br>
+                                    <input type="text" name="city" placeholder="city"><br>
+                                    <input type="text" name="pincode" placeholder="pincode"><br>
+                                    <input type="text" name="street" placeholder="street"><br>
+                                    <input type="text" name="houseName" placeholder="houseName"><br>
+                                    <input type="text" name="buildingNo" placeholder="buildingNo"><br>
+                                    <input type="text" name="landMark" placeholder="landMark"><br>
+                                    <input class="btn btn-outline-light" type="submit" value="Add Address">
+                                </form>
+                                <a class="btn btn-outline-light create-address" href="">Create New Address</a>
+
             </div>
             <div class="image">
                 <% if(locals.user.profImage){ %>

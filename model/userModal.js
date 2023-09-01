@@ -86,6 +86,7 @@ const User = mongoose.Schema({
         },
     },
     shippingAddress: [{
+       
         country: {
             type: String,
             // required: true
@@ -103,7 +104,7 @@ const User = mongoose.Schema({
             // required: true
         },
         pincode: {
-            type: Number,
+            type: String,
             // required: true
         },
         street: {
