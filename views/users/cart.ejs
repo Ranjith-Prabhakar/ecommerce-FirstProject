@@ -5,7 +5,9 @@
                     <%= %>
                 </span> </h1>
         </div>
-
+<div id="selectedProductPrice" class="d-none ">
+    
+</div>
         <div>
             <% locals.cartProducts || '' %>
                 <% if(locals.cartProducts){ %>
@@ -15,7 +17,9 @@
 
                 
                 <div class="cartProducts">
-                    
+                    <!-- Example checkbox for a product -->
+<input type="checkbox" data-index="<%=i  %>" id="productCheckbox_<%=cartProducts[i]._id%>" data-product-id="<%=cartProducts[i]._id%>" data-product-price="<%=cartProducts[i].unitPrice  %>">
+
                 <!-- product image -->
                         <div class="col-4">
                             <img class="rounded-1 imgSize" src="/productImages/<%=cartProducts[i].gallery[0]%>"
@@ -59,8 +63,10 @@
                                     <% } else{ %>
                                         <h5 class="text-success  ">instock </h5>
                                         <% } %>
-
-
+                                        <h5>
+                                            <%=cartProducts[i].unitPrice %>
+                                        </h5>
+                                        
                                         <div>
                                             <button class="increase">add more</button>
                                             <button id="cartUpdate<%=i%>" value=" <%=cartProducts[i].cartQuantity%>" data-product-quantity="<%=cartProducts[i].quantity %>" data-product-id="<%=cartProducts[i]._id%>"> <%=cartProducts[i].cartQuantity%></button>
