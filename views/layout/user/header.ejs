@@ -51,7 +51,8 @@
                                         <%= locals.user.firstName %>
                                     </a>
                                     <ul class="dropdown-menu navbarBg">
-                                        <li><a class="dropdown-item" href="/profile?userId=<%= locals.user._id %>">Profile</a></li>
+                                        <li><a class="dropdown-item"
+                                                href="/profile?userId=<%= locals.user._id %>">Profile</a></li>
                                         <li><a class="dropdown-item" href="#">Orders</a></li>
                                         <li><a class="dropdown-item" href="#">WishList</a></li>
                                         <li><a class="dropdown-item" href="#">Notifications</a></li>
@@ -66,8 +67,15 @@
                                     </ul>
                                 </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link " href="#">Cart</a>
+                                <li class="nav-item position-relative ">
+                                    <a class="nav-link " href="/cart">Cart
+                                        <% if(locals.user.cart.length) {%>
+                                            <span id="valueChanger"
+                                                class="position-absolute top-25  start-100 translate-middle badge rounded-pill bg-danger ">
+                                                <%=locals.user.cart.length %>
+                                            </span>
+                                            <% } %>
+                                    </a>
                                 </li>
                                 <% } %>
 

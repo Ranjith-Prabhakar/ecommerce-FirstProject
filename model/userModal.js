@@ -138,14 +138,19 @@ const User = mongoose.Schema({
         required:true,
         default:true
     },
-    cart: {
-        brandId: ObjectId,
-        itemCode: ObjectId
-    },
-    wishList: {
-        brandId: ObjectId,
-        itemCode: ObjectId
-    }
+    cart: [{
+        productId: ObjectId,
+        quantity:{
+            type:Number,
+            default:0
+        }
+    }],
+    wishList: [{
+        productId: ObjectId,
+    }]
 })
 
 module.exports = mongoose.model('digiUser', User)
+
+
+                            

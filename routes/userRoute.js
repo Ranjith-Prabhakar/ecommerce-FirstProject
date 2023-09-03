@@ -29,4 +29,11 @@ router.post('/createAddress', userSessionHandler, userValidation, userController
 router.post('/editAddress', userSessionHandler, userValidation, userController.postEditAddress)
 router.post('/deleteAddress', userSessionHandler, userValidation, userController.postDeleteAddress)
 
+//cart
+
+router.get('/cart',userSessionHandler, userValidation,userController.getCart)
+router.post('/addToCart',userSessionHandler, userValidation,userController.postAddToCart)
+router.post('/updateCartProductQty',userSessionHandler, userValidation,userController.postUpdateCartProductQty)
+router.post('/removeFromCart',userSessionHandler, userValidation,userController.postRemoveFromCart)
+
 module.exports = router

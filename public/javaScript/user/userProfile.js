@@ -1,6 +1,22 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+    //userBioData edit
+    let userBioData = document.querySelector('.userBioData')
+    userBioData.addEventListener('click', (event) => {
+        event.preventDefault()
+        let bioData = document.getElementById('bioData')
+        let bioDataEdit = document.getElementById('bioDataEdit')
+        console.log(bioData);
+        console.log(bioDataEdit);
+        bioData.classList.toggle('d-none')
+        bioDataEdit.classList.toggle('d-none')
+        console.log("================");
+        console.log(bioData);
+        console.log(bioDataEdit);
+
+    })
+
     //toggle image
     let profilePhoto = document.getElementsByClassName('profile-image-upload')[0]; // Get the first element
     if (profilePhoto) {
@@ -73,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const addressIndex = editButton.getAttribute('data-address-index');
             let addressHiddenDiv = document.getElementById('addressHiddenDiv' + addressIndex);
             addressHiddenDiv.classList.toggle('d-none');
+            e
         });
     });
 
@@ -123,19 +140,21 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let [key, value] of newAddressForm.entries()) {
                 newAddressFormData[key] = value;
             }
-           try {let response = await fetch('/editAddress', {
-                method: 'post',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ newAddressFormData, index })
-            })
+            try {
+                let response = await fetch('/editAddress', {
+                    method: 'post',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ newAddressFormData, index })
+                })
 
-            let data = await response.json()
-            if (data.success) {
-                window.location.href = `/profile?userId=${newAddressFormData.userId}`
+                let data = await response.json()
+                if (data.success) {
+                    window.location.href = `/profile?userId=${newAddressFormData.userId}`
 
-            }}catch(error){
+                }
+            } catch (error) {
                 console.log(error.message)
             }
         })
@@ -144,25 +163,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let addressDelete = document.querySelectorAll('.addressDelete')
     addressDelete.forEach((addressDelete) => {
-        addressDelete.addEventListener('click',async (event) => {
+        addressDelete.addEventListener('click', async (event) => {
             event.preventDefault()
             let userId = addressDelete.getAttribute('data-userId')
             let index = addressDelete.getAttribute('data-address-index')
             let objectId = addressDelete.getAttribute('data-objectId')
 
-           try {let response = await fetch('/deleteAddress',{
-                method:'post',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({userId,index,objectId})
-                
-            })
-            let data = await response.json()
+            try {
+                let response = await fetch('/deleteAddress', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId, index, objectId })
 
-            if(data.success){
-                window.location.href=`/profile?userId=${userId}`
-            }}catch(error){
+                })
+                let data = await response.json()
+
+                if (data.success) {
+                    window.location.href = `/profile?userId=${userId}`
+                }
+            } catch (error) {
                 console.log(error.message)
             }
         })

@@ -38,8 +38,7 @@
                             <% if(locals.brands.length) {%>
                                 <h5 class="mt-2 ">Brand</h5>
 
-                                <form class="text-start " id="brands" action="/brandsfilter"
-                                    method="get">
+                                <form class="text-start " id="brands" action="/brandsfilter" method="get">
                                     <% locals.brands.forEach(brand=>{%>
                                         <label class="form-check-label">
                                             <input class="form-check-input" type="checkbox" name="brand"
@@ -106,8 +105,45 @@
                                                                         <div>
                                                                             <a class="btn btn-outline-light "
                                                                                 href="#">Buy Now</a>
-                                                                            <a class="btn btn-outline-light "
-                                                                                href="#">Add To Cart</a>
+
+
+
+                                                                            <% let buttonName='Add To Cart' ; %>
+
+                                                                                <% if (locals.user && locals.user._id) {
+                                                                                    %>
+                                                                                    <% if (locals.user.cart.length) { %>
+                                                                                        <% for (let i=0; i <
+                                                                                            locals.user.cart.length;
+                                                                                            i++) { %>
+                                                                                            <% if
+                                                                                                (locals.user.cart[i].productId === product._id)
+                                                                                                { %>
+                                                                                                <% buttonName='Go To Cart'
+                                                                                                    ; %>
+                                                                                                    <% break; %>
+                                                                                                        <% } %>
+                                                                                                            <% } %>
+                                                                                                                <% } %>
+                                                                                                                    <a class="btn btn-outline-light productCount"
+                                                                                                                        data-product-id="<%= product._id %>"
+                                                                                                                        data-user-id="<%= locals.user._id %>"
+                                                                                                                        href="#">
+
+                                                                                                                        <%= buttonName
+                                                                                                                            %>
+                                                                                                                    </a>
+                                                                                                                    <% } else
+                                                                                                                        {
+                                                                                                                        %>
+                                                                                                                        <a class="btn btn-outline-light productCount"
+                                                                                                                            data-product-id="<%= product._id %>"
+                                                                                                                            href="#">Add
+                                                                                                                            To
+                                                                                                                            Cart</a>
+                                                                                                                        <% }
+                                                                                                                            %>
+
                                                                         </div>
                                                     </div>
                                                     <!-- product price -->
@@ -135,5 +171,5 @@
                     </div>
                 </div>
 
-
+                <script src="/javaScript/user/cart.js"></script>
                 <%- include('../layout/user/footer') %>
