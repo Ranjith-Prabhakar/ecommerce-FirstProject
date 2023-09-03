@@ -448,7 +448,7 @@ const getCart = async (req, res, next) => {
 
         // Use Promise.all to wait for all product data to be fetched
         const cartProducts = await Promise.all(cartProductPromises);
-      
+
 
         res.render('./users/cart', { cartProducts }); // Pass cartProducts to the EJS template
     } catch (error) {
@@ -462,14 +462,14 @@ const getCart = async (req, res, next) => {
 const postAddToCart = async (req, res, next) => {
     try {
         let count = req.body.count ? req.body.count : 1
-        let result = await UserModal.updateOne({  _id: req.body.userId,"cart": {$not: { $elemMatch: { productId: req.body.productId }}}},
-            {$addToSet: {  cart: { productId: req.body.productId,quantity: count} }})
-            console.log(result);
-            if(result.modifiedCount === 1){
-                res.json({ success: true })
-            }else if (result.modifiedCount === 0){
-                res.json({ success: false })
-            }
+        let result = await UserModal.updateOne({ _id: req.body.userId, "cart": { $not: { $elemMatch: { productId: req.body.productId } } } },
+            { $addToSet: { cart: { productId: req.body.productId, quantity: count } } })
+        console.log(result);
+        if (result.modifiedCount === 1) {
+            res.json({ success: true })
+        } else if (result.modifiedCount === 0) {
+            res.json({ success: false })
+        }
     } catch (error) {
         errorHandler(error, req, res, next)
     }
@@ -478,10 +478,10 @@ const postAddToCart = async (req, res, next) => {
 const postUpdateCartProductQty = async (req, res, next) => {
     try {
         const userId = req.session.userId;
-       
+
         const productId = req.body.productId;
         const quantity = req.body.quantity;
-        console.log(userId,productId,quantity);
+        console.log(userId, productId, quantity);
         const result = await UserModal.updateOne(
             { _id: userId, 'cart.productId': productId },
             { $set: { 'cart.$.quantity': quantity } }
@@ -496,17 +496,65 @@ const postUpdateCartProductQty = async (req, res, next) => {
     }
 };
 
-const postRemoveFromCart = async(req,res,next)=>{
+const postRemoveFromCart = async (req, res, next) => {
     try {
-        const result = await UserModal.updateOne({_id: req.session.userId, cart: {$elemMatch: {productId: req.body.productId}}}, {$pull: {cart: {productId: req.body.productId}}});
-        if(result.modifiedCount === 1){
-            res.json({success:true})
-        }else if(result.modifiedCount === 0){
-            res.json({success:false})
+        const result = await UserModal.updateOne({ _id: req.session.userId, cart: { $elemMatch: { productId: req.body.productId } } }, { $pull: { cart: { productId: req.body.productId } } });
+        if (result.modifiedCount === 1) {
+            res.json({ success: true })
+        } else if (result.modifiedCount === 0) {
+            res.json({ success: false })
         }
     } catch (error) {
-        errorHandler(error,req,res,next)
-        
+        errorHandler(error, req, res, next)
+
+    }
+}
+
+const getCheckOutPage = async (req, res, next) => {
+    try {
+        if (req.query.productId) {
+            let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
+            res.render('./users/checkOutPage', { singleProduct });
+        } else if (req.session.selectedProducts.length) {
+            console.log("getCheckOutPage", req.session.selectedProducts);
+            let productIds = req.session.selectedProducts.map((product) => product.productId);
+            console.log("productIds", productIds);
+            let matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
+            console.log("matchingProducts", matchingProducts);
+
+            // Create a new array with the "orderQuantity" field added
+            let productList = matchingProducts.map((product) => {
+                // Find the selected product that matches the current document
+                let selectedProduct = req.session.selectedProducts.find((selected) => selected.productId === product._id.toString());
+                if (selectedProduct) {
+                    // Add the "orderQuantity" field with the corresponding value
+                    return {
+                        ...product.toObject(),
+                        orderQuantity: selectedProduct.productQuantity,
+                    };
+                } else {
+                    return product.toObject();
+                }
+            });
+
+            console.log("productList", productList);
+            res.render('./users/checkOutPage',{productList})
+        }
+    } catch (error) {
+        errorHandler(error, req, res, next);
+    }
+};
+
+
+
+const postBuySelectedProducts = (req, res, next) => {
+    try {
+        req.session.selectedProducts = req.body.selectedProducts
+        console.log("postBuySelectedProducts",req.session.selectedProducts);
+        res.json({ success: true })
+    } catch (error) {
+        errorHandler(error, req, res, next)
+
     }
 }
 
@@ -531,5 +579,7 @@ module.exports = {
     getCart,
     postAddToCart,
     postUpdateCartProductQty,
-    postRemoveFromCart
+    postRemoveFromCart,
+    getCheckOutPage,
+    postBuySelectedProducts
 }

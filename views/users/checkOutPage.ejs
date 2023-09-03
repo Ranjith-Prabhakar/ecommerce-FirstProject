@@ -1,0 +1,36 @@
+<%- include('../layout/user/header') %>
+    <div class="">
+        <% locals.singleProduct || "" %>
+            <% locals.productList || "" %>
+
+                <% if(locals.singleProduct) {%>
+                    <div class="">
+                        <img src="/productImages/<%=singleProduct.gallery[0] %>" alt="product-Image" srcset="">
+                        <h1>
+                            <%=singleProduct.productName %>
+                        </h1>
+                        <h4>
+                            <%=singleProduct.unitPrice %>
+                        </h4>
+
+                    </div>
+                    <%} else if(locals.productList.length) {%>
+                        <% for(let i=0;i<locals.productList.length;i++){ %>
+                            <div class="">
+                                <img src="/productImages/<%=productList[i].gallery[0] %>" alt="product-Image" srcset="">
+                                <h1>
+                                    <%=productList[i].productName %>
+                                </h1>
+                                <h4>
+                                    <%=productList[i].unitPrice %>
+                                </h4>
+
+                            </div>
+                            <% } %>
+                                <% } %>
+
+
+    </div>
+
+    
+    <%- include('../layout/user/footer') %>

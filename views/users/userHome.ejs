@@ -104,7 +104,8 @@
                                                                     <% } %>
                                                                         <div>
                                                                             <a class="btn btn-outline-light "
-                                                                                href="#">Buy Now</a>
+                                                                                href='/checkOutPage?productId=<%=product._id%>'>Buy
+                                                                                Now</a>
 
 
 
@@ -117,7 +118,7 @@
                                                                                             locals.user.cart.length;
                                                                                             i++) { %>
                                                                                             <% if
-                                                                                                (locals.user.cart[i].productId === product._id)
+                                                                                                (locals.user.cart[i].productId===product._id)
                                                                                                 { %>
                                                                                                 <% buttonName='Go To Cart'
                                                                                                     ; %>
