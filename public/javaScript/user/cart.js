@@ -59,15 +59,31 @@ document.addEventListener('DOMContentLoaded', () => {
     for (let i = 0; i < increaseButtons.length; i++) {
         increaseButtons[i].addEventListener('click', async (event) => {
             try {
+
                 event.preventDefault();
 
                 let cartQuantity = document.getElementById('cartUpdate' + i);
+
+                console.log("cartQuantity",cartQuantity);
+
                 let parseCartQuantity = parseInt(cartQuantity.innerText, 10);
+
+                console.log("parseCartQuantity",parseCartQuantity);
+
                 let referenceParseCartQuantity = parseCartQuantity;
+
+                console.log("referenceParseCartQuantity",referenceParseCartQuantity)
+
                 let productQuantity = cartQuantity.getAttribute('data-product-quantity');
+
+                console.log("productQuantity",productQuantity)
+
                 let parseProductQuantity = parseInt(productQuantity, 10);
 
+                console.log("parseProductQuantity",parseProductQuantity)
+
                 if (parseProductQuantity > parseCartQuantity) {
+                    console.log("Edit product quantity - Increment");
                     parseCartQuantity++;
                     let productId = cartQuantity.getAttribute('data-product-id');
                     let findIfInSelectedProducts = selectedProducts.find(element => element.productId === productId);
@@ -77,6 +93,19 @@ document.addEventListener('DOMContentLoaded', () => {
                         sum += diff * parseFloat(findIfInSelectedProducts.productPrice);
                         let selectedProductPrice = document.getElementById('selectedProductPrice');
                         selectedProductPrice.innerHTML = `<h5>Total Value : ${sum}</h5> <button id="buySelectedProduct"> Place Order </button>`;
+                        let cartPrice = document.getElementById('cartPrice');
+                        cartPrice.innerText = `cart value :${sum}`
+                    } else {
+
+                        let cartPrice = document.getElementById('cartPrice');
+                        console.log("cartPrice", cartPrice, typeof cartPrice);
+                        let cartAmout = parseFloat(cartPrice.getAttribute('data-cartPrice'))
+                        console.log("cartAmout", cartAmout, typeof cartAmout);
+                        let productPrice = parseFloat(increaseButtons[i].getAttribute('data-product-price'))
+                        console.log("productPrice", productPrice, typeof productPrice);
+                        cartPrice.innerText = `cart value :${cartAmout + productPrice}`
+                        cartPrice.setAttribute('data-cartPrice', `${cartAmout + productPrice}`)
+                        console.log("cartPrice.innerText", cartPrice.innerText, typeof cartPrice.innerText);
                     }
                 }
 
@@ -124,6 +153,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     sum -= diff * parseFloat(findIfInSelectedProducts.productPrice);
                     let selectedProductPrice = document.getElementById('selectedProductPrice');
                     selectedProductPrice.innerHTML = `<h5>Total Value : ${sum}</h5> <button id="buySelectedProduct"> Place Order </button>`;
+                    let cartPrice = document.getElementById('cartPrice');
+                    cartPrice.innerText = `cart value :${sum}`
+                } else {
+
+                    let cartPrice = document.getElementById('cartPrice');
+                    console.log("cartPrice", cartPrice, typeof cartPrice);
+                    let cartAmout = parseFloat(cartPrice.getAttribute('data-cartPrice'))
+                    console.log("cartAmout", cartAmout, typeof cartAmout);
+                    let productPrice = parseFloat(increaseButtons[i].getAttribute('data-product-price'))
+                    console.log("productPrice", productPrice, typeof productPrice);
+                    cartPrice.innerText = `cart value :${cartAmout - productPrice}`
+                    cartPrice.setAttribute('data-cartPrice', `${cartAmout - productPrice}`)
+                    console.log("cartPrice.innerText", cartPrice.innerText, typeof cartPrice.innerText);
                 }
             }
             cartQuantity.innerText = parseCartQuantity;
@@ -188,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Cart page load - products to select to purchase ====================================================================
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    /////
+
 
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {

@@ -378,7 +378,7 @@ const getSingleProductPage = async (req, res, next) => {
 
 const getProfile = async (req, res, next) => {
     try {
-        const user = await UserModal.findOne({ _id: req.query.userId })
+        const user = await UserModal.findOne({ _id: req.session.userId })
         res.render('./users/userProfile', { user })
     } catch (error) {
         errorHandler(error, req, res, next)
@@ -400,28 +400,58 @@ const postCreateAddress = async (req, res, next) => {
 
         const formDataObject = req.body.formDataObject; // Assign formDataObject from request body
 
+        // await UserModal.updateOne(
+        //     { _id: formDataObject.userId },
+        //     { $push: { shippingAddress: formDataObject } }
+        // );
+
         await UserModal.updateOne(
-            { _id: formDataObject.userId },
-            { $push: { shippingAddress: formDataObject } }
+            // { _id: formDataObject.userId },
+            { _id:req.session.userId },
+            { $push: { shippingAddress: { $each: [formDataObject], $position: 0 } } }
         );
+        
         res.json({ success: true })
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 };
-
 const postEditAddress = async (req, res, next) => {
+    console.log('inside postEditAddress ');
     try {
-        let userId = req.body.newAddressFormData.userId
+        let userId = req.session.userId
+        console.log("userId",userId);
         let index = req.body.index
+        console.log("index",index);
         let newObject = req.body.newAddressFormData
+        console.log("newObject",newObject);
         delete newObject.userId
+        console.log("after delete ",newObject);
         await UserModal.updateOne({ _id: userId }, { $set: { [`shippingAddress.${index}`]: newObject } })
         res.json({ success: true })
     } catch (error) {
         errorHandler(error, req, res, next)
     }
 }
+// const postEditAddress = async (req, res, next) => {
+//     console.log('inside postEditAddress ');
+//     try {
+//         let userId = req.body.newAddressFormData.userId
+//         console.log("userId",userId);
+//         let index = req.body.index
+//         console.log("index",index);
+//         let newObject = req.body.newAddressFormData
+//         console.log("newObject",newObject);
+//         delete newObject.userId
+//         console.log("after delete ",newObject);
+//         await UserModal.updateOne({ _id: userId }, { $set: { [`shippingAddress.${index}`]: newObject } })
+//         res.json({ success: true })
+//     } catch (error) {
+//         errorHandler(error, req, res, next)
+//     }
+// }
+
+
 
 const postDeleteAddress = async (req, res, next) => {
     try {
@@ -437,11 +467,16 @@ const getCart = async (req, res, next) => {
     try {
         const user = await UserModal.findOne({ _id: req.session.userId });
         const cartItems = user.cart; // Get the cart items array
-
+        let cartValue = 0
         // Create an array to hold cart items with product data and quantity
         const cartProductPromises = cartItems.map(async (cartItem) => {
+
+
             const product = await ProductModal.findOne({ _id: cartItem.productId });
+
+
             product.cartQuantity = cartItem.quantity; // Set the quantity property of the product
+            cartValue += parseFloat(product.unitPrice * product.cartQuantity)
             return product;
         });
 
@@ -449,8 +484,10 @@ const getCart = async (req, res, next) => {
         // Use Promise.all to wait for all product data to be fetched
         const cartProducts = await Promise.all(cartProductPromises);
 
+        console.log("cartProducts", cartProducts);
+        console.log("cartValue", cartValue);
 
-        res.render('./users/cart', { cartProducts }); // Pass cartProducts to the EJS template
+        res.render('./users/cart', { cartProducts, cartValue }); // Pass cartProducts to the EJS template
     } catch (error) {
         errorHandler(error, req, res, next);
     }
@@ -514,20 +551,17 @@ const getCheckOutPage = async (req, res, next) => {
     try {
         if (req.query.productId) {
             let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
-            res.render('./users/checkOutPage', { singleProduct });
-        } else if (req.session.selectedProducts.length) {
-            console.log("getCheckOutPage", req.session.selectedProducts);
+            let user = await UserModal.findOne({ _id: req.session.userId })
+            res.render('./users/checkOutPage', { singleProduct, user });
+            req.query.productId = '';
+        } else if (req.session.selectedProducts && req.session.selectedProducts.length) {
+            let user = await UserModal.findOne({ _id: req.session.userId })
             let productIds = req.session.selectedProducts.map((product) => product.productId);
-            console.log("productIds", productIds);
             let matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
-            console.log("matchingProducts", matchingProducts);
 
-            // Create a new array with the "orderQuantity" field added
             let productList = matchingProducts.map((product) => {
-                // Find the selected product that matches the current document
                 let selectedProduct = req.session.selectedProducts.find((selected) => selected.productId === product._id.toString());
                 if (selectedProduct) {
-                    // Add the "orderQuantity" field with the corresponding value
                     return {
                         ...product.toObject(),
                         orderQuantity: selectedProduct.productQuantity,
@@ -536,9 +570,30 @@ const getCheckOutPage = async (req, res, next) => {
                     return product.toObject();
                 }
             });
+            req.session.selectedProducts.length = 0;
+            res.render('./users/checkOutPage', { productList, user });
+        } else if (req.query.cart) {
+            const user = await UserModal.findOne({ _id: req.session.userId });
 
-            console.log("productList", productList);
-            res.render('./users/checkOutPage',{productList})
+            const cart = user.cart;
+            console.log('cart', cart);
+            const productIds = cart.map((item) => item.productId);
+
+            const matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
+            console.log('matchingProducts', matchingProducts);
+            let productList = matchingProducts.map((product) => {
+                cart.forEach((cart) => {
+
+                    if (cart.productId.equals(product._id)) {
+                        let orderQuantity = cart.quantity
+                        product.orderQuantity = orderQuantity
+                    }
+                })
+                return product
+            })
+
+            req.query.cart = false;
+            res.render('./users/checkOutPage', { productList, user });
         }
     } catch (error) {
         errorHandler(error, req, res, next);
@@ -547,10 +602,11 @@ const getCheckOutPage = async (req, res, next) => {
 
 
 
+
 const postBuySelectedProducts = (req, res, next) => {
     try {
         req.session.selectedProducts = req.body.selectedProducts
-        console.log("postBuySelectedProducts",req.session.selectedProducts);
+        console.log("postBuySelectedProducts", req.session.selectedProducts);
         res.json({ success: true })
     } catch (error) {
         errorHandler(error, req, res, next)

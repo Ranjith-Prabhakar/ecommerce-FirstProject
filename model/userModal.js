@@ -48,43 +48,7 @@ const User = mongoose.Schema({
         required: true,
 
     },
-    permanentAddress: {
-        country: {
-            type: String,
-            // required: true
-        },
-        state: {
-            type: String,
-            // required: true
-        },
-        district: {
-            type: String,
-            // required: true
-        },
-        city: {
-            type: String,
-            // required: true
-        },
-        pincode: {
-            type: Number,
-            // required: true
-        },
-        street: {
-            type: String,
-            // required: true
-        },
-        houseName: {
-            type: String,
-            // required: true
-        },
-        buildingNo: {
-            type: String,
-            // required: true
-        },
-        landMark: {
-            type: String,
-        },
-    },
+   
     shippingAddress: [{
        
         country: {

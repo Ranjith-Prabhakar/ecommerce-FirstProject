@@ -1,97 +1,108 @@
 <%- include('../layout/user/header') %>
     <div>
-        <div>
-            <h1>cart value <span>
-                    <%= %>
-                </span> </h1>
-        </div>
-        <div id="selectedProductPrice" class="d-none ">
-            
-        </div>
-        <div>
-            <% locals.cartProducts || '' %>
-                <% if(locals.cartProducts){ %>
-                    <% for(let i=0 ;i < locals.cartProducts.length;i++) {%>
+        <% locals.cartProducts || '' %>
+            <% locals.cartValue || '' %>
+                <% if(locals.cartValue){ %>
+                    <div>
+                        <h1 id="cartPrice" data-cartPrice="<%=cartValue %>">cart value <span>
+                            <%=cartValue %>
+                        </span> </h1>
+                       <a href='/checkOutPage?cart=true'>place order</a>
+                    </div>
+                    <% } %>
+                        <div id="selectedProductPrice" class="d-none ">
 
-
-
-
-                        <div class="cartProducts">
-                            <!-- Example checkbox for a product -->
-                            <input type="checkbox" data-index="<%=i  %>" id="productCheckbox_<%=cartProducts[i]._id%>"
-                                data-product-id="<%=cartProducts[i]._id%>"
-                                data-product-price="<%=cartProducts[i].unitPrice  %>">
-
-                            <!-- product image -->
-                            <div class="col-4">
-                                <img class="rounded-1 imgSize" src="/productImages/<%=cartProducts[i].gallery[0]%>"
-                                    alt="phone" srcset="">
-                            </div>
-                            <!-- product data -->
-                            <div class="col-6">
-                                <form action="/singleProductPage" method="get">
-                                    <input type="hidden" name="id" value="<%=cartProducts[i]._id%>">
-                                    <input class="fs-2 fw-bold nav-link " type="submit"
-                                        value="<%=cartProducts[i].productName %>">
-                                </form>
-                                <h5><span>
-                                        <%=cartProducts[i].specification.ram%>
-                                    </span> | <span>
-                                        <%=cartProducts[i].specification.internalStorage%>
-                                    </span> | <span>expandable upto
-                                        1
-                                        tb</span>
-                                </h5>
-                                <h4>display</h4>
-                                <h5><span>
-                                        <%=cartProducts[i].specification.frontCamera%>
-                                    </span> | <span>
-                                        <%=cartProducts[i].specification.backCamera%> front camera
-                                    </span> </h5>
-                                <h5>
-                                    <%=cartProducts[i].specification.battery%> Lithium iron battery
-                                </h5>
-                                <h5>
-                                    <%=cartProducts[i].specification.processor%>
-                                </h5>
-
-
-                                <% if(cartProducts[i].quantity < 10 && cartProducts[i].quantity> 0) {%>
-                                    <h5>instock : <span class="text-warning ">Left Only
-                                            <%=cartProducts[i].quantity %>
-                                        </span> </h5>
-                                    <% } else if(cartProducts[i].quantity < 1){%>
-                                        <h5 class="text-danger ">out of stock </h5>
-                                        <% } else{ %>
-                                            <h5 class="text-success  ">instock </h5>
-                                            <% } %>
-                                                <h5>
-                                                    <%=cartProducts[i].unitPrice %>
-                                                </h5>
-
-                                                <div>
-                                                    <button class="increase btn btn-outline-light">add more</button>
-                                                    <button id="cartUpdate<%=i%>"
-                                                        value=" <%=cartProducts[i].cartQuantity%>"
-                                                        data-product-quantity="<%=cartProducts[i].quantity %>"
-                                                        data-product-id="<%=cartProducts[i]._id%>">
-                                                        <%=cartProducts[i].cartQuantity%>
-                                                    </button>
-                                                    <button class="decrease btn btn-outline-light">reduce qty</button>
-                                                </div>
-                                                <div>
-                                                    <a class="btn btn-outline-light "
-                                                        href="/checkOutPage?productId=<%=cartProducts[i]._id%>">Place
-                                                        order</a>
-                                                    <button class="removeFromCart btn btn-outline-light"
-                                                        data-product-id="<%=cartProducts[i]._id%>">Remove From
-                                                        Cart</button>
-                                                </div>
-
-                                                <% } %>
-                                                    <% } %>
-                            </div>
                         </div>
-        </div>
-        <script src="/javaScript/user/cart.js"></script>
-        <%- include('../layout/user/footer') %>
+                        <div>
+
+                            <% if(locals.cartProducts){ %>
+                                <% for(let i=0 ;i < locals.cartProducts.length;i++) {%>
+
+
+
+
+                                    <div class="cartProducts">
+                                        <!-- Example checkbox for a product -->
+                                        <input type="checkbox" data-index="<%=i  %>"
+                                            id="productCheckbox_<%=cartProducts[i]._id%>"
+                                            data-product-id="<%=cartProducts[i]._id%>"
+                                            data-product-price="<%=cartProducts[i].unitPrice  %>">
+
+                                        <!-- product image -->
+                                        <div class="col-4">
+                                            <img class="rounded-1 imgSize"
+                                                src="/productImages/<%=cartProducts[i].gallery[0]%>" alt="phone"
+                                                srcset="">
+                                        </div>
+                                        <!-- product data -->
+                                        <div class="col-6">
+                                            <form action="/singleProductPage" method="get">
+                                                <input type="hidden" name="id" value="<%=cartProducts[i]._id%>">
+                                                <input class="fs-2 fw-bold nav-link " type="submit"
+                                                    value="<%=cartProducts[i].productName %>">
+                                            </form>
+                                            <h5><span>
+                                                    <%=cartProducts[i].specification.ram%>
+                                                </span> | <span>
+                                                    <%=cartProducts[i].specification.internalStorage%>
+                                                </span> | <span>expandable upto
+                                                    1
+                                                    tb</span>
+                                            </h5>
+                                            <h4>display</h4>
+                                            <h5><span>
+                                                    <%=cartProducts[i].specification.frontCamera%>
+                                                </span> | <span>
+                                                    <%=cartProducts[i].specification.backCamera%> front camera
+                                                </span> </h5>
+                                            <h5>
+                                                <%=cartProducts[i].specification.battery%> Lithium iron battery
+                                            </h5>
+                                            <h5>
+                                                <%=cartProducts[i].specification.processor%>
+                                            </h5>
+
+
+                                            <% if(cartProducts[i].quantity < 10 && cartProducts[i].quantity> 0) {%>
+                                                <h5>instock : <span class="text-warning ">Left Only
+                                                        <%=cartProducts[i].quantity %>
+                                                    </span> </h5>
+                                                <% } else if(cartProducts[i].quantity < 1){%>
+                                                    <h5 class="text-danger ">out of stock </h5>
+                                                    <% } else{ %>
+                                                        <h5 class="text-success  ">instock </h5>
+                                                        <% } %>
+                                                            <h5>
+                                                                <%=cartProducts[i].unitPrice %>
+                                                            </h5>
+
+                                                            <div>
+                                                                <button class="increase btn btn-outline-light" data-product-price="<%=cartProducts[i].unitPrice %>">add
+                                                                    more</button>
+                                                                <button id="cartUpdate<%=i%>"
+                                                                    value=" <%=cartProducts[i].cartQuantity%>"
+                                                                    data-product-quantity="<%=cartProducts[i].quantity %>"
+                                                                    data-product-id="<%=cartProducts[i]._id%>">
+                                                                    <%=cartProducts[i].cartQuantity%>
+                                                                </button>
+                                                                <button class="decrease btn btn-outline-light">reduce
+                                                                    qty</button>
+                                                            </div>
+                                                            <div>
+                                                                <a class="btn btn-outline-light "
+                                                                    href="/checkOutPage?productId=<%=cartProducts[i]._id%>">Place
+                                                                    order</a>
+                                                                <button class="removeFromCart btn btn-outline-light"
+                                                                    data-product-id="<%=cartProducts[i]._id%>">Remove
+                                                                    From
+                                                                    Cart</button>
+                                                            </div>
+                                                            <h1>"<%=cartProducts[i].quantity %>"</h1>
+
+                                                            <% } %>
+                                                                <% } %>
+                                        </div>
+                                    </div>
+                        </div>
+                        <script src="/javaScript/user/cart.js"></script>
+                        <%- include('../layout/user/footer') %>

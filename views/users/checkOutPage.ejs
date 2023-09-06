@@ -1,36 +1,130 @@
 <%- include('../layout/user/header') %>
+
     <div class="">
         <% locals.singleProduct || "" %>
             <% locals.productList || "" %>
+                <% locals.user || "" %>
 
-                <% if(locals.singleProduct) {%>
-                    <div class="">
-                        <img src="/productImages/<%=singleProduct.gallery[0] %>" alt="product-Image" srcset="">
-                        <h1>
-                            <%=singleProduct.productName %>
-                        </h1>
-                        <h4>
-                            <%=singleProduct.unitPrice %>
-                        </h4>
+                    <% if(locals.singleProduct) {%>
+                        <div class="">
+                            <img src="/productImages/<%=singleProduct.gallery[0] %>" alt="product-Image" srcset="">
+                            <h1>
+                                <%=singleProduct.productName %>
+                            </h1>
+                            <h4>
+                                <%=singleProduct.unitPrice %>
+                            </h4>
 
-                    </div>
-                    <%} else if(locals.productList.length) {%>
-                        <% for(let i=0;i<locals.productList.length;i++){ %>
-                            <div class="">
-                                <img src="/productImages/<%=productList[i].gallery[0] %>" alt="product-Image" srcset="">
-                                <h1>
-                                    <%=productList[i].productName %>
-                                </h1>
-                                <h4>
-                                    <%=productList[i].unitPrice %>
-                                </h4>
+                        </div>
 
-                            </div>
-                            <% } %>
+                        <%} else if(locals.productList.length) {%>
+                            <% for(let i=0;i<locals.productList.length;i++){ %>
+                                <div class="">
+                                    <img src="/productImages/<%=productList[i].gallery[0] %>" alt="product-Image"
+                                        srcset="">
+                                    <h1>
+                                        <%=productList[i].productName %>
+                                    </h1>
+                                    <h4>
+                                        <%=productList[i].unitPrice %>
+                                    </h4>
+                                    <h4>
+                                        <%=productList[i].orderQuantity %>
+                                    </h4>
+
+                                </div>
                                 <% } %>
+                                    <% } %>
 
 
     </div>
+    <% if(locals.user.shippingAddress.length) {%>
 
-    
-    <%- include('../layout/user/footer') %>
+
+        <% for(let i=0;i<=locals.user.shippingAddress.length-1;i++) {%>
+            <div>
+                <h2>address<%=i+1 %>
+                </h2>
+                <button class="addressEdit">Edit</button>
+                <button class="addressDelete">Delete</button>
+
+                <form action="" name="addressList<%=i %>">
+
+                    <button class="updateAddress d-none" readonly="true" type="submit">Update</button>
+                    <input type="hidden" name="userId" value="<%locals.user._id%>">
+                    <input type="radio" name="selectAddress" value="<%= i %>" id="<%= i %>">
+                    <label for="">Country</label>
+                    <input name="country" readonly="true" type="text"
+                        value="<%=locals.user.shippingAddress[i].country %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].country %>">
+                    <label for="">State</label>
+                    <input name="state" readonly="true" type="text" value="<%=locals.user.shippingAddress[i].state %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].state %>">
+                    <label for="">District</label>
+                    <input name="district" readonly="true" type="text"
+                        value="<%=locals.user.shippingAddress[i].district %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].district %>">
+                    <label readonly="true" for="">City</label>
+                    <input name="city" readonly="true" type="text" value="<%=locals.user.shippingAddress[i].city %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].city %>">
+                    <label readonly="true" for="">Pincode</label>
+                    <input name="pincode" readonly="true" type="text"
+                        value="<%=locals.user.shippingAddress[i].pincode %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].pincode %>">
+                    <label for="">Street</label>
+                    <input name="street" readonly="true" type="text" value="<%=locals.user.shippingAddress[i].street %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].street %>">
+                    <label for="">House Name</label>
+                    <input name="houseName" readonly="true" type="text"
+                        value="<%=locals.user.shippingAddress[i].houseName %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].houseName %>">
+                    <label for="">Building No</label>
+                    <input name="buildingNo" readonly="true" type="text"
+                        value="<%=locals.user.shippingAddress[i].buildingNo %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].buildingNo %>">
+                    <label for="">Land Mark</label>
+                    <input name="landMark" readonly="true" type="text"
+                        value="<%=locals.user.shippingAddress[i].landMark %>"
+                        data-original-value="<%=locals.user.shippingAddress[i].landMark %>">
+
+
+                </form>
+            </div>
+
+            <% } %>
+                <% } %>
+                    <br><br>
+                    <!-- create new address -->
+                    <div class="createNewAddress">
+                        <form action="" name="createAddress">
+                            <div id="formData" class=" d-none ">
+                                <label for="country">Country <input name="country" id="country" type="text"></label>
+                                <label for="state"> State <input name="state" id="state" type="text"></label>
+                                <label for="district">District<input name="district" id="district" type="text"></label>
+                                <label for="city"> City <input name="city" id="city" type="text"></label>
+                                <label for="pincode"> Pincode <input name="pincode" id="pincode" type="text"></label>
+                                <label for="street"> Street <input name="street" id="street" type="text"></label>
+                                <label for="houseName">House Name<input name="houseName" id="houseName"
+                                        type="text"></label>
+                                <label for="buildingNo">Building No<input name="buildingNo" id="buildingNo"
+                                        type="text"></label>
+                                <label for="landMark"> Land Mark<input name="landMark" id="landMark"
+                                        type="text"></label>
+                            </div>
+                            <button id="createNewAddress" value="Create New Address">Create New Address</button>
+                            <input id="create" class="d-none " type="submit" name="" value="Create">
+                        </form>
+                    </div>
+                    <br><br>
+                    <!-- payment section -->
+                    <div class="payment-method">
+                        <form action="">
+                            <input type="radio" id="cashOnDelivery" name="paymentMethod"><label
+                                for="cashOnDelivery">cash on delivery</label><br>
+                            <input type="radio" id="onlinePayment" name="paymentMethod"><label
+                                for="onlinePayment">UPI</label><br>
+                            <input type="submit" value="Place Order">
+                        </form>
+                    </div>
+                    <script src="/javaScript/user/checkout.js"></script>
+                    <%- include('../layout/user/footer') %>

@@ -1,41 +1,44 @@
 <%- include('../layout/user/header') %>
     <% if (locals.user) { %>
         <div class="d-flex justify-content-between ">
+            <div>
+                <div id="bioData">
 
-            <div id="bioData" >
-                <div class="d-flex  ">
-                    <h4 class="me-auto ">Profile
-                    </h4>
-                    <button class="btn btn-outline-light userBioData">Edit</button>
+                    <div class="d-flex  ">
+                        <h4 class="me-auto ">Profile
+                        </h4>
+                        <button class="btn btn-outline-light userBioData">Edit</button>
+
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <th>Name </th>
+                            <td>
+                                <%= locals.user.firstName + " " + locals.user.lastName %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Email </th>
+                            <td>
+                                <%= locals.user.email %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Phone </th>
+                            <td>
+                                <%= locals.user.phone %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>User Name </th>
+                            <td>
+                                <%= locals.user.userName %>
+                            </td>
+                        </tr>
+
+                    </table>
 
                 </div>
-                <table class="table">
-                    <tr>
-                        <th>Name </th>
-                        <td>
-                            <%= locals.user.firstName + " " + locals.user.lastName %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Email </th>
-                        <td>
-                            <%= locals.user.email %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Phone </th>
-                        <td>
-                            <%= locals.user.phone %>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>User Name </th>
-                        <td>
-                            <%= locals.user.userName %>
-                        </td>
-                    </tr>
-
-                </table>
 
                 <div class="d-none" id="bioDataEdit">
                     <form action="">
