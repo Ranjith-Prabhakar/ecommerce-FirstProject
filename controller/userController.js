@@ -407,10 +407,10 @@ const postCreateAddress = async (req, res, next) => {
 
         await UserModal.updateOne(
             // { _id: formDataObject.userId },
-            { _id:req.session.userId },
+            { _id: req.session.userId },
             { $push: { shippingAddress: { $each: [formDataObject], $position: 0 } } }
         );
-        
+
         res.json({ success: true })
     } catch (error) {
         errorHandler(error, req, res, next);
@@ -420,13 +420,13 @@ const postEditAddress = async (req, res, next) => {
     console.log('inside postEditAddress ');
     try {
         let userId = req.session.userId
-        console.log("userId",userId);
+        console.log("userId", userId);
         let index = req.body.index
-        console.log("index",index);
+        console.log("index", index);
         let newObject = req.body.newAddressFormData
-        console.log("newObject",newObject);
+        console.log("newObject", newObject);
         delete newObject.userId
-        console.log("after delete ",newObject);
+        console.log("after delete ", newObject);
         await UserModal.updateOne({ _id: userId }, { $set: { [`shippingAddress.${index}`]: newObject } })
         res.json({ success: true })
     } catch (error) {
@@ -456,7 +456,8 @@ const postEditAddress = async (req, res, next) => {
 const postDeleteAddress = async (req, res, next) => {
     try {
         const { userId, index, objectId } = req.body
-        await UserModal.updateOne({ _id: userId }, { $pull: { shippingAddress: { _id: objectId } } });
+        console.log(objectId);
+        await UserModal.updateOne({ _id: req.session.userId }, { $pull: { shippingAddress: { _id: objectId } } });
         res.json({ success: true })
     } catch (error) {
         errorHandler(error, req, res, next)

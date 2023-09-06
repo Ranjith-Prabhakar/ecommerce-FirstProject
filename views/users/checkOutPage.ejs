@@ -46,7 +46,7 @@
                 <h2>address<%=i+1 %>
                 </h2>
                 <button class="addressEdit">Edit</button>
-                <button class="addressDelete">Delete</button>
+                <button class="addressDelete" data-objectId="<%=locals.user.shippingAddress[i]._id  %>">Delete</button>
 
                 <form action="" name="addressList<%=i %>">
 
@@ -118,7 +118,7 @@
                     <br><br>
                     <!-- payment section -->
                     <div class="payment-method">
-                        <form action="">
+                        <form action="" name="paymentOption">
                             <input type="radio" id="cashOnDelivery" name="paymentMethod"><label
                                 for="cashOnDelivery">cash on delivery</label><br>
                             <input type="radio" id="onlinePayment" name="paymentMethod"><label

@@ -61,7 +61,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ newAddressFormData, index: i })
+                        body: JSON.stringify({
+                            newAddressFormData,
+                            index: i
+                        })
                     })
                     let data = await response.json()
                     if (data.success) {
@@ -106,22 +109,25 @@ document.addEventListener("DOMContentLoaded", () => {
     // delete address ============
     let addressDelete = document.getElementsByClassName('addressDelete')
     for (let i = 0; i < addressDelete.length; i++) {
-        addressDelete[i].addEventListener('click',async (event) => {
+        addressDelete[i].addEventListener('click', async (event) => {
             event.preventDefault()
-            console.log(i);
+            let data_objectId = addressDelete[i].getAttribute('data-objectId')
+            console.log(data_objectId);
 
             try {
-               let response = await fetch('/deleteAddress',{
-                method:'post',
-                headers:{
-                    "Content-Type":'application/json'
-                },
-                body:JSON.stringify({index:i})
-               }) 
-               let data = await response.json()
-               if(data.success){
-                window.location.reload()
-               }
+                let response = await fetch('/deleteAddress', {
+                    method: 'post',
+                    headers: {
+                        "Content-Type": 'application/json'
+                    },
+                    body: JSON.stringify({
+                        objectId: data_objectId
+                    })
+                })
+                let data = await response.json()
+                if (data.success) {
+                    window.location.reload()
+                }
             } catch (error) {
                 console.log(error.message);
             }
@@ -153,7 +159,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: {
                     "Content-Type": 'application/json'
                 },
-                body: JSON.stringify({ formDataObject })
+                body: JSON.stringify({
+                    formDataObject
+                })
 
             })
 
@@ -168,6 +176,62 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
+    //radio button 
+    const radioButtons = document.querySelectorAll('input[name="selectAddress"]');
 
+    radioButtons.forEach((radioButton) => {
+        radioButton.addEventListener('change', (event) => {
+            if (event.target.checked) {
+                // Deselect all other radio buttons
+                radioButtons.forEach((rb) => {
+                    if (rb !== event.target) {
+                        rb.checked = false;
+                    }
+                });
+            }
+        });
+    });
+
+
+    ///order placement
+
+    const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')
+    let address_confirm = false
+    let newFormData = {}
+    const paymentOptionForm = document.forms.paymentOption
+    paymentOptionForm.addEventListener('submit', async (event) => {
+        event.preventDefault()
+        for (let i = 0; i < radioButtons.length; i++) { // radioButtons is the variable created above
+            if (radioButtons[i].checked === true) {
+
+                for (let j = 0; j < placeOrder.length; j++) {
+                    if (placeOrder[j].checked === true) {
+                        let formData = document.forms["addressList" + i]
+                        let formObject = new FormData(formData)
+                        for (let [key, value] of formObject) {
+                            newFormData[key] = value
+                        }
+                        newFormData.modeOfPayment = placeOrder[j].id
+                    }
+
+                }
+                if (!newFormData.country) {
+                    alert("select a payment mode ")
+                    address_confirm = true
+                    break;
+                }
+            }
+        }
+        if (!address_confirm) {
+            alert("select an address for deliver ")
+
+        } else {
+
+            ///here i have to retreive the product data and have to create route ,controller update db and have to redirect or show a order confirmation here
+            /// modal has updated for user 
+        }
+
+
+    })
 
 })

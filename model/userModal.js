@@ -48,9 +48,9 @@ const User = mongoose.Schema({
         required: true,
 
     },
-   
+
     shippingAddress: [{
-       
+
         country: {
             type: String,
             // required: true
@@ -92,29 +92,50 @@ const User = mongoose.Schema({
         required: true,
         default: false,
     },
-    isAdmin: {
-        type: Boolean,
-        required: true,
-        default: false,
-    },
+
     status: {
         type: Boolean,
-        required:true,
-        default:true
+        required: true,
+        default: true
     },
     cart: [{
         productId: ObjectId,
-        quantity:{
-            type:Number,
-            default:0
+        quantity: {
+            type: Number,
+            default: 0
         }
     }],
     wishList: [{
         productId: ObjectId,
+    }],
+    orders: [{
+        orderDate: {
+            type: Date,
+            default: () => {
+                const currentDate = new Date();
+                currentDate.setHours(0, 0, 0, 0); // Set time to midnight
+                return currentDate;
+            }
+        },
+        product: {
+            productId: ObjectId,
+            quantity: String,
+            discount:String,
+            coupon:String,
+        },
+        status: {
+            type: String,
+            enum: ['placed', 'confirmed', 'cancelledByAdmin', 'cancelledByClient', 'inTransit'],
+            default: 'placed'
+        },
+        rating: String,
+        review: String,
+        modeOfPayment:String,
+        
     }]
+
 })
 
 module.exports = mongoose.model('digiUser', User)
 
 
-                            
