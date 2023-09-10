@@ -1,34 +1,68 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    //userBioData edit
-    let userBioData = document.querySelector('.userBioData')
-    userBioData.addEventListener('click', (event) => {
-        event.preventDefault()
-        let bioData = document.getElementById('bioData')
-        let bioDataEdit = document.getElementById('bioDataEdit')
-        console.log(bioData);
-        console.log(bioDataEdit);
-        bioData.classList.toggle('d-none')
-        bioDataEdit.classList.toggle('d-none')
-        console.log("================");
-        console.log(bioData);
-        console.log(bioDataEdit);
 
-    })
 
     //toggle image
-    let profilePhoto = document.getElementsByClassName('profile-image-upload')[0]; // Get the first element
+    let profilePhoto = document.getElementById('profile-image-upload') // Get the first element
     if (profilePhoto) {
-
-
         profilePhoto.addEventListener('click', (event) => {
             event.preventDefault()
             let profilePhotoForm = document.getElementById('addProfilePhoto');
             profilePhotoForm.classList.toggle('d-none');
 
+            if (profilePhoto.innerText === 'Change Image') {
+                profilePhoto.innerText = 'Cancell'
+            } else if (profilePhoto.innerText === 'Cancell') {
+                profilePhoto.innerText = 'Change Image'
+            }
         })
     };
+
+
+    //userBioData edit
+    let userBioData = document.getElementById('userBioData')
+    userBioData.addEventListener('click', (event) => {
+        event.preventDefault()
+        let bioData = document.getElementById('bioData')
+        let bioDataEdit = document.getElementById('bioDataEdit')
+        bioData.classList.toggle('d-none')
+        bioDataEdit.classList.toggle('d-none')
+
+    })
+
+    //userBioData edit submit
+
+
+    let bioDataEditForm = document.forms.bioDataEditForm
+    if (bioDataEditForm) {
+        console.log("bioDataEditForm", bioDataEditForm);
+        bioDataEditForm.addEventListener('submit', async (event) => {
+            event.preventDefault()
+            const userObject = {
+                firstName: bioDataEditForm.firstName.value,
+                lastName: bioDataEditForm.lastName.value,
+                email: bioDataEditForm.email.value,
+                phone: bioDataEditForm.phone.value,
+                userName: bioDataEditForm.userName.value,
+            }
+            let resposne = await fetch('/editAddress', {
+                method: 'post',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ userObject })
+            })
+            let data = await resposne.json()
+            if (data.success) {
+                window.location.reload()
+            }
+
+
+        })
+
+    }
+
 
     //address form popUp
     let createAddress = document.getElementsByClassName('create-address')[0]

@@ -117,12 +117,14 @@ const User = mongoose.Schema({
                 return currentDate;
             }
         },
-        product: {
+        product: [{
             productId: ObjectId,
-            quantity: String,
-            discount:String,
-            coupon:String,
-        },
+            orderQuantity: String,
+            price: String,
+        }],
+        modeOfPayment: String,
+        discount: String,
+        coupon: String,
         status: {
             type: String,
             enum: ['placed', 'confirmed', 'cancelledByAdmin', 'cancelledByClient', 'inTransit'],
@@ -130,8 +132,7 @@ const User = mongoose.Schema({
         },
         rating: String,
         review: String,
-        modeOfPayment:String,
-        
+        addressToShip: ObjectId
     }]
 
 })

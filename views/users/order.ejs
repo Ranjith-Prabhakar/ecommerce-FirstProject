@@ -1,0 +1,15 @@
+<%- include('../layout/user/header') %>
+<div>
+   <% locals.orders || '' %>
+   <% if(locals.orders) {%>
+    <% for(let i = 0;i<locals.orders.length;i++){ %>
+        <div class="container">
+            <div class="row">
+                <img src="" alt="">
+            </div>
+        </div>
+        <% } %>
+    <% } %>
+</div>
+<script src="/javaScript/user/header.js"></script>
+<%- include('../layout/user/footer') %>

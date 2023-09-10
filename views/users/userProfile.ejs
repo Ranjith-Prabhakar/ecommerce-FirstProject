@@ -1,158 +1,151 @@
 <%- include('../layout/user/header') %>
     <% if (locals.user) { %>
-        <div class="d-flex justify-content-between ">
-            <div>
-                <div id="bioData">
 
-                    <div class="d-flex  ">
-                        <h4 class="me-auto ">Profile
-                        </h4>
-                        <button class="btn btn-outline-light userBioData">Edit</button>
-
-                    </div>
-                    <table class="table">
-                        <tr>
-                            <th>Name </th>
-                            <td>
-                                <%= locals.user.firstName + " " + locals.user.lastName %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Email </th>
-                            <td>
-                                <%= locals.user.email %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Phone </th>
-                            <td>
-                                <%= locals.user.phone %>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>User Name </th>
-                            <td>
-                                <%= locals.user.userName %>
-                            </td>
-                        </tr>
-
-                    </table>
-
-                </div>
-
-                <div class="d-none" id="bioDataEdit">
-                    <form action="">
-                        <input type="text" name="firstName" value="<%= locals.user.firstName%>">
-                        <input type="text" name="lastName" value="<%= locals.user.lastName%>">
-                        <input type="text" name="email" value="<%= locals.user.email %>">
-                        <input type="text" name="phone" value="<%= locals.user.phone %>">
-                        <input type="text" name="userName" value="<%= locals.user.userName %>">
-                        <input type="submit" class="btn btn-outline-light " value="submit">
-                    </form>
-                </div>
-            </div>
+        <div class="d-flex justify-content-around  ">
             <div class="image">
                 <% if(locals.user.profImage){ %>
-                    <img class="rounded-5 w-75 h-75 " src="/userImages/<%=locals.user.profImage%>" alt="profile-Image"
-                        srcset="">
+                    <img class="profile-Image-Size mt-3 " src="/userImages/<%=locals.user.profImage%>"
+                        alt="profile-Image" srcset="">
                     <% } else {%>
                         <img class="profile-photo-add-icon" src="/userImages/profile photo adder icon.png"
                             alt="profile-Image" srcset="">
                         <% } %>
-                            <button class="profile-image-upload">Edit Image</button>
+                            <button id="profile-image-upload" class=" ms-1 mt-2   btn btn-outline-light  ">Change
+                                Image</button>
                             <form id="addProfilePhoto" class="d-none " action="/addProfileImage" method="post"
                                 enctype="multipart/form-data">
                                 <input type="hidden" name="userId" value="<%=locals.user._id%>" id="">
-                                <input type="file" name="profileImage">
-                                <button type="submit">Upload</button>
+                                <input class="btn btn-lg" type="file" name="profileImage">
+                                <button class="btn btn-outline-light  " type="submit">Upload</button>
                             </form>
             </div>
 
+            <div>
+                <div id="bioData" class="mt-5 text-white ">
+
+                    <h6>Name : <p class="d-inline ">
+                            <%= locals.user.firstName + " " + locals.user.lastName %>
+                        </p>
+                    </h6>
+                    <h6>Email : <p class="d-inline ">
+                            <%= locals.user.email %>
+                        </p>
+                    </h6>
+
+                    <h6>Phone : <p class="d-inline ">
+                            <%= locals.user.phone %>
+                        </p>
+                    </h6>
+
+                    <h6>User Name : <p class="d-inline ">
+                            <%= locals.user.userName %>
+                        </p>
+                        <button id="userBioData" class=" btn btn-outline-light ms-2 ">Edit</button>
+                    </h6>
+
+                </div>
+
+                <div class="d-none" id="bioDataEdit">
+                    <form action="" class="form mt-3 " name="bioDataEditForm" data-user-object="<%=locals.user %>">
+                        <input class="form-control mb-2   " type="text" name="firstName"
+                            value="<%= locals.user.firstName%>">
+                        <input class="form-control mb-2   " type="text" name="lastName"
+                            value="<%= locals.user.lastName%>">
+                        <input class="form-control mb-2   " type="text" name="email" value="<%= locals.user.email %>">
+                        <input class="form-control mb-2   " type="text" name="phone" value="<%= locals.user.phone %>">
+                        <input class="form-control mb-2   " type="text" name="userName"
+                            value="<%= locals.user.userName %>">
+                        <input id="bioDataEditSubmit" type="submit" class="btn btn-outline-light " value="Submit">
+                        <button id="bioDataEditCancell" class="btn btn-outline-light ">Cancell </button>
+                    </form>
+                </div>
+            </div>
+
         </div>
+
+        <!-- addresses -->
         <% if (locals.user.shippingAddress.length) { %>
             <% for (let i=0; i < locals.user.shippingAddress.length; i++) { %>
                 <!-- address -->
-                <div class="d-flex ">
-                    <h4 class="me-auto ">Address <%= i+1 %>
-                    </h4>
-                    <button class="btn btn-outline-light addressEdit" data-address-index="<%= i %>">Edit</button>
-                    <button class="btn btn-outline-light addressDelete" data-userId="<%= locals.user._id %>"
-                        data-objectId="<%= locals.user.shippingAddress[i]._id %>"
-                        data-address-index="<%= i %>">Delete</button>
 
-                </div>
-                <div class="d-flex ">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex ">
 
 
-                    <table class="table">
-                        <tbody>
+                                <h4 class="me-auto text-white  ">Address <%= i+1 %>
+                                </h4>
+                                <button class="btn btn-outline-light addressEdit"
+                                    data-address-index="<%= i %>">Edit</button>
+                                <button class="btn btn-outline-light addressDelete" data-userId="<%= locals.user._id %>"
+                                    data-objectId="<%= locals.user.shippingAddress[i]._id %>"
+                                    data-address-index="<%= i %>">Delete</button>
+                            </div>
 
-                            <% if(locals.user.shippingAddress[i].country) {%>
 
-                                <tr>
-                                    <th>Country</th>
-                                    <td>
-                                        <%= locals.user.shippingAddress[i].country %>
-                                    </td>
-                                </tr>
-                                <% } %>
-                                    <% if(locals.user.shippingAddress[i].state) {%>
+
+                            <table class="table table-dark table-striped table-hover col">
+                                <tbody>
+
+                                    <% if(locals.user.shippingAddress[i].country) {%>
+
                                         <tr>
-                                            <th>State</th>
+                                            <th>Country</th>
                                             <td>
-                                                <%= locals.user.shippingAddress[i].state %>
+                                                <%= locals.user.shippingAddress[i].country %>
                                             </td>
                                         </tr>
                                         <% } %>
-                                            <% if(locals.user.shippingAddress[i].district) {%>
+                                            <% if(locals.user.shippingAddress[i].state) {%>
                                                 <tr>
-                                                    <th>District</th>
+                                                    <th>State</th>
                                                     <td>
-                                                        <%= locals.user.shippingAddress[i].district %>
+                                                        <%= locals.user.shippingAddress[i].state %>
                                                     </td>
                                                 </tr>
                                                 <% } %>
-                                                    <% if(locals.user.shippingAddress[i].city) {%>
+                                                    <% if(locals.user.shippingAddress[i].district) {%>
                                                         <tr>
-                                                            <th>City</th>
+                                                            <th>District</th>
                                                             <td>
-                                                                <%= locals.user.shippingAddress[i].city %>
+                                                                <%= locals.user.shippingAddress[i].district %>
                                                             </td>
                                                         </tr>
                                                         <% } %>
-                                                            <% if(locals.user.shippingAddress[i].pincode) {%>
+                                                            <% if(locals.user.shippingAddress[i].city) {%>
                                                                 <tr>
-                                                                    <th>Pincode</th>
+                                                                    <th>City</th>
                                                                     <td>
-                                                                        <%= locals.user.shippingAddress[i].pincode %>
+                                                                        <%= locals.user.shippingAddress[i].city %>
                                                                     </td>
                                                                 </tr>
                                                                 <% } %>
-                                                                    <% if(locals.user.shippingAddress[i].street) {%>
+                                                                    <% if(locals.user.shippingAddress[i].pincode) {%>
                                                                         <tr>
-                                                                            <th>Street</th>
+                                                                            <th>Pincode</th>
                                                                             <td>
-                                                                                <%= locals.user.shippingAddress[i].street
+                                                                                <%= locals.user.shippingAddress[i].pincode
                                                                                     %>
                                                                             </td>
                                                                         </tr>
                                                                         <% } %>
-                                                                            <% if(locals.user.shippingAddress[i].houseName)
+                                                                            <% if(locals.user.shippingAddress[i].street)
                                                                                 {%>
                                                                                 <tr>
-                                                                                    <th>HouseName</th>
+                                                                                    <th>Street</th>
                                                                                     <td>
-                                                                                        <%= locals.user.shippingAddress[i].houseName
+                                                                                        <%= locals.user.shippingAddress[i].street
                                                                                             %>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <% } %>
-                                                                                    <% if(locals.user.shippingAddress[i].buildingNo)
+                                                                                    <% if(locals.user.shippingAddress[i].houseName)
                                                                                         {%>
                                                                                         <tr>
-                                                                                            <th>Building No</th>
+                                                                                            <th>HouseName</th>
                                                                                             <td>
-                                                                                                <%= locals.user.shippingAddress[i].buildingNo
+                                                                                                <%= locals.user.shippingAddress[i].houseName
                                                                                                     %>
                                                                                             </td>
                                                                                         </tr>
@@ -168,84 +161,132 @@
                                                                                                     </td>
                                                                                                 </tr>
                                                                                                 <% } %>
-                                                                                                    <% if(locals.user.shippingAddress[i].landMark)
+                                                                                                    <% if(locals.user.shippingAddress[i].buildingNo)
                                                                                                         {%>
                                                                                                         <tr>
-                                                                                                            <th>Land
-                                                                                                                Mark
+                                                                                                            <th>Building
+                                                                                                                No
                                                                                                             </th>
                                                                                                             <td>
-                                                                                                                <%= locals.user.shippingAddress[i].landMark
+                                                                                                                <%= locals.user.shippingAddress[i].buildingNo
                                                                                                                     %>
                                                                                                             </td>
                                                                                                         </tr>
                                                                                                         <% } %>
+                                                                                                            <% if(locals.user.shippingAddress[i].landMark)
+                                                                                                                {%>
+                                                                                                                <tr>
+                                                                                                                    <th>Land
+                                                                                                                        Mark
+                                                                                                                    </th>
+                                                                                                                    <td>
+                                                                                                                        <%= locals.user.shippingAddress[i].landMark
+                                                                                                                            %>
+                                                                                                                    </td>
+                                                                                                                </tr>
+                                                                                                                <% } %>
 
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div id="addressHiddenDiv<%= i %>" class="d-none col">
+
+                            <form name="editAddress<%= i %>" action="/editAddress">
+                                <div class="d-flex mt-5 ">
+                                    <div>
+                                        <input class="form-control  " type="hidden" name="userId"
+                                            value="<%= locals.user._id %>">
+                                        <label for="country">Country</label>
+                                        <input class="form-control  " id="country" type="text" name="country"
+                                            value="<%= locals.user.shippingAddress[i].country %>">
+                                        <label for="state">State</label>
+                                        <input class="form-control  " id="state" type="text" name="state"
+                                            value="<%= locals.user.shippingAddress[i].state %>">
+                                        <label for="state">District</label>
+                                        <input class="form-control  " id="state" type="text" name="district"
+                                            value="<%= locals.user.shippingAddress[i].district %>">
+                                        <label for="City">City</label>
+                                        <input class="form-control  " id="City" type="text" name="city"
+                                            value="<%= locals.user.shippingAddress[i].city %>">
+                                        <label for="Pincode">Pincode</label>
+                                        <input class="form-control  " id="Pincode" type="text" name="pincode"
+                                            value="<%= locals.user.shippingAddress[i].pincode %>">
+                                    </div>
+                                    <div class="ms-3  ">
+
+
+                                        <label for="Street">Street</label>
+                                        <input class="form-control  " id="Street" type="text" name="street"
+                                            value="<%= locals.user.shippingAddress[i].street %>">
+                                        <label for="House Name">House Name</label>
+                                        <input class="form-control  " id="House Name" type="text" name="houseName"
+                                            value="<%= locals.user.shippingAddress[i].houseName %>">
+                                        <label for="Building No">Building No</label>
+                                        <input class="form-control  " id="Building No" type="text" name="buildingNo"
+                                            value="<%= locals.user.shippingAddress[i].buildingNo %>">
+                                        <label for="Land Mark">Land Mark</label>
+                                        <input class="form-control  " id="Land Mark" type="text" name="landMark"
+                                            value="<%= locals.user.shippingAddress[i].landMark %>">
+                                        <input class="btn btn-outline-light submitProfileEdit mt-4 ms-4" type="submit"
+                                            value="submit">
 
 
 
-                    <div id="addressHiddenDiv<%= i %>" class="d-none">
-                        <form name="editAddress<%= i %>" action="/editAddress">
-                            <input type="hidden" name="userId" value="<%= locals.user._id %>"><br>
-                            <label for="country">Country</label>
-                            <input id="country" type="text" name="country"
-                                value="<%= locals.user.shippingAddress[i].country %>"><br>
-                            <label for="state">State</label>
-                            <input id="state" type="text" name="state"
-                                value="<%= locals.user.shippingAddress[i].state %>"><br>
-                            <label for="state">District</label>
-                            <input id="state" type="text" name="district"
-                                value="<%= locals.user.shippingAddress[i].district %>"><br>
-                            <label for="City">City</label>
-                            <input id="City" type="text" name="city"
-                                value="<%= locals.user.shippingAddress[i].city %>"><br>
-                            <label for="Pincode">Pincode</label>
-                            <input id="Pincode" type="text" name="pincode"
-                                value="<%= locals.user.shippingAddress[i].pincode %>"><br>
-                            <label for="Street">Street</label>
-                            <input id="Street" type="text" name="street"
-                                value="<%= locals.user.shippingAddress[i].street %>"><br>
-                            <label for="House Name">House Name</label>
-                            <input id="House Name" type="text" name="houseName"
-                                value="<%= locals.user.shippingAddress[i].houseName %>"><br>
-                            <label for="Building No">Building No</label>
-                            <input id="Building No" type="text" name="buildingNo"
-                                value="<%= locals.user.shippingAddress[i].buildingNo %>"><br>
-                            <label for="Land Mark">Land Mark</label>
-                            <input id="Land Mark" type="text" name="landMark"
-                                value="<%= locals.user.shippingAddress[i].landMark %>"><br>
-                            <input class="btn btn-outline-light submitProfileEdit" type="submit" value="submit">
-                            <!-- <input class="btn btn-outline-light cancellProfileEdit"
-                                        data-address-cancell="<%= i %>" type="submit" value="cancell">  -->
-                            <a class="btn btn-outline-light cancellProfileEdit" data-address-cancell-index="<%= i %>"
-                                href="">cancell</a>
-                        </form>
+                                        <a class="btn btn-outline-light cancellProfileEdit mt-4 "
+                                            data-address-cancell-index="<%= i %>" href="">cancell</a>
+                            </form>
+                        </div>
                     </div>
+
+                </div>
+
+                </div>
 
                 </div>
                 <% } %>
                     <% } %>
+
                         <!-- form creation -->
                         <form name="addressForm" action="/createAddress" class="d-none add-address">
-                            <input type="hidden" name="userId" value="<%= locals.user._id %>">
-                            <input type="text" name="country" placeholder="country"><br>
-                            <input type="text" name="state" placeholder="state"><br>
-                            <input type="text" name="district" placeholder="district"><br>
-                            <input type="text" name="city" placeholder="city"><br>
-                            <input type="text" name="pincode" placeholder="pincode"><br>
-                            <input type="text" name="street" placeholder="street"><br>
-                            <input type="text" name="houseName" placeholder="houseName"><br>
-                            <input type="text" name="buildingNo" placeholder="buildingNo"><br>
-                            <input type="text" name="landMark" placeholder="landMark"><br>
-                            <input class="btn btn-outline-light" type="submit" value="Add Address">
+                            <div class="d-flex">
+
+                                <div class="me-4 ">
+                                    <input class="form-control mb-2    " type="hidden" name="userId"
+                                        value="<%= locals.user._id %>">
+                                    <input class="form-control mb-2    " type="text" name="country"
+                                        placeholder="country">
+                                    <input class="form-control mb-2    " type="text" name="state" placeholder="state">
+                                    <input class="form-control mb-2    " type="text" name="district"
+                                        placeholder="district">
+                                </div>
+                                <div class="me-4 ">
+                                    <input class="form-control mb-2    " type="text" name="city" placeholder="city">
+                                    <input class="form-control mb-2    " type="text" name="pincode"
+                                        placeholder="pincode">
+                                    <input class="form-control mb-2    " type="text" name="street" placeholder="street">
+
+                                </div>
+                                <div>
+                                    <input class="form-control mb-2    " type="text" name="houseName"
+                                        placeholder="houseName">
+                                    <input class="form-control mb-2    " type="text" name="buildingNo"
+                                        placeholder="buildingNo">
+                                    <input class="form-control mb-2    " type="text" name="landMark"
+                                        placeholder="landMark">
+
+                                </div>
+
+
+                                <input class="btn btn-outline-light mt-5 ms-5  h-25 " type="submit" value="Add Address">
+                            </div>
                         </form>
-                        <a class="btn btn-outline-light create-address" href="">Create New Address</a>
-
+                        <div class="container-fluid">
+                            <a class="btn btn-outline-light create-address" href="">Create New Address</a>
                         </div>
 
-                        </div>
                         <% } %>
+                            <script src="/javaScript/user/header.js"></script>
                             <script src="/javaScript/user/userProfile.js"></script>
                             <%- include('../layout/user/footer') %>

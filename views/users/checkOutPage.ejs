@@ -11,9 +11,14 @@
                             <h1>
                                 <%=singleProduct.productName %>
                             </h1>
-                            <h4>
+                            <h4 id="singleProductUnitPrice">
                                 <%=singleProduct.unitPrice %>
                             </h4>
+                            <button id="increament">add</button>
+                            <button name="orderQuantity" data-product-price="<%=locals.singleProduct.unitPrice%>"
+                                data-productId="<%=locals.singleProduct._id %>"
+                                data-stock-availability="<%=locals.singleProduct.quantity %>">1</button>
+                            <button id="decreament">reduce</button>
 
                         </div>
 
@@ -42,53 +47,69 @@
 
 
         <% for(let i=0;i<=locals.user.shippingAddress.length-1;i++) {%>
-            <div>
-                <h2>address<%=i+1 %>
-                </h2>
-                <button class="addressEdit">Edit</button>
-                <button class="addressDelete" data-objectId="<%=locals.user.shippingAddress[i]._id  %>">Delete</button>
-
-                <form action="" name="addressList<%=i %>">
-
-                    <button class="updateAddress d-none" readonly="true" type="submit">Update</button>
-                    <input type="hidden" name="userId" value="<%locals.user._id%>">
-                    <input type="radio" name="selectAddress" value="<%= i %>" id="<%= i %>">
-                    <label for="">Country</label>
-                    <input name="country" readonly="true" type="text"
-                        value="<%=locals.user.shippingAddress[i].country %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].country %>">
-                    <label for="">State</label>
-                    <input name="state" readonly="true" type="text" value="<%=locals.user.shippingAddress[i].state %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].state %>">
-                    <label for="">District</label>
-                    <input name="district" readonly="true" type="text"
-                        value="<%=locals.user.shippingAddress[i].district %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].district %>">
-                    <label readonly="true" for="">City</label>
-                    <input name="city" readonly="true" type="text" value="<%=locals.user.shippingAddress[i].city %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].city %>">
-                    <label readonly="true" for="">Pincode</label>
-                    <input name="pincode" readonly="true" type="text"
-                        value="<%=locals.user.shippingAddress[i].pincode %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].pincode %>">
-                    <label for="">Street</label>
-                    <input name="street" readonly="true" type="text" value="<%=locals.user.shippingAddress[i].street %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].street %>">
-                    <label for="">House Name</label>
-                    <input name="houseName" readonly="true" type="text"
-                        value="<%=locals.user.shippingAddress[i].houseName %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].houseName %>">
-                    <label for="">Building No</label>
-                    <input name="buildingNo" readonly="true" type="text"
-                        value="<%=locals.user.shippingAddress[i].buildingNo %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].buildingNo %>">
-                    <label for="">Land Mark</label>
-                    <input name="landMark" readonly="true" type="text"
-                        value="<%=locals.user.shippingAddress[i].landMark %>"
-                        data-original-value="<%=locals.user.shippingAddress[i].landMark %>">
+            <div class="container ">
+                <div class="row">
 
 
-                </form>
+                    <div>
+                        <h2>address<%=i+1 %>
+                        </h2>
+                        <div>
+                            <button class="addressEdit">Edit</button>
+                            <button class="addressDelete"
+                                data-objectId="<%=locals.user.shippingAddress[i]._id  %>">Delete</button>
+                        </div>
+                    </div>
+                    <form action="" name="addressList<%=i %>">
+
+                        <button class="updateAddress d-none" readonly="true" type="submit">Update</button>
+
+                        <input type="hidden" name="userId" value="<%locals.user._id%>">
+                        <input type="hidden" name="addressId"
+                            value="<%=locals.user.shippingAddress[i]._id  %>">
+
+
+                        <input  type="radio" name="selectAddress" value="<%= i %>" id="<%= i %>">
+                        <label for="">Country</label>
+                        <input class="form-control" name="country" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].country %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].country %>">
+                        <label for="">State</label>
+                        <input class="form-control" name="state" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].state %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].state %>">
+                        <label for="">District</label>
+                        <input class="form-control" name="district" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].district %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].district %>">
+                        <label readonly="true" for="">City</label>
+                        <input class="form-control" name="city" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].city %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].city %>">
+                        <label readonly="true" for="">Pincode</label>
+                        <input class="form-control" name="pincode" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].pincode %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].pincode %>">
+                        <label for="">Street</label>
+                        <input class="form-control" name="street" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].street %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].street %>">
+                        <label for="">House Name</label>
+                        <input class="form-control" name="houseName" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].houseName %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].houseName %>">
+                        <label for="">Building No</label>
+                        <input class="form-control" name="buildingNo" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].buildingNo %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].buildingNo %>">
+                        <label for="">Land Mark</label>
+                        <input class="form-control" name="landMark" readonly="true" type="text"
+                            value="<%=locals.user.shippingAddress[i].landMark %>"
+                            data-original-value="<%=locals.user.shippingAddress[i].landMark %>">
+
+
+                    </form>
+                </div>
             </div>
 
             <% } %>

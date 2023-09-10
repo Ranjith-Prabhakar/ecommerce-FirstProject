@@ -39,5 +39,7 @@ router.post('/removeFromCart',userSessionHandler, userValidation,userController.
 // checkOut
 router.get('/checkOutPage',userSessionHandler,userValidation,userController.getCheckOutPage)
 router.post('/buySelectedProducts',userSessionHandler,userValidation,userController.postBuySelectedProducts)
+router.post('/orderPlacement',userSessionHandler,userValidation,userController.postOrderPlacement)
+router.get('/orders',userSessionHandler,userValidation,userController.getOrders)
 
 module.exports = router

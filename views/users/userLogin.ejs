@@ -1,5 +1,6 @@
 <%- include('../layout/user/header') %>
-    <div class="container">
+
+    <div class="container ">
         <div class="row vh-100 justify-content-center justify-content-sm-end  align-items-center ">
             <div class="col-4">
                 <form action="/userLogin" method="post">
@@ -20,7 +21,8 @@
                                                 <%= block %>
                                             </h6>
                                             <% } %>
-                                                <label class="form-label text-white " for="userName">User Name</label>
+                                                <label class="form-label text-white " for="userName">User
+                                                    Name</label>
                                                 <input class="form-control w-75 " type="text" name="userName"
                                                     placeholder="userName" id="userName" required>
                                                 <label class="form-label text-white " for="password">Password</label>
@@ -33,5 +35,4 @@
             </div>
         </div>
     </div>
-
     <%- include('../layout/user/footer') %>

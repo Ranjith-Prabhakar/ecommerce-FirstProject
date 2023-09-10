@@ -22,7 +22,7 @@
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying"
                     data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-next-icon " aria-hidden="true"></span>
                     <span class="visually-hidden">Next</span>
                 </button>
             </div>
@@ -109,41 +109,35 @@
 
 
 
-                                                                            <% let buttonName='Add To Cart' ; %>
+                                                                            <% let buttonName='Add To Cart' %>
 
-                                                                                <% if (locals.user && locals.user._id) {
-                                                                                    %>
+                                                                                <% if (locals.user) { %>
                                                                                     <% if (locals.user.cart.length) { %>
                                                                                         <% for (let i=0; i <
                                                                                             locals.user.cart.length;
                                                                                             i++) { %>
-                                                                                            <% if
-                                                                                                (locals.user.cart[i].productId===product._id)
-                                                                                                { %>
+                                                                                                <% if (String(locals.user.cart[i].productId) === String(product._id)) { %>
                                                                                                 <% buttonName='Go To Cart'
-                                                                                                    ; %>
-                                                                                                    <% break; %>
+                                                                                                    %>
+                                                                                                    <% } %>
                                                                                                         <% } %>
                                                                                                             <% } %>
-                                                                                                                <% } %>
+                                                                                                                <a class="btn btn-outline-light productCount"
+                                                                                                                    data-product-id="<%= product._id %>"
+                                                                                                                    data-user-id="<%= locals.user._id %>"
+                                                                                                                    href="#">
+                                                                                                                    <%= buttonName
+                                                                                                                        %>
+                                                                                                                </a>
+                                                                                                                <% } else{
+                                                                                                                    %>
                                                                                                                     <a class="btn btn-outline-light productCount"
                                                                                                                         data-product-id="<%= product._id %>"
-                                                                                                                        data-user-id="<%= locals.user._id %>"
-                                                                                                                        href="#">
-
-                                                                                                                        <%= buttonName
-                                                                                                                            %>
-                                                                                                                    </a>
-                                                                                                                    <% } else
-                                                                                                                        {
+                                                                                                                        href="#">Add
+                                                                                                                        To
+                                                                                                                        Cart</a>
+                                                                                                                    <% }
                                                                                                                         %>
-                                                                                                                        <a class="btn btn-outline-light productCount"
-                                                                                                                            data-product-id="<%= product._id %>"
-                                                                                                                            href="#">Add
-                                                                                                                            To
-                                                                                                                            Cart</a>
-                                                                                                                        <% }
-                                                                                                                            %>
 
                                                                         </div>
                                                     </div>
@@ -171,6 +165,6 @@
 
                     </div>
                 </div>
-
+                <script src="/javaScript/user/header.js"></script>
                 <script src="/javaScript/user/cart.js"></script>
                 <%- include('../layout/user/footer') %>

@@ -26,14 +26,18 @@
                                 <input class="form-control w-75 " id="userName" required type="text" name="userName"
                                     placeholder="User Name">
                                 <label class="form-label text-white " for="password">Password</label>
-                                <input class="form-control w-75 mb-3" id="password" required type="password"
-                                    name="password" placeholder="Password">
+                                <input class="form-control w-75" id="password" required type="password" name="password"
+                                    placeholder="Password">
+                                <label class="form-label text-white " id="confirm_password_label" for="Confirm_Password" data-value="Confirm Password">Confirm Password</label>
+                                <input class="form-control w-75 mb-3" id="Confirm_Password" required type="password"
+                                    name="Confirm_Password" placeholder="Confirm Password">
 
-                             
-                                <button type="submit" class="btn btn-primary w-50  loginButtonColor">Submit</button>
+
+                                <button type="submit" id="submitButton"
+                                    class="btn btn-primary w-50  loginButtonColor">Submit</button>
                 </form>
             </div>
         </div>
     </div>
-
+    <script src="/javaScript/user/signUp.js"></script>
     <%- include('../layout/user/footer') %>

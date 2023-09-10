@@ -179,6 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //radio button 
     const radioButtons = document.querySelectorAll('input[name="selectAddress"]');
 
+
     radioButtons.forEach((radioButton) => {
         radioButton.addEventListener('change', (event) => {
             if (event.target.checked) {
@@ -192,43 +193,103 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    //increament
+    let increamentButton = document.getElementById('increament')
+    let orderQuantity = document.querySelector('button[name="orderQuantity"]');
+    if (increamentButton) {
+        increamentButton.addEventListener('click', async (event) => {
+            event.preventDefault()
+            let increase = parseInt(orderQuantity.innerText)
+            let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
+            increase++
+            if (data_stock_availability >= increase) {
+                orderQuantity.innerText = increase
+                let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
+                let productPrice = orderQuantity.getAttribute('data-product-price')
+                singleProductUnitPrice.innerText = increase * parseInt(productPrice)
+
+            }
+        })
+    }
+
+    //decreament
+    let decreamentButton = document.getElementById('decreament')
+    if (decreamentButton) {
+        decreamentButton.addEventListener('click', async (event) => {
+            event.preventDefault()
+            let decrease = parseInt(orderQuantity.innerText) // took from above
+            let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
+            decrease--
+            if (decrease > 0) {
+                orderQuantity.innerText = decrease
+                let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
+                let productPrice = orderQuantity.getAttribute('data-product-price')
+                singleProductUnitPrice.innerText = decrease * parseInt(productPrice)
+            }
+        })
+    }
+
 
     ///order placement
 
     const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')
-    let address_confirm = false
     let newFormData = {}
     const paymentOptionForm = document.forms.paymentOption
+
     paymentOptionForm.addEventListener('submit', async (event) => {
         event.preventDefault()
+
         for (let i = 0; i < radioButtons.length; i++) { // radioButtons is the variable created above
             if (radioButtons[i].checked === true) {
 
                 for (let j = 0; j < placeOrder.length; j++) {
+                    let formData = document.forms["addressList" + i]
+                    let formObject = new FormData(formData)
+                    for (let [key, value] of formObject) {
+                        newFormData[key] = value
+                    }
                     if (placeOrder[j].checked === true) {
-                        let formData = document.forms["addressList" + i]
-                        let formObject = new FormData(formData)
-                        for (let [key, value] of formObject) {
-                            newFormData[key] = value
-                        }
+
+
                         newFormData.modeOfPayment = placeOrder[j].id
+
+                        if (increamentButton) {//took from above
+                            let productId = orderQuantity.getAttribute("data-productId")
+                            let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
+                            let productPrice = parseFloat(singleProductUnitPrice.innerText)
+                            let order_Quantity = parseFloat(orderQuantity.innerText)
+                            newFormData.productId = productId
+                            newFormData.productPrice = productPrice
+                            newFormData.orderQuantity = order_Quantity
+                        }
+                        console.log("newFormData", newFormData);
+
+                        break
                     }
 
                 }
-                if (!newFormData.country) {
-                    alert("select a payment mode ")
-                    address_confirm = true
-                    break;
-                }
+
             }
         }
-        if (!address_confirm) {
+        if (!newFormData.country) {
             alert("select an address for deliver ")
 
-        } else {
-
-            ///here i have to retreive the product data and have to create route ,controller update db and have to redirect or show a order confirmation here
-            /// modal has updated for user 
+        } else if (!newFormData.modeOfPayment) {
+            alert("select the mode of payment ")
+        }
+        else {
+            let response = await fetch('/orderPlacement', {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ newFormData })
+            })
+            let data = await response.json()
+            if (data.success) {
+               alert('the order has been placed')
+            }
+           
         }
 
 

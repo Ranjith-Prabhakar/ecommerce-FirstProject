@@ -68,16 +68,16 @@ const getSearch = async (req, res, next) => {
 const getUserLogin = async (req, res, next) => {
     try {
         if (req.session.userSignUpSuccess) {
-            res.render('./users/userLogin', { userSignUpSuccess: req.session.userSignUpSuccess })
+            res.render('./users/userLogin', { userSignUpSuccess: req.session.userSignUpSuccess, login: true })
             req.session.userSignUpSuccess = ''
         } else if (req.session.loginErrorMessage) {
-            res.render('./users/userLogin', { loginErrorMessage: req.session.loginErrorMessage })
+            res.render('./users/userLogin', { loginErrorMessage: req.session.loginErrorMessage, login: true })
             req.session.loginErrorMessage = ''
         } else if (req.session.block) {
-            res.render('./users/userLogin', { block: req.session.block })
+            res.render('./users/userLogin', { block: req.session.block, login: true })
             req.session.block = ''
         } else {
-            res.render('./users/userLogin')
+            res.render('./users/userLogin', { login: true })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -157,11 +157,12 @@ const postUserLogin = async (req, res, next) => {
 
 const getUserSignUp = async (req, res, next) => {
     try {
+        console.log('in user signUp');
         if (req.session.errorMessage) {
-            res.render('./users/userSignUp', { errorMessage: req.session.errorMessage })
+            res.render('./users/userSignUp', { errorMessage: req.session.errorMessage, signUp: true })
             req.session.errorMessage = ''
         } else {
-            res.render('./users/userSignUp')
+            res.render('./users/userSignUp', { signUp: true })
         }
 
     } catch (err) {
@@ -314,13 +315,14 @@ const getBrandPage = async (req, res, next) => {
     try {
         if (!req.session.userId) {
             let brands = await BrandModal.distinct('brandName')
+
             let products = await ProductModal.find({ brandName: req.query.brandName, freez: { $eq: 'active' } })
             res.render('./users/brandPage', { brands, products })
         } else {
-            let userName = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
+            let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({ brandName: req.query.brandName, freez: { $eq: 'active' } })
-            res.render('./users/brandPage', { brands, products, userName: userName.firstName })
+            res.render('./users/brandPage', { brands, products, user })
         }
 
 
@@ -362,14 +364,15 @@ const getBrandFilter = async (req, res, next) => {
 const getSingleProductPage = async (req, res, next) => {
     try {
         if (!req.session.userId) {
+            
             let brands = await BrandModal.distinct('brandName')
             let product = await ProductModal.findOne({ _id: req.query.id })
             res.render('./users/singleProduct', { brands, product })
         } else {
-            let userName = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, firstName: 1 });
+            let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             let product = await ProductModal.findOne({ _id: req.query.id })
-            res.render('./users/singleProduct', { brands, product, userName: userName.firstName })
+            res.render('./users/singleProduct', { brands, product, user })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -379,7 +382,8 @@ const getSingleProductPage = async (req, res, next) => {
 const getProfile = async (req, res, next) => {
     try {
         const user = await UserModal.findOne({ _id: req.session.userId })
-        res.render('./users/userProfile', { user })
+        let brands = await BrandModal.distinct('brandName')
+        res.render('./users/userProfile', { user, brands })
     } catch (error) {
         errorHandler(error, req, res, next)
 
@@ -419,16 +423,32 @@ const postCreateAddress = async (req, res, next) => {
 const postEditAddress = async (req, res, next) => {
     console.log('inside postEditAddress ');
     try {
-        let userId = req.session.userId
-        console.log("userId", userId);
-        let index = req.body.index
-        console.log("index", index);
-        let newObject = req.body.newAddressFormData
-        console.log("newObject", newObject);
-        delete newObject.userId
-        console.log("after delete ", newObject);
-        await UserModal.updateOne({ _id: userId }, { $set: { [`shippingAddress.${index}`]: newObject } })
-        res.json({ success: true })
+        if (req.body.userObject) {
+            let { firstName, lastName, email, phone, userName } = req.body.userObject
+            await UserModal.updateOne({ _id: req.session.userId }, {
+                $set: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phone: phone,
+                    userName: userName
+                }
+            })
+
+            userObject = ""
+            res.json({ success: true })
+        } else {
+            let userId = req.session.userId
+            console.log("userId", userId);
+            let index = req.body.index
+            console.log("index", index);
+            let newObject = req.body.newAddressFormData
+            console.log("newObject", newObject);
+            delete newObject.userId
+            console.log("after delete ", newObject);
+            await UserModal.updateOne({ _id: userId }, { $set: { [`shippingAddress.${index}`]: newObject } })
+            res.json({ success: true })
+        }
     } catch (error) {
         errorHandler(error, req, res, next)
     }
@@ -466,6 +486,7 @@ const postDeleteAddress = async (req, res, next) => {
 //cart
 const getCart = async (req, res, next) => {
     try {
+        let brands = await BrandModal.distinct('brandName')
         const user = await UserModal.findOne({ _id: req.session.userId });
         const cartItems = user.cart; // Get the cart items array
         let cartValue = 0
@@ -485,10 +506,9 @@ const getCart = async (req, res, next) => {
         // Use Promise.all to wait for all product data to be fetched
         const cartProducts = await Promise.all(cartProductPromises);
 
-        console.log("cartProducts", cartProducts);
-        console.log("cartValue", cartValue);
 
-        res.render('./users/cart', { cartProducts, cartValue }); // Pass cartProducts to the EJS template
+
+        res.render('./users/cart', { cartProducts, cartValue, user, brands }); // Pass cartProducts to the EJS template
     } catch (error) {
         errorHandler(error, req, res, next);
     }
@@ -519,7 +539,6 @@ const postUpdateCartProductQty = async (req, res, next) => {
 
         const productId = req.body.productId;
         const quantity = req.body.quantity;
-        console.log(userId, productId, quantity);
         const result = await UserModal.updateOne(
             { _id: userId, 'cart.productId': productId },
             { $set: { 'cart.$.quantity': quantity } }
@@ -550,12 +569,12 @@ const postRemoveFromCart = async (req, res, next) => {
 
 const getCheckOutPage = async (req, res, next) => {
     try {
-        if (req.query.productId) {
+        if (req.query.productId) {//singleProduct
             let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
             let user = await UserModal.findOne({ _id: req.session.userId })
             res.render('./users/checkOutPage', { singleProduct, user });
             req.query.productId = '';
-        } else if (req.session.selectedProducts && req.session.selectedProducts.length) {
+        } else if (req.session.selectedProducts && req.session.selectedProducts.length) {//selected cart
             let user = await UserModal.findOne({ _id: req.session.userId })
             let productIds = req.session.selectedProducts.map((product) => product.productId);
             let matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
@@ -572,16 +591,17 @@ const getCheckOutPage = async (req, res, next) => {
                 }
             });
             req.session.selectedProducts.length = 0;
+            req.session.productList = productList
             res.render('./users/checkOutPage', { productList, user });
         } else if (req.query.cart) {
             const user = await UserModal.findOne({ _id: req.session.userId });
 
             const cart = user.cart;
-            console.log('cart', cart);
             const productIds = cart.map((item) => item.productId);
 
             const matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
-            console.log('matchingProducts', matchingProducts);
+
+
             let productList = matchingProducts.map((product) => {
                 cart.forEach((cart) => {
 
@@ -594,6 +614,8 @@ const getCheckOutPage = async (req, res, next) => {
             })
 
             req.query.cart = false;
+            req.session.productList = productList
+            console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
             res.render('./users/checkOutPage', { productList, user });
         }
     } catch (error) {
@@ -607,13 +629,117 @@ const getCheckOutPage = async (req, res, next) => {
 const postBuySelectedProducts = (req, res, next) => {
     try {
         req.session.selectedProducts = req.body.selectedProducts
-        console.log("postBuySelectedProducts", req.session.selectedProducts);
         res.json({ success: true })
     } catch (error) {
         errorHandler(error, req, res, next)
 
     }
 }
+//////
+const postOrderPlacement = async (req, res, next) => {
+    console.log("inside postOrderPlacement");
+    try {
+        console.log("inside try");
+        console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
+        console.log("req.session.productList", req.session.productList);
+        if (!req.session.productList) {
+            console.log("inside postOrderPlacement ande (!req.session.productList)");
+            await UserModal.updateOne({ _id: req.session.userId }, {
+                $push: {
+                    orders: {
+                        product: [{
+                            productId: req.session.productList.productId,
+                            orderQuantity: req.session.productList.orderQuantity,
+                            price: req.session.productList.productPrice,
+                        }],
+                        modeOfPayment: req.session.productList.modeOfPayment,
+
+                        addressToShip: req.session.productList.addressId
+                    }
+                }
+            })
+            res.json({ success: true })
+            req.body.newFormData = false
+        } else if (req.session.productList) {
+            console.log("req.session.productList[0].orderQuantity", req.session.productList[0]);
+
+            let products = req.session.productList.map((product) => {
+                return {
+                    productId: product._id, // Use product._id as the productId
+                    orderQuantity: product.orderQuantity, // Use product.quantity as the orderQuantity
+                    price: product.unitPrice * product.orderQuantity // Calculate the total price
+                };
+            })
+            console.log("products================================================");
+            console.log(products);
+            await UserModal.updateOne({ _id: req.session.userId }, {
+                $addToSet: {
+                    orders: {
+                        product: products,
+                        modeOfPayment: req.body.newFormData.modeOfPayment,
+
+                        addressToShip: req.body.newFormData.addressId
+                    }
+                }
+            })
+            res.json({ success: true })
+        }
+    } catch (error) {
+        errorHandler(error, req, res, next)
+
+    }
+}
+
+const getOrders = async (req, res, next) => {
+    try {
+        let brands = await BrandModal.distinct('brandName')
+        const user = await UserModal.findOne({ _id: req.session.userId })
+        // Debugging: Log the userId to ensure it's valid
+        console.log("UserID:", req.session.userId);
+        const orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: true })
+        const products =
+            // const orders = await UserModal.aggregate([
+            //     {
+            //         $match: { _id: req.session.userId }
+            //     },
+            // {
+            //     $lookup: {
+            //         from: "products",
+            //         localField: "orders.product.productId",
+            //         foreignField: "_id",
+            //         as: "orderDetails"
+            //     }
+            // },
+            // {
+            //     $unwind: "$orderDetails"
+            // },
+            // {
+            //     $addFields: {
+            //         "order.orderQuantity": {
+            //             $arrayElemAt: ["$orderDetails.orders.orderQuantity", 0]
+            //         },
+            //         "order.price": {
+            //             $arrayElemAt: ["$orderDetails.orders.price", 0]
+            //         }
+            //     }
+            // },
+            // {
+            //     $project: {
+            //         "orderDetails.orders": 0 // Exclude the original orders field from the users collection
+            //     }
+            // }
+            // ]);
+
+            // Debugging: Log the result of the aggregation pipeline
+            console.log("Orders:", orders);
+
+        res.render('./users/order', { orders, brands, user }); // Pass orders data to the template
+    } catch (error) {
+        errorHandler(error.message);
+    }
+};
+
+
 
 module.exports = {
     userHome,
@@ -638,5 +764,7 @@ module.exports = {
     postUpdateCartProductQty,
     postRemoveFromCart,
     getCheckOutPage,
-    postBuySelectedProducts
+    postBuySelectedProducts,
+    postOrderPlacement,
+    getOrders
 }

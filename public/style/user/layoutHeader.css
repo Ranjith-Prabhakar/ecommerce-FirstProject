@@ -1,9 +1,13 @@
-
+@import './userProfile.css';
+@import './cart.css';
 
 body{
     background-color:#08030f ;
+   
 }
 .navbarBg{
+    /* background-color:#351a58 ; */
+    /* background-color: rgba(25, 16, 34, 0.2);  */
     background-color:#351a58 ;
 }
 
@@ -12,15 +16,12 @@ body{
 }
 /* userHome */
 .bannerSize{
-    height: 300px;
+    height: 600px;
     width: 100vw;
     overflow: hidden;
 }
 /* common for userHome brandPage singleProductPage */
-.brandBox{
-    background-color: rgba(125, 90, 170, 0.2);  
-   
-}
+/*  */
 .filter{
     background-color: rgba(25, 16, 34, 0.2); 
 }
@@ -85,19 +86,19 @@ body{
  /* Custom Carousel Styles */
 .carousal-button-prev{
     position: absolute;
-    left:-200px;
-    padding-right: 100px;
+    left:-100px;
+    margin-right: 100px;
+    width: 20px;
 }
 .carousal-button-next{
     position: absolute;
-    right:-160px;
-    padding-left: 100px;
+    right:-100px;
+    margin-left: 10px;
+    width: 20px;
 }
 
+
+
 /* profile image adder */
-.profile-photo-add-icon{
-    border-radius: 100%;
-    height: 100px;
-    width: 100px;
- 
-}
+
+
