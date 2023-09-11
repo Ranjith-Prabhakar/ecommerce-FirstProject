@@ -122,6 +122,7 @@ const User = mongoose.Schema({
             orderQuantity: String,
             price: String,
         }],
+        total:String,
         modeOfPayment: String,
         discount: String,
         coupon: String,

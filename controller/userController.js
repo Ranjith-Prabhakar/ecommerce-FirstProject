@@ -7,6 +7,7 @@ const nodeMailer = require('nodemailer')
 const randomString = require('randomstring')
 require('dotenv').config()
 const { errorHandler } = require('../middleWare/errorMiddleWare')
+const productModal = require('../model/productModal')
 
 
 
@@ -343,7 +344,7 @@ const getBrandFilter = async (req, res, next) => {
             }
             let brands = await BrandModal.distinct('brandName')
             const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] }, freez: 'active' }).sort({ brandName: 1 })
-            res.render('./users/productFilter', { filterProducts, brands})
+            res.render('./users/productFilter', { filterProducts, brands })
         } else {
             let brand = []
             if (typeof req.query.brand === 'string') {
@@ -573,7 +574,7 @@ const getCheckOutPage = async (req, res, next) => {
             let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
             let user = await UserModal.findOne({ _id: req.session.userId })
             let brands = await BrandModal.distinct('brandName')
-            res.render('./users/checkOutPage', { singleProduct, user ,brands});
+            res.render('./users/checkOutPage', { singleProduct, user, brands });
             req.query.productId = '';
         } else if (req.session.selectedProducts && req.session.selectedProducts.length) {//selected cart
             let user = await UserModal.findOne({ _id: req.session.userId })
@@ -594,7 +595,7 @@ const getCheckOutPage = async (req, res, next) => {
             });
             req.session.selectedProducts.length = 0;
             req.session.productList = productList
-            res.render('./users/checkOutPage', { productList, user,brands });
+            res.render('./users/checkOutPage', { productList, user, brands });
         } else if (req.query.cart) {
             const user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
@@ -618,7 +619,7 @@ const getCheckOutPage = async (req, res, next) => {
             req.query.cart = false;
             req.session.productList = productList
             console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
-            res.render('./users/checkOutPage', { productList, user,brands });
+            res.render('./users/checkOutPage', { productList, user, brands });
         }
     } catch (error) {
         errorHandler(error, req, res, next);
@@ -642,49 +643,31 @@ const postOrderPlacement = async (req, res, next) => {
     console.log("inside postOrderPlacement");
     try {
         console.log("inside try");
-        console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
-        console.log("req.session.productList", req.session.productList);
-        if (!req.session.productList) {
+        console.log("req.body.newFormData", req.body.newFormData);
+        if (req.body.newFormData) {
             console.log("inside postOrderPlacement ande (!req.session.productList)");
             await UserModal.updateOne({ _id: req.session.userId }, {
                 $push: {
                     orders: {
-                        product: [{
-                            productId: req.session.productList.productId,
-                            orderQuantity: req.session.productList.orderQuantity,
-                            price: req.session.productList.productPrice,
-                        }],
-                        modeOfPayment: req.session.productList.modeOfPayment,
-
-                        addressToShip: req.session.productList.addressId
+                        product: req.body.newFormData.productData,
+                        modeOfPayment: req.body.newFormData.modeOfPayment,
+                        addressToShip: req.body.newFormData.addressId,
+                        total: req.body.newFormData.total
                     }
                 }
             })
+            console.log('yet it ok');
+
+            // /////////
+            await Promise.all(req.body.newFormData.product.map(async (product) => {
+                await ProductModal.updateOne(
+                    { _id: product.productId },
+                    { $inc: { quantity: -(product.orderQuantity) } }
+                );
+            }));
+
             res.json({ success: true })
             req.body.newFormData = false
-        } else if (req.session.productList) {
-            console.log("req.session.productList[0].orderQuantity", req.session.productList[0]);
-
-            let products = req.session.productList.map((product) => {
-                return {
-                    productId: product._id, // Use product._id as the productId
-                    orderQuantity: product.orderQuantity, // Use product.quantity as the orderQuantity
-                    price: product.unitPrice * product.orderQuantity // Calculate the total price
-                };
-            })
-            console.log("products================================================");
-            console.log(products);
-            await UserModal.updateOne({ _id: req.session.userId }, {
-                $addToSet: {
-                    orders: {
-                        product: products,
-                        modeOfPayment: req.body.newFormData.modeOfPayment,
-
-                        addressToShip: req.body.newFormData.addressId
-                    }
-                }
-            })
-            res.json({ success: true })
         }
     } catch (error) {
         errorHandler(error, req, res, next)

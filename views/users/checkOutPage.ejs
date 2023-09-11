@@ -25,6 +25,8 @@
                                             <% } else{ %>
                                                 <h5 class="text-success  ">instock </h5>
                                                 <% } %>
+                                                    <h4>Unit Price: <%=singleProduct.unitPrice %>
+                                                    </h4>
                                 </div>
                                 <div class="col text-end">
                                     <h4 id="singleProductUnitPrice">
@@ -70,18 +72,23 @@
                                                     <% } else{ %>
                                                         <h5 class="text-success  ">instock </h5>
                                                         <% } %>
+                                                            <h5>
+                                                                Unit Price :<%= productList[i].unitPrice %>
+                                                            </h5>
                                         </div>
 
                                         <div class="col text-end">
-                                            <h4 id="singleProductUnitPrice">
-                                                <%=productList[i].unitPrice %>
+
+                                            <h4 id="orderQuantity<%=i%>" class="productList"
+                                                data-productId="<%=productList[i]._id  %>"
+                                                data-product-price="<%= productList[i].orderQuantity * productList[i].unitPrice %>">
+                                                Order Quantity : <span>
+                                                    <%=productList[i].orderQuantity %>
+                                                </span>
                                             </h4>
-                                            <button id="increament" class="bi bi-plus btn btn-light "></button>
-                                            <button name="orderQuantity" class="btn btn-light "
-                                                data-product-price="<%=productList[i].unitPrice%>"
-                                                data-productId="<%=productList[i]._id %>"
-                                                data-stock-availability="<%=productList[i].quantity %>">1</button>
-                                            <button id="decreament " class="bi bi-dash btn btn-light"></button>
+                                            <h4>Total : <%= productList[i].orderQuantity * productList[i].unitPrice %>
+                                            </h4>
+
                                         </div>
 
                                     </div>
@@ -113,7 +120,7 @@
                             <div class="d-flex justify-content-start  ">
                                 <input class="form-check-input" type="radio" name="selectAddress" value="<%= i %>"
                                     id="<%= i %>">
-                                <h2 class="d-inline ms-2 ">Address<%=i+1 %>
+                                <h2 class="d-inline ms-2 ">Address <%=i+1 %>
                                 </h2>
 
                             </div>

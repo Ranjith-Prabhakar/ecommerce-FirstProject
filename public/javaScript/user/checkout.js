@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let increamentButton = document.getElementById('increament')
     console.log("increamentButton", increamentButton);
     let orderQuantity = document.querySelector('button[name="orderQuantity"]');
-    console.log("orderQuantity.innerText", orderQuantity.innerText);
     if (increamentButton) {
         increamentButton.addEventListener('click', async (event) => {
             event.preventDefault()
@@ -13,10 +12,11 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("increase", increase);
             let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
             increase++
-            if (data_stock_availability >= increase) {
+            if (parseFloat(data_stock_availability) >= increase) {
                 orderQuantity.innerText = increase
                 let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
                 let productPrice = orderQuantity.getAttribute('data-product-price')
+
                 singleProductUnitPrice.innerText = increase * parseInt(productPrice)
 
             }
@@ -32,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let decrease = parseInt(orderQuantity.innerText);// took from above
             decrease--
             console.log("decrease", decrease);
-            let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
-            decrease--
+            // let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
+
             if (decrease > 0) {
                 orderQuantity.innerText = decrease
                 let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
@@ -230,12 +230,13 @@ document.addEventListener("DOMContentLoaded", () => {
     ///order placement
 
     const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')
-    let newFormData = {}
+
     const paymentOptionForm = document.forms.paymentOption
 
+    console.log("paymentOptionForm", paymentOptionForm);
     paymentOptionForm.addEventListener('submit', async (event) => {
         event.preventDefault()
-
+        let newFormData = {}
         for (let i = 0; i < radioButtons.length; i++) { // radioButtons is the variable created above
             if (radioButtons[i].checked === true) {
 
@@ -249,15 +250,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
                         newFormData.modeOfPayment = placeOrder[j].id
-
+                        newFormData.productData = []
+                        newFormData.total = 0
                         if (increamentButton) {//took from above
                             let productId = orderQuantity.getAttribute("data-productId")
                             let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
                             let productPrice = parseFloat(singleProductUnitPrice.innerText)
                             let order_Quantity = parseFloat(orderQuantity.innerText)
-                            newFormData.productId = productId
-                            newFormData.productPrice = productPrice
-                            newFormData.orderQuantity = order_Quantity
+                            newFormData.productData[0] = {
+                                productId: productId,
+                                price: productPrice,
+                                orderQuantity: order_Quantity
+                            }
+                            newFormData.total = productPrice
+
+                        } else {
+                            let productList = document.getElementsByClassName('productList')
+
+                            for (i = 0; i < productList.length; i++) {
+                                let head4 = document.getElementById('orderQuantity' + i)
+                                newFormData.productData.unshift({
+                                    productId: head4.getAttribute('data-productId'),
+                                    price: head4.getAttribute('data-product-price'),
+                                    orderQuantity: head4.firstElementChild.innerText
+                                })
+                                newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
+                                console.log("newFormData.productData", newFormData.productData);
+                            }
+
                         }
                         console.log("newFormData", newFormData);
 
@@ -275,16 +295,21 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("select the mode of payment ")
         }
         else {
-            let response = await fetch('/orderPlacement', {
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ newFormData })
-            })
-            let data = await response.json()
-            if (data.success) {
-                alert('the order has been placed')
+            try {
+                const response = await fetch('/orderPlacement', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ newFormData })
+                })
+                const data = await response.json();
+                if (data.success) {
+                    alert('the order has been placed')
+                    window.location.reload()
+                }
+            } catch (error) {
+                console.log(error.message);
             }
 
         }
