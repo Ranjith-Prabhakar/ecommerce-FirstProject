@@ -1,8 +1,13 @@
 @import './userProfile.css';
 @import './cart.css';
+@import './checkOut.css';
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 body{
     background-color:#08030f ;
+    font-family: 'Poppins', sans-serif;
    
 }
 .navbarBg{

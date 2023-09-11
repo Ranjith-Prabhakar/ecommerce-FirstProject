@@ -1,12 +1,55 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+
+    //single product increament
+    let increamentButton = document.getElementById('increament')
+    console.log("increamentButton", increamentButton);
+    let orderQuantity = document.querySelector('button[name="orderQuantity"]');
+    console.log("orderQuantity.innerText", orderQuantity.innerText);
+    if (increamentButton) {
+        increamentButton.addEventListener('click', async (event) => {
+            event.preventDefault()
+            let increase = parseInt(orderQuantity.innerText)
+            console.log("increase", increase);
+            let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
+            increase++
+            if (data_stock_availability >= increase) {
+                orderQuantity.innerText = increase
+                let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
+                let productPrice = orderQuantity.getAttribute('data-product-price')
+                singleProductUnitPrice.innerText = increase * parseInt(productPrice)
+
+            }
+        })
+    }
+
+    //single product decreament
+    let decreamentButton = document.getElementById('decreament')
+    console.log("decreamentButton", decreamentButton);
+    if (decreamentButton) {
+        decreamentButton.addEventListener('click', async (event) => {
+            event.preventDefault()
+            let decrease = parseInt(orderQuantity.innerText);// took from above
+            decrease--
+            console.log("decrease", decrease);
+            let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
+            decrease--
+            if (decrease > 0) {
+                orderQuantity.innerText = decrease
+                let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
+                let productPrice = orderQuantity.getAttribute('data-product-price')
+                singleProductUnitPrice.innerText = decrease * parseInt(productPrice)
+            }
+        })
+    }
+
+
+    // 
     let addressEdit = document.getElementsByClassName('addressEdit')
     for (let i = 0; i < addressEdit.length; i++) {
 
         addressEdit[i].addEventListener('click', (event) => {
             event.preventDefault()
-
-            // let addressForm = document.forms['addressList' + (addressEdit.length - 1 - i)];
             let addressForm = document.forms['addressList' + i];
             let formElements = addressForm.elements;
 
@@ -14,16 +57,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (formElements[j].hasAttribute('readonly')) {
                     addressEdit[i].innerText = "Cancell"
                     formElements[j].removeAttribute('readonly');
-
-                    // let siblingElement = addressEdit[i].nextElementSibling;
-
-                    // while (siblingElement) {
-                    //     if (siblingElement.classList.contains('updateAddress')) {
-                    //          break;
-                    //     }
-                    //     siblingElement = siblingElement.nextElementSibling;
-                    // }
-                    // siblingElement.classList.toggle('d-none')
                     if (formElements[j].classList.contains("updateAddress")) {
                         formElements[j].classList.toggle('d-none')
                     }
@@ -193,42 +226,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    //increament
-    let increamentButton = document.getElementById('increament')
-    let orderQuantity = document.querySelector('button[name="orderQuantity"]');
-    if (increamentButton) {
-        increamentButton.addEventListener('click', async (event) => {
-            event.preventDefault()
-            let increase = parseInt(orderQuantity.innerText)
-            let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
-            increase++
-            if (data_stock_availability >= increase) {
-                orderQuantity.innerText = increase
-                let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
-                let productPrice = orderQuantity.getAttribute('data-product-price')
-                singleProductUnitPrice.innerText = increase * parseInt(productPrice)
-
-            }
-        })
-    }
-
-    //decreament
-    let decreamentButton = document.getElementById('decreament')
-    if (decreamentButton) {
-        decreamentButton.addEventListener('click', async (event) => {
-            event.preventDefault()
-            let decrease = parseInt(orderQuantity.innerText) // took from above
-            let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
-            decrease--
-            if (decrease > 0) {
-                orderQuantity.innerText = decrease
-                let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
-                let productPrice = orderQuantity.getAttribute('data-product-price')
-                singleProductUnitPrice.innerText = decrease * parseInt(productPrice)
-            }
-        })
-    }
-
 
     ///order placement
 
@@ -287,9 +284,9 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             let data = await response.json()
             if (data.success) {
-               alert('the order has been placed')
+                alert('the order has been placed')
             }
-           
+
         }
 
 
