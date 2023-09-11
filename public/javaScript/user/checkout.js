@@ -306,7 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await response.json();
                 if (data.success) {
                     alert('the order has been placed')
-                    window.location.reload()
+                    window.location.href = '/orders'
                 }
             } catch (error) {
                 console.log(error.message);

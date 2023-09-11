@@ -1,15 +1,52 @@
 <%- include('../layout/user/header') %>
-<div>
-   <% locals.orders || '' %>
-   <% if(locals.orders) {%>
-    <% for(let i = 0;i<locals.orders.length;i++){ %>
-        <div class="container">
-            <div class="row">
-                <img src="" alt="">
-            </div>
-        </div>
-        <% } %>
-    <% } %>
-</div>
-<script src="/javaScript/user/header.js"></script>
-<%- include('../layout/user/footer') %>
+    <div>
+        <% locals.orders || '' %>
+            <% if(locals.orders) {%>
+                <div class="container text-white bg-dark  mt-5 ">
+                    <div class="row text-center p-3 ">
+                        <div class="col-4">
+                            <h5>
+                                Order Id
+                            </h5>
+                        </div>
+                        <div class="col-4">
+                            <h5>
+                                Ordered Date
+                            </h5>
+                        </div>
+                        <div class="col-4">
+                            <h5>Status</h5>
+                        </div>
+
+
+                    </div>
+                </div>
+
+                <% for(let i=0;i<locals.orders.orders.length;i++){ %>
+                    <div class="container text-white order-item-background mt-3 ">
+                        <div class="row text-center p-3 ">
+                            <div class="col-4">
+                                <a name="orderId" class="nav-link " href="/orderSinglePage?Id=<%=locals.orders.orders[i]._id %>" >
+                                    <%=locals.orders.orders[i]._id %>
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <h6>
+                                    <%= new Date(locals.orders.orders[i].orderDate).toLocaleDateString('en-US', {
+                                        weekday: 'short' , month: 'short' , day: 'numeric' , year: 'numeric' }) %>
+
+                                </h6>
+                            </div>
+                            <div class="col-4">
+                                <button class="btn btn-light ">Cancell</button>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <% } %>
+                        <% } %>
+    </div>
+
+    <script src="/javaScript/user/header.js"></script>
+    <%- include('../layout/user/footer') %>

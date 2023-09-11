@@ -640,32 +640,47 @@ const postBuySelectedProducts = (req, res, next) => {
 }
 //////
 const postOrderPlacement = async (req, res, next) => {
-    console.log("inside postOrderPlacement");
     try {
-        console.log("inside try");
-        console.log("req.body.newFormData", req.body.newFormData);
         if (req.body.newFormData) {
-            console.log("inside postOrderPlacement ande (!req.session.productList)");
+
+
+
             await UserModal.updateOne({ _id: req.session.userId }, {
                 $push: {
                     orders: {
-                        product: req.body.newFormData.productData,
-                        modeOfPayment: req.body.newFormData.modeOfPayment,
-                        addressToShip: req.body.newFormData.addressId,
-                        total: req.body.newFormData.total
+                        $each: [{
+                            product: req.body.newFormData.productData,
+                            modeOfPayment: req.body.newFormData.modeOfPayment,
+                            addressToShip: req.body.newFormData.addressId,
+                            total: req.body.newFormData.total
+                        }], $position: 0
                     }
                 }
             })
-            console.log('yet it ok');
 
-            // /////////
-            await Promise.all(req.body.newFormData.product.map(async (product) => {
-                await ProductModal.updateOne(
-                    { _id: product.productId },
-                    { $inc: { quantity: -(product.orderQuantity) } }
-                );
+
+            // await UserModal.updateOne({ _id: req.session.userId }, {
+            //     $push: {
+            //         orders: {
+            //             product: req.body.newFormData.productData,
+            //             modeOfPayment: req.body.newFormData.modeOfPayment,
+            //             addressToShip: req.body.newFormData.addressId,
+            //             total: req.body.newFormData.total
+            //         }
+            //     }
+            // })
+            await Promise.all(req.body.newFormData.productData.map(async (product) => {
+                let count = product.orderQuantity;
+                try {
+                    await ProductModal.updateOne(
+                        { _id: product.productId },
+                        { $inc: { quantity: -count } }
+                    );
+                } catch (error) {
+                    console.error('Error updating product quantity:', error);
+                    // Handle the error, such as logging it or sending an error response.
+                }
             }));
-
             res.json({ success: true })
             req.body.newFormData = false
         }
@@ -679,50 +694,113 @@ const getOrders = async (req, res, next) => {
     try {
         let brands = await BrandModal.distinct('brandName')
         const user = await UserModal.findOne({ _id: req.session.userId })
-        // Debugging: Log the userId to ensure it's valid
-        console.log("UserID:", req.session.userId);
         const orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: true })
-        const products =
-            // const orders = await UserModal.aggregate([
-            //     {
-            //         $match: { _id: req.session.userId }
-            //     },
-            // {
-            //     $lookup: {
-            //         from: "products",
-            //         localField: "orders.product.productId",
-            //         foreignField: "_id",
-            //         as: "orderDetails"
-            //     }
-            // },
-            // {
-            //     $unwind: "$orderDetails"
-            // },
-            // {
-            //     $addFields: {
-            //         "order.orderQuantity": {
-            //             $arrayElemAt: ["$orderDetails.orders.orderQuantity", 0]
-            //         },
-            //         "order.price": {
-            //             $arrayElemAt: ["$orderDetails.orders.price", 0]
-            //         }
-            //     }
-            // },
-            // {
-            //     $project: {
-            //         "orderDetails.orders": 0 // Exclude the original orders field from the users collection
-            //     }
-            // }
-            // ]);
-
-            // Debugging: Log the result of the aggregation pipeline
-            console.log("Orders:", orders);
-
-        res.render('./users/order', { orders, brands, user }); // Pass orders data to the template
+        res.render('./users/order', { orders, brands, user });
     } catch (error) {
-        errorHandler(error.message);
+        errorHandler(error, req, res, next)
     }
 };
+
+// const getOrderSinglePage = async (req, res, next) => {
+//     try {
+//         let brands = await BrandModal.distinct('brandName')
+//         const user = await UserModal.findOne({ _id: req.session.userId })
+//         let orderId = req.query.Id
+//         let orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: 1 })
+//         let order = orders.orders.find((order) => order._id.toString() === orderId.toString())
+//         console.log("order", order);
+//         console.log("order.product", order.product);
+
+//         let completeData = await Promise.all(order.product.map(async (products) => {
+//             try {
+//                 let product = await ProductModal.findOne({ _id: products.productId }).lean();
+//                 console.log("inside map", product);
+//                 return { ...product, ...products };
+//             } catch (error) {
+//                 console.log(error.message);
+//             }
+//         }));
+//         console.log("completeData", completeData[0].product);
+
+//         res.render('./users/orderSinglePage', { order, brands, user })
+
+//     } catch (error) {
+//         errorHandler(error, req, res, next)
+
+//     }
+// }
+
+// const getOrderSinglePage = async (req, res, next) => {
+//     try {
+//         let brands = await BrandModal.distinct('brandName');
+//         const user = await UserModal.findOne({ _id: req.session.userId });
+//         let orderId = req.query.Id;
+//         let orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: 1 }).lean();
+//         let order = orders.orders.find((order) => order._id.toString() === orderId.toString());
+//         console.log("order", order);
+//         console.log("order.product", order.product);
+
+//         // Populate the 'product' field within each 'order'
+//         await Promise.all(order.product.map(async (products) => {
+//             try {
+//                 await ProductModal.populate(products, { path: 'productId' });
+//             } catch (error) {
+//                 console.log(error.message);
+//             }
+//         }));
+
+//         console.log("order.product (after populating)", order.product);
+
+//         res.render('./users/orderSinglePage', { order, brands, user });
+//     } catch (error) {
+//         errorHandler(error, req, res, next);
+//     }
+// }
+
+
+const getOrderSinglePage = async (req, res, next) => {
+    try {
+        let brands = await BrandModal.distinct('brandName');
+        const user = await UserModal.findOne({ _id: req.session.userId });
+        let orderId = req.query.Id;
+        let orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: 1 }).lean();
+        let order = orders.orders.find((order) => order._id.toString() === orderId.toString());
+        console.log("order", order);
+        console.log("order.product", order.product);
+
+        let completeData = await Promise.all(order.product.map(async (products) => {
+            try {
+                const product = await ProductModal.findOne({ _id: products.productId }).lean();
+        
+                if (product) {
+                    // Populate the 'gallery' and 'specification' fields
+                    const populatedProduct = await ProductModal.populate(product, {
+                        path: 'gallery', // Assuming 'gallery' is an array of strings
+                        select: 'specification' // Specify the fields to populate
+                    });
+        
+                    // Merge the populated fields into the original product
+                    const mergedProduct = { ...product, ...populatedProduct };
+        
+                    // Merge with the product-specific order data
+                    return { ...mergedProduct, ...products };
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        }));
+        
+        console.log("completeData", completeData);
+        
+
+        console.log("order.product (after populating)", order.product);
+
+        res.render('./users/orderSinglePage', { order:completeData, brands, user });
+    } catch (error) {
+        errorHandler(error, req, res, next);
+    }
+}
+
 
 
 
@@ -751,5 +829,6 @@ module.exports = {
     getCheckOutPage,
     postBuySelectedProducts,
     postOrderPlacement,
-    getOrders
+    getOrders,
+    getOrderSinglePage
 }

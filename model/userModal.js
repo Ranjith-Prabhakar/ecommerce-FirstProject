@@ -113,8 +113,8 @@ const User = mongoose.Schema({
             type: Date,
             default: () => {
                 const currentDate = new Date();
-                currentDate.setHours(0, 0, 0, 0); // Set time to midnight
-                return currentDate;
+                const formattedDate = currentDate.toISOString().split('T')[0];
+                return formattedDate;
             }
         },
         product: [{

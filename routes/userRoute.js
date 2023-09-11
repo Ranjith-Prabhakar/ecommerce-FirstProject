@@ -40,6 +40,10 @@ router.post('/removeFromCart',userSessionHandler, userValidation,userController.
 router.get('/checkOutPage',userSessionHandler,userValidation,userController.getCheckOutPage)
 router.post('/buySelectedProducts',userSessionHandler,userValidation,userController.postBuySelectedProducts)
 router.post('/orderPlacement',userSessionHandler,userValidation,userController.postOrderPlacement)
+
+
+// order
 router.get('/orders',userSessionHandler,userValidation,userController.getOrders)
+router.get('/orderSinglePage',userSessionHandler,userValidation,userController.getOrderSinglePage)
 
 module.exports = router
