@@ -45,5 +45,6 @@ router.post('/orderPlacement',userSessionHandler,userValidation,userController.p
 // order
 router.get('/orders',userSessionHandler,userValidation,userController.getOrders)
 router.get('/orderSinglePage',userSessionHandler,userValidation,userController.getOrderSinglePage)
+router.post('/cancellOrder',userSessionHandler,userValidation,userController.postCancellOrder)
 
 module.exports = router

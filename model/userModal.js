@@ -51,6 +51,9 @@ const User = mongoose.Schema({
 
     shippingAddress: [{
 
+        name:{
+            type: String,
+        },
         country: {
             type: String,
             // required: true
@@ -128,7 +131,7 @@ const User = mongoose.Schema({
         coupon: String,
         status: {
             type: String,
-            enum: ['placed', 'confirmed', 'cancelledByAdmin', 'cancelledByClient', 'inTransit'],
+            enum: ['placed','cancelledByAdmin', 'cancelledByClient', 'packed','inTransit',"deliverd"],
             default: 'placed'
         },
         rating: String,

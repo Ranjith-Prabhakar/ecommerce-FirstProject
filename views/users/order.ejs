@@ -4,18 +4,25 @@
             <% if(locals.orders) {%>
                 <div class="container text-white bg-dark  mt-5 ">
                     <div class="row text-center p-3 ">
-                        <div class="col-4">
-                            <h5>
-                                Order Id
-                            </h5>
-                        </div>
-                        <div class="col-4">
+
+                        <div class="col-3">
                             <h5>
                                 Ordered Date
                             </h5>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
+                            <h5>
+                                Order Id
+                            </h5>
+                        </div>
+                        <div class="col-2">
+                            <h5>Total</h5>
+                        </div>
+                        <div class="col-2">
                             <h5>Status</h5>
+                        </div>
+                        <div class="col-2">
+                            <h5>Cancell</h5>
                         </div>
 
 
@@ -25,20 +32,49 @@
                 <% for(let i=0;i<locals.orders.orders.length;i++){ %>
                     <div class="container text-white order-item-background mt-3 ">
                         <div class="row text-center p-3 ">
-                            <div class="col-4">
-                                <a name="orderId" class="nav-link " href="/orderSinglePage?Id=<%=locals.orders.orders[i]._id %>" >
-                                    <%=locals.orders.orders[i]._id %>
-                                </a>
-                            </div>
-                            <div class="col-4">
+
+                            <div class="col-3">
                                 <h6>
                                     <%= new Date(locals.orders.orders[i].orderDate).toLocaleDateString('en-US', {
                                         weekday: 'short' , month: 'short' , day: 'numeric' , year: 'numeric' }) %>
 
                                 </h6>
                             </div>
-                            <div class="col-4">
-                                <button class="btn btn-light ">Cancell</button>
+                            <div class="col-3">
+                                <a name="orderId" class="nav-link "
+                                    href="/orderSinglePage?Id=<%=locals.orders.orders[i]._id %>">
+                                    <%=locals.orders.orders[i]._id %>
+                                </a>
+                            </div>
+                            <div class="col-2">
+                                <h6>
+                                    <%=locals.orders.orders[i].total%>
+                                </h6>
+                            </div>
+                            <div class="col-2">
+                                <h6>
+                                    <% if(locals.orders.orders[i].status==="cancelledByClient" ){ %>
+                                        Cancellde By You
+                                        <% } else if(locals.orders.orders[i].status === "cancelledByAdmin") {%>
+                                            Cancellde By Admin
+                                            <% } else{%>
+                                            <%=locals.orders.orders[i].status%>
+                                            <% } %>
+                                </h6>
+                            </div>
+                            <div class="col-2">
+                                <% if(locals.orders.orders[i].status==='placed' ) {%>
+                                    <button data-orderid="<%=locals.orders.orders[i]._id %>" name="CancellButton"
+                                        class="btn btn-light ">Cancell</button>
+                                    <% } else{ %>
+                                        <button data-orderid="<%=locals.orders.orders[i]._id %>" name="CancellButton"
+                                            class="btn btn-danger text-dark  " disabled>Cancelled</button>
+                                        <% } %>
+                                            <!-- <button type="button" data-orderid="<%=locals.orders.orders[i]._id %>"
+                                        name="CancellButton" class="btn btn-light " data-bs-toggle="tooltip"
+                                        data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+                                        data-bs-title="This top tooltip is themed via CSS variables.">Cancelle</button> -->
+
                             </div>
 
 
@@ -49,4 +85,5 @@
     </div>
 
     <script src="/javaScript/user/header.js"></script>
+    <script src="/javaScript/user/order.js"></script>
     <%- include('../layout/user/footer') %>

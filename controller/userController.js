@@ -695,6 +695,7 @@ const getOrders = async (req, res, next) => {
         let brands = await BrandModal.distinct('brandName')
         const user = await UserModal.findOne({ _id: req.session.userId })
         const orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: true })
+        console.log(orders);
         res.render('./users/order', { orders, brands, user });
     } catch (error) {
         errorHandler(error, req, res, next)
@@ -790,18 +791,49 @@ const getOrderSinglePage = async (req, res, next) => {
             }
         }));
         
+        const addressToShip = user.shippingAddress.find((shippingAddress)=> shippingAddress._id.toString() === order.addressToShip.toString())
         console.log("completeData", completeData);
         
 
         console.log("order.product (after populating)", order.product);
+        console.log(order.addressToShip);
+        console.log("addressToShip",addressToShip);
 
-        res.render('./users/orderSinglePage', { order:completeData, brands, user });
+        res.render('./users/orderSinglePage', { order:completeData,addressToShip, brands, user });
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 }
 
+const postCancellOrder = async (req, res, next) => {
+    try {
+        const userId = req.session.userId;
+        const orderId = req.body.orderId;
 
+        const updatedUser = await UserModal.updateOne(
+            {
+                _id: userId,
+                'orders._id': orderId // Find the user by ID and match the order with the specified orderId
+            },
+            {
+                $set: {
+                    'orders.$.status': 'cancelledByClient' // Update the status of the matched order
+                }
+            }
+        );
+
+        if (updatedUser.nModified === 1) {
+            // Check if an order was actually updated
+            console.log('Order cancelled successfully');
+        } else {
+            console.log('Order not found or could not be cancelled');
+        }
+
+        res.status(200).json({ success:true});
+    } catch (error) {
+        errorHandler(error, req, res, next);
+    }
+};
 
 
 module.exports = {
@@ -830,5 +862,6 @@ module.exports = {
     postBuySelectedProducts,
     postOrderPlacement,
     getOrders,
-    getOrderSinglePage
+    getOrderSinglePage,
+    postCancellOrder
 }
