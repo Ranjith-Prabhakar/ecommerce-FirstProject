@@ -3,10 +3,13 @@ const BannerModal = require('../model/bannarModal')
 const  {errorHandler} = require('../middleWare/errorMiddleWare')
 
 
-const getBannerManagement = (req, res,next) => {
+const getBannerManagement = async(req, res,next) => {
     try {
         if (req.session.isAdmin) {
-            res.render('./admin/bannerManagement/bannerManagement')
+            let banner = await BannerModal.find().limit(3) 
+            let brand = await BrandModal.distinct('brandName')
+            console.log(banner);
+            res.render('./admin/bannerManagement/bannerManagement',{banner,brand})
         } else {
             req.session.loginErrorMessage = 'Login First'
             res.redirect('/adminLogin')

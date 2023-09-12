@@ -1,12 +1,73 @@
 <%- include('../../layout/admin/header') %>
-<%- include('../../layout/admin/generalManagement') %>
-<div class="container">
-    <div class="row">
-        <div class="col-4">
-            <div class="box  p-2 rounded-4  m-3 mt-4  text-center">
-                <a class="nav-link text-white fs-5" href="/createBanner">createBanner</a>
+    <%- include('../../layout/admin/generalManagement') %>
+        <div class="col">
+            <div class="bg-dark   p-2     rounded-1  m-1   text-start  position-absolute "
+                style="top: 300px; left: 18px;">
+                <a class="nav-link text-white fs-5" href="/createBanner">Create Banner</a>
             </div>
+
+            <div class="container-fluid">
+                <% locals.banner || "" %>
+                    <% locals.brand || "" %>
+                        <% if(locals.banner.length) {%>
+                            <div class="row">
+                                <% let count= 1 %>
+                                    <% locals.banner.forEach(banner=>{%>
+                                        <div class="col">
+                                            <img style="width: 330px;height: 200px;"
+                                                src="/bannerImages/<%=banner.images %>" alt="bannerImage" srcset="">
+                                            <br>
+                                            <br>
+                                            <button data-img-no="<%= count %>" name="Change"
+                                                class="btn btn-outline-secondary ">Change</button>
+                                        </div>
+                                        <% count++ %>
+                                            <%}) %>
+                            </div>
+                            <% } %>
+                                <div name="bannerChange" class="row d-none">
+                                    <div class="col-3">
+                                        <form action="/createBanner" method="post" enctype="multipart/form-data">
+                                            <input type="hidden" name="imageName"  id="">
+                                            <% if(locals.brand.length) {%>
+                                                <br>
+                                                <select class="form-select " id="brand" name="brandName">
+
+                                                    <% locals.brand.forEach(brandName=> {%>
+                                                        <option value="<%=brandName%>">
+                                                            <%=brandName%>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                                <% } else{%>
+                                                    <input type="text" name="brandName" placeholder="brandName">
+                                                    <% } %>
+
+                                                        <br><input class="form-control" type="text" name="productName"
+                                                            placeholder="productName" id="">
+                                                        <br><input class="form-control" type="text" name="discription"
+                                                            placeholder="discription" id="">
+                                    </div>
+                                    <div class="col-3">
+                                        <br><input class="form-control" type="text" name="unitPrice"
+                                            placeholder="unitPrice" id="">
+
+                                        <br><input class="form-control" type="text" name="launchDate"
+                                            placeholder="launchDate" id="">
+                                        <br><input class="form-control" type="file" name="gallery" placeholder="images"
+                                            id="">
+                                    </div>
+                                    <div class="col-3">
+                                        <br><button class="btn btn-outline-secondary " type="submit">submit</button>
+                                    </div>
+                                    </form>
+                                </div>
+
+
+            </div>
+
         </div>
-    </div>
-</div>
-<%- include('../../layout/admin/footer') %>
+        </div>
+        </div>
+        <script src="/javaScript/admin/bannerManagement.js"></script>
+        <%- include('../../layout/admin/footer') %>

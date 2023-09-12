@@ -112,14 +112,19 @@ const User = mongoose.Schema({
         productId: ObjectId,
     }],
     orders: [{
+        // orderDate: {
+        //     type: Date,
+        //     default: () => {
+        //         const currentDate = new Date();
+        //         const formattedDate = currentDate.toISOString().split('T')[0];
+        //         return formattedDate;
+        //     }
+        // },
         orderDate: {
             type: Date,
-            default: () => {
-                const currentDate = new Date();
-                const formattedDate = currentDate.toISOString().split('T')[0];
-                return formattedDate;
-            }
+            default: () => new Date().toISOString()
         },
+        
         product: [{
             productId: ObjectId,
             orderQuantity: String,

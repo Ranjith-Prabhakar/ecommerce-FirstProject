@@ -1,78 +1,83 @@
 <%- include('../../layout/admin/header') %>
     <%- include('../../layout/admin/generalManagement') %>
-
-        <div class="col-2 box  p-2 rounded-4  m-3 mt-4  text-center"><a class="nav-link text-white fs-5"
-                href="/createProduct">createProduct</a></div>
-        <% if(products.length) {%>
-            <div class="container-fluid">
-                <table class="table table-dark table-hover  box">
-                    <thead>
-                        <tr>
-                            <th scope="col">Number</th>
-                            <th scope="col">Brand</th>
-                            <th scope="col">Model</th>
-                            <th scope="col">In Stock</th>
-                            <th scope="col">Unit Price</th>
-                            <th scope="col">Edit</th>
-                            <th scope="col">Freez</th>
-                            <th scope="col">Add/Remove</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% let count=1 %>
-                            <% for (let product of products) { %>
-                                <tr>
-                                    <td>
-                                        <%= count %>
-                                    </td>
-                                    <td>
-                                        <%= product.brandName %>
-                                    </td>
-                                    <td>
-                                        <%= product.productName %>
-                                    </td>
-                                    <td class="quantity">
-                                        <%= product.quantity %>
-                                    </td>
-
-                                    <td>
-                                        <%= product.unitPrice %>
-                                    </td>
-
-
-                                    <td>
-                                        <form action="/productEditRequest" method="post">
-                                            <input type="hidden" name="id" value="<%= product._id %>">
-                                            <button class="btn btn-outline-secondary" type="submit">Edit</button>
-                                        </form>
-                                    </td>
-
-                                    <td>
-                                        <form action="/productSoftDelete" class="softDelete">
-                                            <input type="hidden" name="productId" value="<%= product._id %>">
-                                            <input class="btn btn-outline-secondary" type="submit" name="freez" value="<%= product.freez %>">
-                                        </form>
-                                    </td>
-
-                                    <!-- Inside the form in the table cell -->
-                                    <td>
-
-                                        <form action="/productAddOrRemove"
-                                            class="quantity-form w-50 p-0 m-0 ">
-                                            <input type="hidden" name="productId" value="<%= product._id %>">
-                                            <input class="form-control w-50  d-inline" type="number" name="quantity"
-                                                step="1" value="<%= product.quantity %>">
-                                            <button class="btn btn-outline-secondary" type="submit">Submit</button>
-                                        </form>
-                                    </td>
-
-
-                                </tr>
-                                <% count++ %>
-                                    <% } %>
-                    </tbody>
-                </table>
+        <div class="col">
+            <div class="bg-dark   p-2     rounded-1  m-1   text-start  position-absolute "
+                style="top: 300px; left: 18px;"><a class="nav-link text-white fs-5 " href="/createProduct">Create
+                    Product</a>
             </div>
-            <% } %>
-                <script src="/javaScript/admin/productManagement.js" defer></script>
-                <%- include('../../layout/admin/footer') %>
+            <% if(products.length) {%>
+                <div class="container-fluid">
+                    <table class="table table-dark table-hover  box">
+                        <thead>
+                            <tr>
+                                <th scope="col">Number</th>
+                                <th scope="col">Brand</th>
+                                <th scope="col">Model</th>
+                                <th scope="col">In Stock</th>
+                                <th scope="col">Unit Price</th>
+                                <th scope="col">Edit</th>
+                                <th scope="col">Freez</th>
+                                <th scope="col">Add/Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% let count=1 %>
+                                <% for (let product of products) { %>
+                                    <tr>
+                                        <td>
+                                            <%= count %>
+                                        </td>
+                                        <td>
+                                            <%= product.brandName %>
+                                        </td>
+                                        <td>
+                                            <%= product.productName %>
+                                        </td>
+                                        <td class="quantity">
+                                            <%= product.quantity %>
+                                        </td>
+
+                                        <td>
+                                            <%= product.unitPrice %>
+                                        </td>
+
+
+                                        <td>
+                                            <form action="/productEditRequest" method="post">
+                                                <input type="hidden" name="id" value="<%= product._id %>">
+                                                <button class="btn btn-outline-secondary" type="submit">Edit</button>
+                                            </form>
+                                        </td>
+
+                                        <td>
+                                            <form action="/productSoftDelete" class="softDelete">
+                                                <input type="hidden" name="productId" value="<%= product._id %>">
+                                                <input class="btn btn-outline-secondary" type="submit" name="freez"
+                                                    value="<%= product.freez %>">
+                                            </form>
+                                        </td>
+
+                                        <!-- Inside the form in the table cell -->
+                                        <td>
+
+                                            <form action="/productAddOrRemove" class="quantity-form w-50 p-0 m-0 ">
+                                                <input type="hidden" name="productId" value="<%= product._id %>">
+                                                <input class="form-control w-50  d-inline" type="number" name="quantity"
+                                                    step="1" value="<%= product.quantity %>">
+                                                <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                                            </form>
+                                        </td>
+
+
+                                    </tr>
+                                    <% count++ %>
+                                        <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+        </div>
+        </div>
+        </div>
+        <script src="/javaScript/admin/productManagement.js" defer></script>
+        <%- include('../../layout/admin/footer') %>

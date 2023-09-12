@@ -14,6 +14,7 @@ const userManagementRoute = require('./routes/userManagementRoute')
 const bannerRoute = require('./routes/bannerRoute')
 const brandRoute = require('./routes/brandRoute')
 const productRoute = require('./routes/productRoute')
+const orderRoute = require('./routes/orderRoute')
 
 
 
@@ -63,6 +64,7 @@ app.use(bannerRoute)
 app.use(brandRoute)
 app.use(userManagementRoute)
 app.use(productRoute)
+app.use(orderRoute)
 
 
 

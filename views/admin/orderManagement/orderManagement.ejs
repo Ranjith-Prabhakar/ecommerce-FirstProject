@@ -1,0 +1,60 @@
+<%- include('../../layout/admin/header') %>
+
+    <%- include('../../layout/admin/generalManagement') %>
+        <div class="col text-white">
+            <table class="table table-hover table-dark">
+                <thead>
+                    <tr>
+                        <td>Order Date</td>
+                        <td>Order Id</td>
+                        <td>User Name</td>
+                        <td>Total</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for (let i=0; i < orderObject.length; i++) { %>
+                        <tr>
+                            <td>
+                                <%= orderObject[i].orderDate.toLocaleDateString('en-US', { weekday: 'short' ,
+                                    month: 'short' , day: 'numeric' , year: 'numeric' }) %>
+                            </td>
+                            <td>
+                                <a class="nav-link " href="/orderDetailPage?userId=<%=orderObject[i].userId %>&orderId=<%= orderObject[i].orderId %>"><%= orderObject[i].orderId %></a>
+                            </td>
+                            <td>
+                                <%= orderObject[i].firstName + " " + orderObject[i].lastName %>
+                            </td>
+                            <td>
+                                <%= orderObject[i].total %>
+                            </td>
+                            <% if (orderObject[i].status==="cancelledByClient" ) { %>
+                                <td>
+                                    <select disabled id="mySelect">
+                                        <option value="default" selected>
+                                            <%= orderObject[i].status %>
+                                        </option>
+                                    </select>
+                                </td>
+                                <% } else { %>
+                                    <td>
+                                        <select class="form-select w-75" id="mySelect"
+                                            data-userId="<%=orderObject[i].userId%>"
+                                            data-orderId="<%=orderObject[i].orderId %>">
+                                            <option value="default" selected>
+                                                <%= orderObject[i].status %>
+                                            </option>
+                                            <option value="cancelledByAdmin">Cancelled By Admin</option>
+                                            <option value="packed">Packed</option>
+                                            <option value="inTransit">In Transit</option>
+                                            <option value="delivered">Delivered</option>
+                                        </select>
+                                    </td>
+                                    <% } %>
+                        </tr>
+                        <% } %>
+                </tbody>
+            </table>
+        </div>
+        <script src="/javaScript/admin/orderManagement.js"></script>
+        <%- include('../../layout/admin/footer') %>

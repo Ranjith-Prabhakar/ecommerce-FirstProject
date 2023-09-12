@@ -1,0 +1,84 @@
+<%- include('../../layout/admin/header') %>
+
+  <%- include('../../layout/admin/generalManagement') %>
+    <div class="col">
+      <% if (locals.order && locals.order.length> 0) { %>
+        <% locals.addressToShip || "" %>
+          <div class="container text-white p-1 pt-1  ">
+            <div class="row">
+              <div class="col">
+
+                <% let total=0 %>
+                  <% locals.order.forEach(order=> { %>
+
+                    <div class="row orderSinglePage-item-background mb-2 align-items-center">
+                      <div class="col">
+                        <img class="orderSinglePage-img-size" src="/productImages/<%= order.gallery[0] %>" alt=""
+                          srcset="">
+
+                      </div>
+                      <div class="col">
+                        <a class="nav-link fs-3" href='/singleProductPage?id=<%=order.productId %>'>
+                          <%= order.productName %>
+                        </a>
+
+                        <h4>
+                          Quantity : <%= order.orderQuantity %>
+                        </h4>
+                        <h4>
+                          Total : <%= order.price %>
+                        </h4>
+                        <% total +=parseInt(order.price) %>
+
+                      </div>
+                    </div>
+                    <% }); %>
+
+              </div>
+
+              <div class="col-4 ms-2 ">
+                <div class="row orderSinglePage-address-background mb-1 align-items-center ">
+                  <div class="col-12  ">
+                    <h3 class="p-3 ">Total : <%=total %>
+                    </h3>
+                  </div>
+                </div>
+
+
+                <div class="row orderSinglePage-address-background mb-2 align-items-center ">
+                  <div class="col-12">
+                    <h4 class="text-center pt-3">Delivery Address</h4>
+                    <hr>
+                    <p class="ps-3 ">
+                      <%=addressToShip.country %>,<br>
+                        <%=addressToShip.state %>,<br>
+                          <%=addressToShip.district %>,<br>
+                            <%=addressToShip.city %>,<br>
+                              <%=addressToShip.pincode %>,<br>
+                                <%=addressToShip.street %>,<br>
+                                  <%=addressToShip.houseName %>,<br>
+                                    <%=addressToShip.buildingNo %>,<br>
+                                      <%=addressToShip.landMark %>,<br>
+                    </p>
+                  </div>
+
+                </div>
+
+
+
+
+
+              </div>
+
+
+            </div>
+          </div>
+          <% } else { %>
+            <p>No orders to display.</p>
+            <% } %>
+    </div>
+    </div>
+    </div>
+
+
+    <%- include('../../layout/admin/footer') %>

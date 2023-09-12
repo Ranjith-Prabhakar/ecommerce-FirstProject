@@ -55,22 +55,26 @@
                                 <h6>
                                     <% if(locals.orders.orders[i].status==="cancelledByClient" ){ %>
                                         Cancellde By You
-                                        <% } else if(locals.orders.orders[i].status === "cancelledByAdmin") {%>
+                                        <% } else if(locals.orders.orders[i].status==="cancelledByAdmin" ) {%>
                                             Cancellde By Admin
                                             <% } else{%>
-                                            <%=locals.orders.orders[i].status%>
-                                            <% } %>
+                                                <%=locals.orders.orders[i].status%>
+                                                    <% } %>
                                 </h6>
                             </div>
                             <div class="col-2">
-                                <% if(locals.orders.orders[i].status==='placed' ) {%>
+                                <% if(locals.orders.orders[i].status==='cancelledByClient' ||
+                                    locals.orders.orders[i].status==='cancelledByAdmin' ) {%>
                                     <button data-orderid="<%=locals.orders.orders[i]._id %>" name="CancellButton"
-                                        class="btn btn-light ">Cancell</button>
-                                    <% } else{ %>
+                                        class="btn btn-danger text-dark  " disabled>Cancelled</button>
+                                    <% }else if(locals.orders.orders[i].status==="delivered" ){%>
                                         <button data-orderid="<%=locals.orders.orders[i]._id %>" name="CancellButton"
-                                            class="btn btn-danger text-dark  " disabled>Cancelled</button>
-                                        <% } %>
-                                            <!-- <button type="button" data-orderid="<%=locals.orders.orders[i]._id %>"
+                                            class="btn btn-success  text-dark  " disabled>Delivered</button>
+                                        <%}else { %>
+                                            <button data-orderid="<%=locals.orders.orders[i]._id %>"
+                                                name="CancellButton" class="btn btn-light ">Cancell</button>
+                                            <% } %>
+                                                <!-- <button type="button" data-orderid="<%=locals.orders.orders[i]._id %>"
                                         name="CancellButton" class="btn btn-light " data-bs-toggle="tooltip"
                                         data-bs-placement="top" data-bs-custom-class="custom-tooltip"
                                         data-bs-title="This top tooltip is themed via CSS variables.">Cancelle</button> -->

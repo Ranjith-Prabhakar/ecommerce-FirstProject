@@ -1,3 +1,5 @@
+@import "./adminPanel.css";
+@import "./orderSinglePage.css";
 body{
     background-color:#08030f ;
 }
@@ -14,22 +16,5 @@ body{
 }
 
 
-/* buttons*/
-.searchButton{
-    background: transparent;
-    border-color: #F9EFEF;
-    color:#F9EFEF ;
-}
-.searchButton:hover{
-    background-color: rgba(25, 16, 34, 0.2);
-}
 
-.loginButtonColor{
-    background-color:#351a58 ;
-    border: none;
-}
-.loginButtonColor:hover{
-    background-color:#351a58 ;
-    opacity: .5;
-}
 

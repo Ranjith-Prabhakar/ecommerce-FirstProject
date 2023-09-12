@@ -1,0 +1,15 @@
+.orderSinglePage-item-background{
+  background-color: rgba(130, 130, 179, 0.219);
+  height: 170px;
+  border-radius: 10px;
+}
+.orderSinglePage-img-size{
+  height: 150px;
+  width: 150px;
+  border-radius: 10px;
+}
+.orderSinglePage-address-background{
+  background-color: rgba(56, 56, 102, 0.219);
+  height: auto;
+  border-radius: 10px;
+}
