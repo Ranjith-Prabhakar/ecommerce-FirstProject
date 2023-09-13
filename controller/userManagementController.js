@@ -27,20 +27,14 @@ const postEditConfirm = async (req, res) => {
     }
 }
 
-const postDeleteUserManagement = async (req, res) => {
-    try {
-        req.session.deleteId = req.body.id,
-            res.render('./admin/userManagement/confirmDeleteUserManagement')
-    } catch (err) {
-        errorHandler(err, req, res, next);
-    }
-}
+
 
 const postDeleteConfirm = async (req, res) => {
     try {
-        await UserModal.deleteOne({ _id: req.session.deleteId })
-        req.session.deleteId = ''
-        res.redirect('/userManagement')
+        await UserModal.deleteOne({ _id: req.body.userId })
+        res.json({success:true})
+      
+
     } catch (err) {
         errorHandler(err, req, res, next);
     }
@@ -49,6 +43,5 @@ const postDeleteConfirm = async (req, res) => {
 module.exports = {
     getUserManagement,
     postEditConfirm,
-    postDeleteUserManagement,
     postDeleteConfirm,
 }
