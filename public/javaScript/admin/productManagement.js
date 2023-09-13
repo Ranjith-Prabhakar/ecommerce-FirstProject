@@ -68,12 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // stock edit 
     const productEditForm = document.getElementById('productEditform')
     console.log(productEditForm);
-    productEditForm.addEventListener('submit', async(event) => {
+    productEditForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         let formRawObj = document.forms.productEdit;
         let formObj = new FormData(formRawObj);
-        let finalformObj= {};
-    
+        let finalformObj = {};
+
         for (let [key, value] of formObj) {
             finalformObj[key] = value;
         }
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({finalformObj })
+                body: JSON.stringify({ finalformObj })
             })
             const data = await response.json()
             if (data.success) {
@@ -95,9 +95,25 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.log(error.message);
         }
-    
+
     });
-    
+
+    //image edit
+    const images = document.getElementsByClassName("tableProductImages");
+
+    for (let i = 0; i < images.length; i++) {
+    images[i].addEventListener('click',(event)=>{
+        let imageName = images[i].getAttribute('data-image-name');
+        console.log('Image Name:', imageName);
+        let tableImageModal = document.getElementById('tableImageModal')
+        tableImageModal.setAttribute('src',`/productImages/${imageName}`)
+    })
+        
+
+    }
+
+
+
 
 
 });

@@ -9,7 +9,7 @@
 
 
 
-           
+
             <% if(products.length) {%>
                 <div class="container-fluid">
                     <table class="table table-dark table-hover  box">
@@ -20,7 +20,8 @@
                                 <th scope="col">Model</th>
                                 <th scope="col">In Stock</th>
                                 <th scope="col">Unit Price</th>
-                                <th scope="col">Edit</th>
+                                <th scope="col">Edit Data</th>
+                                <th scope="col">Edit Images</th>
                                 <th scope="col">Freez</th>
                                 <!-- <th scope="col">Add/Remove</th> -->
                             </tr>
@@ -89,8 +90,9 @@
                                                                             value="<%=product.unitPrice %>"
                                                                             placeholder="<%=product.unitPrice %>"><br>
 
-                                                                        <!-- 
-                                                                        <input class="form-control w-75 " type="file" name="gallery0"
+                                                                        <!-- -->
+
+                                                                        <!-- <input class="form-control w-75 " type="file" name="gallery0"
                                                                             value="<%=product.gallery[0] %>" placeholder="<%=product.gallery[0] %>"><br>
                                                                         <input class="form-control w-75 " type="file" name="gallery1"
                                                                             value="<%=product.gallery[1] %>" placeholder="<%=product.gallery[1] %>" ><br>
@@ -100,6 +102,10 @@
                                                                             value="<%=product.specification.discription %>"
                                                                             placeholder="<%=product.specification.discription %>"> </textarea>
                                                                         <br> -->
+
+
+
+                                                                        <!-- -->
 
 
 
@@ -158,6 +164,14 @@
 
                                             <!--  -->
                                         </td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <% product.gallery.forEach(image=>{%>
+                                                    <img data-image-name="<%=image %>" class="tableProductImages product-image-table me-1 "
+                                                        src="/productImages/<%=image %>" alt="" data-bs-toggle="modal" data-bs-target="#exampleModalImg" data-bs-whatever="@getbootstrap">
+                                                    <%}) %>
+                                            </div>
+                                        </td>
 
                                         <td>
                                             <form action="/productSoftDelete" class="softDelete">
@@ -180,12 +194,40 @@
 
 
                                     </tr>
+
                                     <% count++ %>
                                         <% } %>
                         </tbody>
                     </table>
                 </div>
+
+
+                <!--  -->
+                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
+                
+                <div class="modal fade" id="exampleModalImg" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                       <img id="tableImageModal"  class="product-image-modal" alt="" srcset="">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancell</button>
+                        <button type="button" class="btn btn-primary">Delete</button>
+                        <button type="button" class="btn btn-primary">Change</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--  -->
+
                 <% } %>
+
+                
         </div>
         </div>
         </div>
