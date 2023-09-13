@@ -1,4 +1,5 @@
 const UserModal = require('../model/userModal')
+const errorHandler = require('../middleWare/errorMiddleWare')
 
 
 
@@ -12,30 +13,15 @@ const getUserManagement = async (req, res) => {
     }
 }
 
-const postEditUserManagement = async (req, res) => {
-    try {
-        req.session.confirmEditUserManagement_id = req.body.id
-        res.render('./admin/userManagement/editUserManagement')
-    } catch (err) {
-        errorHandler(err, req, res, next);
-    }
-}
 
-const postEditSubmit = async (req, res) => {
-    try {
-        req.session.confirmEditUserManagement_status = req.body.status
-        res.render('./admin/userManagement/confirmEditUserManagement')
-    } catch (err) {
-        errorHandler(err, req, res, next);
-    }
-}
+
+
 
 const postEditConfirm = async (req, res) => {
     try {
-        await UserModal.updateOne({ _id: req.session.confirmEditUserManagement_id }, { $set: { status: req.session.confirmEditUserManagement_status } })
-        req.session.confirmEditUserManagement_id = ''
-        req.session.confirmEditUserManagement_status = ''
-        res.redirect('/userManagement')
+        let {userId,status} = req.body.userData
+            await UserModal.updateOne({ _id:userId }, { $set: { status:status } })
+           res.json({success:true})
     } catch (err) {
         errorHandler(err, req, res, next);
     }
@@ -62,8 +48,6 @@ const postDeleteConfirm = async (req, res) => {
 
 module.exports = {
     getUserManagement,
-    postEditUserManagement,
-    postEditSubmit,
     postEditConfirm,
     postDeleteUserManagement,
     postDeleteConfirm,

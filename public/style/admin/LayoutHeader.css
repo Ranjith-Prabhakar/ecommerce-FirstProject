@@ -1,5 +1,6 @@
 @import "./adminPanel.css";
 @import "./orderSinglePage.css";
+@import "./userManagement.css";
 body{
     background-color:#08030f ;
 }
