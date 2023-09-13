@@ -65,4 +65,39 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 
+    // stock edit 
+    const productEditForm = document.getElementById('productEditform')
+    console.log(productEditForm);
+    productEditForm.addEventListener('submit', async(event) => {
+        event.preventDefault();
+        let formRawObj = document.forms.productEdit;
+        let formObj = new FormData(formRawObj);
+        let finalformObj= {};
+    
+        for (let [key, value] of formObj) {
+            finalformObj[key] = value;
+        }
+        console.log(finalformObj);
+
+        try {
+            const response = await fetch('/productEditConfirm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({finalformObj })
+            })
+            const data = await response.json()
+            if (data.success) {
+                window.location.reload()
+                alert('success')
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    
+    });
+    
+
+
 });

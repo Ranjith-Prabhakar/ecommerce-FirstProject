@@ -68,32 +68,43 @@ const postCreateProductManagement = async (req, res) => {
     }
 }
 
-const postProductEditRequest = async (req, res) => {
-    try {
-        const product = await ProductModal.findOne({ _id: req.body.id })
-        res.render('./admin/productManagement/productEdit', { product })
-    }catch(err){
-        errorHandler(err, req, res, next);
-    }
-}
+
 const postProductEditConfirm = async (req, res) => {
     try {
-        await ProductModal.updateOne({ _id: req.body.id }, {
-            brandName: req.body.brandName,
-            productName: req.body.productName,
-            quantity: req.body.quantity,
-            unitPrice: req.body.unitPrice,
+        const finalformObj =req.body.finalformObj
+        await ProductModal.updateOne({ _id: finalformObj.id }, {
+            brandName: finalformObj.brandName,
+            productName: finalformObj.productName,
+            quantity: finalformObj.quantity,
+            unitPrice: finalformObj.unitPrice,
             specification: {
-                frontCamera: req.body.frontCamera,
-                backCamera: req.body.backCamera,
-                ram: req.body.ram,
-                internalStorage: req.body.internalStorage,
-                battery: req.body.battery,
-                processor: req.body.processor,
-                chargerType: req.body.chargerType,
+                frontCamera: finalformObj.frontCamera,
+                backCamera: finalformObj.backCamera,
+                ram: finalformObj.ram,
+                internalStorage: finalformObj.internalStorage,
+                battery: finalformObj.battery,
+                processor: finalformObj.processor,
+                chargerType: finalformObj.chargerType,
             }
         });
-        res.redirect('/productManagement')
+        res.json({success:true})
+
+        // await ProductModal.updateOne({ _id: req.body.id }, {
+        //     brandName: req.body.brandName,
+        //     productName: req.body.productName,
+        //     quantity: req.body.quantity,
+        //     unitPrice: req.body.unitPrice,
+        //     specification: {
+        //         frontCamera: req.body.frontCamera,
+        //         backCamera: req.body.backCamera,
+        //         ram: req.body.ram,
+        //         internalStorage: req.body.internalStorage,
+        //         battery: req.body.battery,
+        //         processor: req.body.processor,
+        //         chargerType: req.body.chargerType,
+        //     }
+        // });
+        // res.redirect('/productManagement')
     } catch(err){
         errorHandler(err, req, res, next);
     }
@@ -130,7 +141,6 @@ module.exports = {
     getProductManagement,
     getCreateProductManagement,
     postCreateProductManagement,
-    postProductEditRequest,
     postProductEditConfirm,
     postUpdateStock,
     postSoftDelete,
