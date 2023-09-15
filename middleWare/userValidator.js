@@ -8,7 +8,7 @@ const userRestriction = async (req, res, next) => {
                 if (err) {
                     throw Error('cookie mismatching')
                 } else {
-                    res.redirect('/Home')
+                    res.redirect('/home')
                 }
             });
         } else {

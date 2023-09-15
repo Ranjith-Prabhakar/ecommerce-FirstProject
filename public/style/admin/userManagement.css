@@ -1,0 +1,6 @@
+.deleteButton{
+  height: min-content;
+  width: min-content;
+  padding: 1px 5px;
+  border-radius: 5px;
+}

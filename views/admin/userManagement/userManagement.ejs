@@ -3,68 +3,102 @@
 
     <% if (users.length) { %>
         <%- include('../../layout/admin/generalManagement') %>
-                <div class="col">
-                    <table class="table table-dark table-hover  box">
-                        <thead>
-                            <tr>
-                                <th scope="col">Number</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Phone</th>
-                                <th scope="col">Verified</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% let count=1 %>
-                                <% for (let user of users) { %>
-                                    <tr>
-                                        <td>
-                                            <%= count %>
-                                        </td>
-                                        <td>
-                                            <%= user.firstName + " " + user.lastName %>
-                                        </td>
-                                        <td>
-                                            <%= user.email %>
-                                        </td>
-                                        <td>
-                                            <%= user.phone %>
-                                        </td>
+            <div class="col">
+                <table class="table table-dark table-hover  box">
+                    <thead>
+                        <tr>
+                            <th scope="col">Number</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Verified</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% let count=1 %>
+                            <% for (let user of users) { %>
+                                <tr>
+                                    <td>
+                                        <%= count %>
+                                    </td>
+                                    <td>
+                                        <%= user.firstName + " " + user.lastName %>
+                                    </td>
+                                    <td>
+                                        <%= user.email %>
+                                    </td>
+                                    <td>
+                                        <%= user.phone %>
+                                    </td>
 
-                                        <td>
-                                            <%= user.isVerified %>
-                                        </td>
-                                        <td>
-                                            <% if (user.status) { %>
-                                                Active
-                                                <% } else { %>
-                                                    Blocked
-                                                    <% } %>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex gap-1 ">
-                                                <form action="/userEditRequest" method="post">
-                                                    <input type="hidden" name="id" value="<%= user._id %>">
-                                                    <button class="btn btn-outline-warning " type="submit">Edit</button>
-                                                </form>
+                                    <td>
+                                        <%= user.isVerified %>
+                                    </td>
+                                    <td>
+                                        <% if (user.status) { %>
+                                            <select name="status" id="status" data-userId="<%= user._id %>">
+                                                <option selected value="true"> Active</option>
+                                                <option value="false"> Blocked</option>
+                                            </select>
+                                            <% } else { %>
+                                                <select name="status" id="status" data-userId="<%= user._id %>">
+                                                    <option selected value="false"> Blocked</option>
+                                                    <option value="true"> Active</option>
+                                                </select>
+                                                <% } %>
+                                    </td>
 
-                                                <form action="/userDeleteRequest" method="post">
-                                                    <input type="hidden" name="id" value="<%= user._id %>">
-                                                    <button class="btn btn-outline-danger" type="submit">Delete</button>
-                                                </form>
+                                    <td>
+    
+
+
+                                        <!-- Button trigger modal -->
+                                        <button type="button" class="btn btn-outline-danger deleteButton"
+                                            data-bs-toggle="modal" data-bs-target="#<%= user._id %>">
+                                            Delete
+                                        </button>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="<%= user._id %>" tabindex="-1"
+                                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">
+                                                            Delete Confirmation</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body text-black">
+                                                        If You Press Save Changes The Client Will Be Deleted From
+                                                        DataBase !!!
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button name="confirmDelete" type="button"
+                                                            class="btn btn-primary" data-userId="<%= user._id %>">Save
+                                                            changes</button>
+                                                    </div>
+                                                </div>
                                             </div>
+                                        </div>
 
-                                        </td>
-                                    </tr>
-                                    <% count++ %>
-                                        <% } %>
-                        </tbody>
-                    </table>
-                </div>
+                                    </td>
+                                   
             </div>
-        </div>
-        <% } %>
 
-            <%- include('../../layout/admin/footer') %>
+            </td>
+            </tr>
+            <% count++ %>
+                <% } %>
+                    </tbody>
+                    </table>
+                    </div>
+                    </div>
+                    </div>
+                    <% } %>
+                        <script src="/javaScript/admin/userManagement.js"></script>
+                        <%- include('../../layout/admin/footer') %>

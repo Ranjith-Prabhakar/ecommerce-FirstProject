@@ -46,37 +46,26 @@ const bannerImageUpload = multer({storage:bannerStorage})
 
 
 
+// multer for product image updation
 
+const productImageUpdation = multer.diskStorage({
+    destination: (req, file, cb) => {
+        console.log(req.body);
+        cb(null, "public/productImages")
+    },
+    filename: (req, file, cb) => {
+        console.log("im in multer req.body", req);
+        console.log("im in multer req.body.oldImage", req.body.oldImage);
+        cb(null, `${req.body.oldImage}`); 
+    },
+    overwrite: true,
+})
 
-module.exports = {upload,profileImageUpload,bannerImageUpload}
-
-
-
-
-//multer for user profile
-
-// const profileStorage = multer.diskStorage({
-//     destination:(req,file,cb)=>{
-//         cb(null,'public/userImages')
-//     },
-//     filename:(req,file,cb)=>{
-//         cb(null,Date.now()+path.extname(file.originalname))
-//     }
-// })
-
-// const profileImageUpload = multer({storage:profileStorage})
+const productImageUpdate = multer({ storage: productImageUpdation })
 
 
 
-// const profileStorage = multer.diskStorage({
+module.exports = { upload, profileImageUpload, bannerImageUpload, productImageUpdate }
 
 
-//     destination:(req,file,cb)=>{
-//         cb(null,'public/userImages')
-//     },
-//     filename:(req,file,cb)=>{
-//         let userId = req.session.userId
-//         console.log(req.session.userId);
-//         cb(null,userId+path.extname(file.originalname))
-//     }
-// })
+

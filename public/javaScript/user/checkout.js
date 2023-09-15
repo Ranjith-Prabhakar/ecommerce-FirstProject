@@ -289,10 +289,21 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
         if (!newFormData.country) {
-            alert("select an address for deliver ")
-
+            // alert("select an address for deliver ")
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'select an address for deliver ',
+                footer: '<a href="">Why do I have this issue?</a>'
+            })
         } else if (!newFormData.modeOfPayment) {
-            alert("select the mode of payment ")
+            // alert("select the mode of payment ")
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'select the mode of payment ',
+                footer: '<a href="">Why do I have this issue?</a>'
+            })
         }
         else {
             try {
@@ -305,8 +316,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 })
                 const data = await response.json();
                 if (data.success) {
-                    alert('the order has been placed')
-                    window.location.href = '/orders'
+                    // alert('the order has been placed')
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'the order has been placed',
+                        footer: '<a href="">Why do I have this issue?</a>'
+                    })
+                    // Schedule an anonymous function to run after 1000 milliseconds (1 second)
+                    setTimeout(function () {
+                        window.location.href = '/orders'
+                    }, 2000);
+
+                   
                 }
             } catch (error) {
                 console.log(error.message);

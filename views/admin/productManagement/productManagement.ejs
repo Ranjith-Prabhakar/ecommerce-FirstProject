@@ -1,10 +1,15 @@
 <%- include('../../layout/admin/header') %>
     <%- include('../../layout/admin/generalManagement') %>
         <div class="col">
+
             <div class="bg-dark   p-2     rounded-1  m-1   text-start  position-absolute "
                 style="top: 300px; left: 18px;"><a class="nav-link text-white fs-5 " href="/createProduct">Create
                     Product</a>
             </div>
+
+
+
+
             <% if(products.length) {%>
                 <div class="container-fluid">
                     <table class="table table-dark table-hover  box">
@@ -15,9 +20,10 @@
                                 <th scope="col">Model</th>
                                 <th scope="col">In Stock</th>
                                 <th scope="col">Unit Price</th>
-                                <th scope="col">Edit</th>
+                                <th scope="col">Edit Data</th>
+                                <th scope="col">Edit Images</th>
                                 <th scope="col">Freez</th>
-                                <th scope="col">Add/Remove</th>
+                                <!-- <th scope="col">Add/Remove</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -43,10 +49,149 @@
 
 
                                         <td>
-                                            <form action="/productEditRequest" method="post">
-                                                <input type="hidden" name="id" value="<%= product._id %>">
-                                                <button class="btn btn-outline-secondary" type="submit">Edit</button>
-                                            </form>
+
+                                            <!--  -->
+                                            <button type="button" class="btn btn-outline-secondary"
+                                                data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                data-bs-whatever="@mdo">Edit</button>
+
+                                            <div class="modal fade" id="exampleModal" tabindex="-1"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5 text-black "
+                                                                id="exampleModalLabel">New message</h1>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <!-- ==== -->
+                                                            <form id="productEditform" name="productEdit"
+                                                                action="/productEditConfirm" method="post">
+                                                                <div class="d-flex">
+                                                                    <div class="one mt-3 ">
+
+                                                                        <input type="hidden" name="id"
+                                                                            value="<%=product._id %>">
+                                                                        <label for="" class="text-black ">Product
+                                                                            Name</label>
+                                                                        <input class="form-control w-75 " type="text"
+                                                                            name="productName"
+                                                                            value="<%=product.productName%>"
+                                                                            placeholder="<%=product.productName%>"
+                                                                            id="productName">
+                                                                        <label for="" class="text-black ">Quantity
+                                                                        </label>
+                                                                        <input class="form-control w-75 " type="text"
+                                                                            name="quantity"
+                                                                            value="<%=product.quantity %>"
+                                                                            placeholder="<%=product.quantity %>"
+                                                                            id="quantity">
+                                                                        <label for="" class="text-black ">Unit
+                                                                            price</label>
+                                                                        <input class="form-control w-75 " type="text"
+                                                                            name="unitPrice"
+                                                                            value="<%=product.unitPrice %>"
+                                                                            placeholder="<%=product.unitPrice %>">
+
+                                                                        <!-- -->
+
+                                                                        <!-- <input class="form-control w-75 " type="file" name="gallery0"
+                                                                            value="<%=product.gallery[0] %>" placeholder="<%=product.gallery[0] %>">
+                                                                        <input class="form-control w-75 " type="file" name="gallery1"
+                                                                            value="<%=product.gallery[1] %>" placeholder="<%=product.gallery[1] %>" >
+                                                                        <input class="form-control w-75 " type="file" name="gallery2"
+                                                                            value="<%=product.gallery[2] %>" placeholder="<%=product.gallery[2] %>">
+                                                                        <textarea  class="form-control w-75 " name="discription"
+                                                                            value="<%=product.specification.discription %>"
+                                                                            placeholder="<%=product.specification.discription %>"> </textarea>
+                                                                         -->
+
+
+
+                                                                        <!-- -->
+
+
+                                                                        <label for="" class="text-black ">Front
+                                                                            Camera</label>
+                                                                        <input class="form-control w-75 " type="text"
+                                                                            name="frontCamera"
+                                                                            value="<%=product.specification.frontCamera %>"
+                                                                            placeholder="<%=product.specification.frontCamera %>">
+
+
+                                                                        <label for="" class="text-black ">Back
+                                                                            Camera</label>
+                                                                        <input class="form-control w-75 " type="text"
+                                                                            name="backCamera"
+                                                                            value="<%=product.specification.backCamera %>"
+                                                                            placeholder="<%=product.specification.backCamera %>">
+                                                                        </div>
+                                                                        <div class="two mt-4">
+                                                                        <label for="" class="text-black ">RAM</label>
+                                                                        <input class="form-control w-75 " type="text"
+                                                                            name="ram"
+                                                                            value="<%=product.specification.ram %>"
+                                                                            placeholder="<%=product.specification.ram %>">
+
+                                                                    
+                                                                        <label for="" class="text-black ">Internal
+                                                                            Storage</label>
+                                                                        <input class="form-control w-100 " type="text"
+                                                                            name="internalStorage"
+                                                                            value="<%=product.specification.internalStorage %>"
+                                                                            placeholder="<%=product.specification.internalStorage %>">
+                                                                        <label for=""
+                                                                            class="text-black ">Battery</label>
+                                                                        <input class="form-control w-100 " type="text"
+                                                                            name="battery"
+                                                                            value="<%=product.specification.battery %>"
+                                                                            placeholder="<%=product.specification.battery %>">
+                                                                        <label for=""
+                                                                            class="text-black ">Processor</label>
+                                                                        <input class="form-control w-100 " type="text"
+                                                                            name="processor"
+                                                                            value="<%=product.specification.processor %>"
+                                                                            placeholder="<%=product.specification.processor %>">
+                                                                        <label for="" class="text-black ">Charger
+                                                                            Type</label>
+                                                                        <input class="form-control w-100 mb-2 "
+                                                                            type="text" name="chargerType"
+                                                                            value="<%=product.specification.chargerType %>"
+                                                                            placeholder="<%=product.specification.chargerType %>">
+
+
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- ==== -->
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Close</button>
+                                                            <button type="submit"
+                                                                class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <!--  -->
+                                        </td>
+                                        <td>
+                                            <div class="d-flex">
+                                                <% product.gallery.forEach(image=>{%>
+                                                    <img data-product-id="<%=product._id%>"
+                                                        data-image-name="<%=image %>"
+                                                        class="tableProductImages product-image-table me-1 "
+                                                        src="/productImages/<%=image %>" alt="" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModalImg"
+                                                        data-bs-whatever="@getbootstrap">
+                                                    <%}) %>
+                                            </div>
                                         </td>
 
                                         <td>
@@ -58,7 +203,7 @@
                                         </td>
 
                                         <!-- Inside the form in the table cell -->
-                                        <td>
+                                        <!-- <td>
 
                                             <form action="/productAddOrRemove" class="quantity-form w-50 p-0 m-0 ">
                                                 <input type="hidden" name="productId" value="<%= product._id %>">
@@ -66,16 +211,54 @@
                                                     step="1" value="<%= product.quantity %>">
                                                 <button class="btn btn-outline-secondary" type="submit">Submit</button>
                                             </form>
-                                        </td>
+                                        </td> -->
 
 
                                     </tr>
+
                                     <% count++ %>
                                         <% } %>
                         </tbody>
                     </table>
                 </div>
+
+
+                <!--  -->
+                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
+
+                <div class="modal fade" id="exampleModalImg" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <img id="tableImageModal" class="product-image-modal" alt="" srcset="">
+                            </div>
+                            <form name="hiddenDiv" class="d-none mb-3 ms-3 " enctype="multipart/form-data" method="post"
+                                action="/productImageUpdation">
+                                <input type="hidden" name="oldImage">
+                                <input type="file" name="imageChange" class="form-control w-50 d-inline ">
+                                <button name="hiddenDivImgUpload" class="btn btn-primary" type="submit">Upload</button>
+                                <button name="hiddenDivImgCancell" class="btn btn-secondary ">Cancell</button>
+
+                            </form>
+                            <div name="modalFooter" class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancell</button>
+                                <button name="deleteImage" type="button" class="btn btn-primary">Delete</button>
+                                <button name="changeImage" type="button" class="btn btn-primary">Change</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--  -->
+
                 <% } %>
+
+
         </div>
         </div>
         </div>

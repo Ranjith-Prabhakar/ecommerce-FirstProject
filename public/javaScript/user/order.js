@@ -20,7 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         let data = await response.json()
         if (data.success) {
-          alert('Order Has Been Cancelled Successfully')
+          // alert('Order Has Been Cancelled Successfully')
+          Swal.fire({
+            icon: 'success',
+            title: 'Order Has Been Cancelled Successfully',
+            footer: '<a href="">Why do I have this issue?</a>'
+        })
           window.location.reload()
         }
       } catch (error) {

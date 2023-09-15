@@ -11,25 +11,55 @@ const productModal = require('../model/productModal')
 
 
 
+// const userHome = async (req, res, next) => { //15-9-23 11:21
+//     try {
+//         if (req.session.userId) {
+//             let user = await UserModal.findOne({ _id: req.session.userId });
+//             let brands = await BrandModal.distinct('brandName')
+//             let products = await ProductModal.find({ freez: { $eq: 'active' } })
+//             let banner = await BannerModal.find()
+//             res.render('./users/userHome', { user, brands, products, banner })
+//         } else {
+//             let brands = await BrandModal.distinct('brandName')
+//             let products = await ProductModal.find({ freez: { $eq: 'active' } })
+//             let banner = await BannerModal.find()
+//             res.render('./users/userHome', { brands: brands, products, banner })
+//         }
+//     } catch (err) {
+//         errorHandler(err, req, res, next);
+//     }
+// }
+
+
 const userHome = async (req, res, next) => {
     try {
+        const page = req.params.paramName ? parseInt(req.params.paramName) : 1; // Parse the page number
+
+        const itemsPerPage = 5; // Number of products per page
+        const start = (page - 1) * itemsPerPage;
+        let user, brands, products, productsCount, banner;
+        console.log("req.params.i", req.params);
+        console.log("start,itemsPerPage", start, itemsPerPage);
         if (req.session.userId) {
-            let user = await UserModal.findOne({ _id: req.session.userId });
-            let brands = await BrandModal.distinct('brandName')
-            let products = await ProductModal.find({ freez: { $eq: 'active' } })
-            let banner = await BannerModal.find()
-            res.render('./users/userHome', { user, brands, products, banner })
+            user = await UserModal.findOne({ _id: req.session.userId });
+            brands = await BrandModal.distinct('brandName')
+            products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage);
+            productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
+            banner = await BannerModal.find()
+            res.render('./users/userHome', { user, brands, products, banner, productsCount })
         } else {
-            let brands = await BrandModal.distinct('brandName')
-            let products = await ProductModal.find({ freez: { $eq: 'active' } })
-            let banner = await BannerModal.find()
-            res.render('./users/userHome', { brands: brands, products, banner })
+
+            brands = await BrandModal.distinct('brandName')
+            products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage);
+            productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
+            banner = await BannerModal.find()
+
+            res.render('./users/userHome', { brands: brands, products, banner, productsCount })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
 ///have to check it
 const getSearch = async (req, res, next) => {
     try {
@@ -772,17 +802,17 @@ const getOrderSinglePage = async (req, res, next) => {
         let completeData = await Promise.all(order.product.map(async (products) => {
             try {
                 const product = await ProductModal.findOne({ _id: products.productId }).lean();
-        
+
                 if (product) {
                     // Populate the 'gallery' and 'specification' fields
                     const populatedProduct = await ProductModal.populate(product, {
                         path: 'gallery', // Assuming 'gallery' is an array of strings
                         select: 'specification' // Specify the fields to populate
                     });
-        
+
                     // Merge the populated fields into the original product
                     const mergedProduct = { ...product, ...populatedProduct };
-        
+
                     // Merge with the product-specific order data
                     return { ...mergedProduct, ...products };
                 }
@@ -790,16 +820,16 @@ const getOrderSinglePage = async (req, res, next) => {
                 console.log(error.message);
             }
         }));
-        
-        const addressToShip = user.shippingAddress.find((shippingAddress)=> shippingAddress._id.toString() === order.addressToShip.toString())
+
+        const addressToShip = user.shippingAddress.find((shippingAddress) => shippingAddress._id.toString() === order.addressToShip.toString())
         console.log("completeData", completeData);
-        
+
 
         console.log("order.product (after populating)", order.product);
         console.log(order.addressToShip);
-        console.log("addressToShip",addressToShip);
+        console.log("addressToShip", addressToShip);
 
-        res.render('./users/orderSinglePage', { order:completeData,addressToShip, brands, user });
+        res.render('./users/orderSinglePage', { order: completeData, addressToShip, brands, user });
     } catch (error) {
         errorHandler(error, req, res, next);
     }
@@ -829,7 +859,7 @@ const postCancellOrder = async (req, res, next) => {
             console.log('Order not found or could not be cancelled');
         }
 
-        res.status(200).json({ success:true});
+        res.status(200).json({ success: true });
     } catch (error) {
         errorHandler(error, req, res, next);
     }

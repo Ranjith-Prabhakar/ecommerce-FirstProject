@@ -1,10 +1,47 @@
 <%- include('../../layout/admin/header') %>
     <%- include('../../layout/admin/generalManagement') %>
         <div class="col">
-            <div class="bg-dark   p-2     rounded-1  m-1   text-start  position-absolute "
+            <!-- <div class="bg-dark   p-2     rounded-1  m-1   text-start  position-absolute "
                 style="top: 300px; left: 18px;">
                 <a class="nav-link text-white fs-5" href="/createBrand">Create Brand</a>
+            </div> -->
+
+
+            <!--  -->
+            <div class="position-absolute " style="top: 300px; left: 18px;">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    data-bs-whatever="@mdo">Create Brand</button>
             </div>
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form name="createBrand" action="" method="post">
+                                <%locals.brandCreation || '' %>
+                                    <% if(locals.brandCreation) {%>
+                                        <h6 class="text-warning ">
+                                            <%=locals.brandCreation %>
+                                        </h6>
+                                        <% } %>
+                                            <input class="form-control  " type="text" name="brandName" required
+                                                placeholder="brandName"><br>
+                        </div>
+                        <div class="modal-footer">
+                            <button name="brandClose" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary loginButtonColor">Create</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!--  -->
 
 
             <% if(brands.length) {%>
@@ -44,4 +81,5 @@
         </div>
         </div>
         </div>
+        <script src="/javaScript/admin/catagoryManagement.js"></script>
         <%- include('../../layout/admin/footer') %>

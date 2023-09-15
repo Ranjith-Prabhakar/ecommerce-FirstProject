@@ -3,7 +3,6 @@ const brandController = require('../controller/brandController')
 const { adminValidation} = require('../middleWare/adminValidator')
 
 router.get('/catagoryManagement', adminValidation, brandController.getBrandManagement)/////
-router.get('/createBrand',adminValidation, brandController.getCreateBrand)/////
 router.post('/createBrand', adminValidation, brandController.postCreateBrand)
 
 
