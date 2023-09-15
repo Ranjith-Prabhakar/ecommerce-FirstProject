@@ -100,13 +100,13 @@ const getUserLogin = async (req, res, next) => {
     try {
         if (req.session.userSignUpSuccess) {
             res.render('./users/userLogin', { userSignUpSuccess: req.session.userSignUpSuccess, login: true })
-            req.session.userSignUpSuccess = ''
+            req.session.userSignUpSuccess =''
         } else if (req.session.loginErrorMessage) {
             res.render('./users/userLogin', { loginErrorMessage: req.session.loginErrorMessage, login: true })
-            req.session.loginErrorMessage = ''
+            req.session.loginErrorMessage =''
         } else if (req.session.block) {
             res.render('./users/userLogin', { block: req.session.block, login: true })
-            req.session.block = ''
+            req.session.block =''
         } else {
             res.render('./users/userLogin', { login: true })
         }
