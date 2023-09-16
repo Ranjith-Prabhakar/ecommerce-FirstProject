@@ -141,7 +141,9 @@ const User = mongoose.Schema({
         },
         rating: String,
         review: String,
-        addressToShip: ObjectId
+        addressToShip: ObjectId,
+        razorpay_payment_id:String,
+        razorpay_order_id:String
     }]
 
 })

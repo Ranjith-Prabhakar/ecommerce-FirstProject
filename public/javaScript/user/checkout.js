@@ -229,6 +229,116 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ///order placement
 
+    // const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')
+
+    // const paymentOptionForm = document.forms.paymentOption
+
+    // console.log("paymentOptionForm", paymentOptionForm);
+    // paymentOptionForm.addEventListener('submit', async (event) => {
+    //     event.preventDefault()
+    //     let newFormData = {}
+    //     for (let i = 0; i < radioButtons.length; i++) { // radioButtons is the variable created above
+    //         if (radioButtons[i].checked === true) {
+
+    //             for (let j = 0; j < placeOrder.length; j++) {
+    //                 let formData = document.forms["addressList" + i]
+    //                 let formObject = new FormData(formData)
+    //                 for (let [key, value] of formObject) {
+    //                     newFormData[key] = value
+    //                 }
+    //                 if (placeOrder[j].checked === true) {
+
+
+    //                     newFormData.modeOfPayment = placeOrder[j].id
+    //                     newFormData.productData = []
+    //                     newFormData.total = 0
+    //                     if (increamentButton) {//took from above
+    //                         let productId = orderQuantity.getAttribute("data-productId")
+    //                         let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
+    //                         let productPrice = parseFloat(singleProductUnitPrice.innerText)
+    //                         let order_Quantity = parseFloat(orderQuantity.innerText)
+    //                         newFormData.productData[0] = {
+    //                             productId: productId,
+    //                             price: productPrice,
+    //                             orderQuantity: order_Quantity
+    //                         }
+    //                         newFormData.total = productPrice
+
+    //                     } else {
+    //                         let productList = document.getElementsByClassName('productList')
+
+    //                         for (i = 0; i < productList.length; i++) {
+    //                             let head4 = document.getElementById('orderQuantity' + i)
+    //                             newFormData.productData.unshift({
+    //                                 productId: head4.getAttribute('data-productId'),
+    //                                 price: head4.getAttribute('data-product-price'),
+    //                                 orderQuantity: head4.firstElementChild.innerText
+    //                             })
+    //                             newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
+    //                             console.log("newFormData.productData", newFormData.productData);
+    //                         }
+
+    //                     }
+    //                     console.log("newFormData", newFormData);
+
+    //                     break
+    //                 }
+
+    //             }
+
+    //         }
+    //     }
+    //     if (!newFormData.country) {
+    //         // alert("select an address for deliver ")
+    //         Swal.fire({
+    //             icon: 'error',
+    //             title: 'Oops...',
+    //             text: 'select an address for deliver ',
+    //             footer: '<a href="">Why do I have this issue?</a>'
+    //         })
+    //     } else if (!newFormData.modeOfPayment) {
+    //         // alert("select the mode of payment ")
+    //         Swal.fire({
+    //             icon: 'error',
+    //             title: 'Oops...',
+    //             text: 'select the mode of payment ',
+    //             footer: '<a href="">Why do I have this issue?</a>'
+    //         })
+    //     }
+    //     else {
+    //         try {
+    //             const response = await fetch('/orderPlacement', {
+    //                 method: 'post',
+    //                 headers: {
+    //                     'Content-Type': 'application/json'
+    //                 },
+    //                 body: JSON.stringify({ newFormData })
+    //             })
+    //             const data = await response.json();
+    //             if (data.success) {
+    //                 // alert('the order has been placed')
+    //                 Swal.fire({
+    //                     icon: 'success',
+    //                     title: 'the order has been placed',
+    //                     footer: '<a href="">Why do I have this issue?</a>'
+    //                 })
+    //                 // Schedule an anonymous function to run after 1000 milliseconds (1 second)
+    //                 setTimeout(function () {
+    //                     window.location.href = '/orders'
+    //                 }, 2000);
+
+
+    //             }
+    //         } catch (error) {
+    //             console.log(error.message);
+    //         }
+
+    //     }
+
+
+    // })
+
+
     const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')
 
     const paymentOptionForm = document.forms.paymentOption
@@ -307,28 +417,116 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         else {
             try {
-                const response = await fetch('/orderPlacement', {
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ newFormData })
-                })
-                const data = await response.json();
-                if (data.success) {
-                    // alert('the order has been placed')
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'the order has been placed',
-                        footer: '<a href="">Why do I have this issue?</a>'
-                    })
-                    // Schedule an anonymous function to run after 1000 milliseconds (1 second)
-                    setTimeout(function () {
-                        window.location.href = '/orders'
-                    }, 2000);
 
-                   
+                console.log("newFormData", newFormData);
+                if (newFormData.modeOfPayment === "onlinePayment") {
+
+
+
+
+                    // $('.pay-form').submit(function(e){
+                    //     e.preventDefault();
+
+                    // var formData = $(this).serialize();
+
+                    $.ajax({
+                        url: "/razorPayCreateOrder",
+                        type: "POST",
+                        data: newFormData,
+                        success: function (res) {
+                            if (res.success) {
+                                var options = {
+                                    "key": "" + res.key_id + "",
+                                    "amount": "" + res.amount + "",
+                                    "currency": "INR",
+                                    // "name": ""+res.product_name+"",
+                                    // "description": ""+res.description+"",
+                                    "image": "https://dummyimage.com/600x400/000/fff",
+                                    "order_id": "" + res.order_id + "",
+                                    "handler": async function (response) {
+
+                                        
+                                        newFormData.razorpay_payment_id = response.razorpay_payment_id
+                                        newFormData.razorpay_order_id = response.razorpay_order_id
+
+                                        console.log("newFormData",newFormData);
+                                        const success = await fetch('/orderPlacement', {
+                                            method: 'post',
+                                            headers: {
+                                                'Content-Type': 'application/json'
+                                            },
+                                            body: JSON.stringify({ newFormData })
+                                        })
+                                        const data = await success.json();
+                                        if (data.success) {
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'the order has been placed',
+                                                footer: '<a href="">Why do I have this issue?</a>'
+                                            })
+                                            setTimeout(function () {
+                                                window.location.href = '/orders'
+                                            }, 2000);
+
+
+                                        }
+
+
+                                    },
+                                    "prefill": {
+                                        "contact": "" + res.contact + "",
+                                        "name": "" + res.name + "",
+                                        "email": "" + res.email + ""
+                                    },
+                                    "notes": {
+                                        "description": "" + res.description + ""
+                                    },
+                                    "theme": {
+                                        "color": "#2300a3"
+                                    }
+                                };
+                                const razorpayObject = new Razorpay(options);
+                                razorpayObject.on('payment.failed', function (response) {
+                                    alert("Payment Failed");
+                                });
+                                razorpayObject.open();
+                            }
+                            else {
+                                alert(res.msg);
+                            }
+                        }
+                    })
+
+                    // });
+
+
+
+
+
+                } else if (newFormData.modeOfPayment === "cashOnDelivery") {
+                    const response = await fetch('/orderPlacement', {
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ newFormData })
+                    })
+                    const data = await response.json();
+                    if (data.success) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'the order has been placed',
+                            footer: '<a href="">Why do I have this issue?</a>'
+                        })
+                        setTimeout(function () {
+                            window.location.href = '/orders'
+                        }, 2000);
+
+
+                    }
                 }
+
+
             } catch (error) {
                 console.log(error.message);
             }

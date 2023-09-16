@@ -7,7 +7,14 @@ const nodeMailer = require('nodemailer')
 const randomString = require('randomstring')
 require('dotenv').config()
 const { errorHandler } = require('../middleWare/errorMiddleWare')
-const productModal = require('../model/productModal')
+
+const Razorpay = require('razorpay');
+const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
+
+const razorpayInstance = new Razorpay({
+    key_id: RAZORPAY_ID_KEY,
+    key_secret: RAZORPAY_SECRET_KEY
+});
 
 
 
@@ -100,13 +107,13 @@ const getUserLogin = async (req, res, next) => {
     try {
         if (req.session.userSignUpSuccess) {
             res.render('./users/userLogin', { userSignUpSuccess: req.session.userSignUpSuccess, login: true })
-            req.session.userSignUpSuccess =''
+            req.session.userSignUpSuccess = ''
         } else if (req.session.loginErrorMessage) {
             res.render('./users/userLogin', { loginErrorMessage: req.session.loginErrorMessage, login: true })
-            req.session.loginErrorMessage =''
+            req.session.loginErrorMessage = ''
         } else if (req.session.block) {
             res.render('./users/userLogin', { block: req.session.block, login: true })
-            req.session.block =''
+            req.session.block = ''
         } else {
             res.render('./users/userLogin', { login: true })
         }
@@ -166,7 +173,7 @@ const postUserLogin = async (req, res, next) => {
                             let hash = await bcrypt.hash(req.body.password, 2)
                             req.session.userHash = hash
                             res.cookie('userId', hash)
-                            res.redirect('/Home',)
+                            res.redirect('/home',)
                         } else {
                             req.session.loginErrorMessage = 'invalid username or password'
                             res.redirect('/userLogin')
@@ -322,14 +329,14 @@ const postUserLogOut = (req, res, next) => {
 
             delete req.session.userId;
             res.clearCookie('userId')
-            res.redirect('/Home')
+            res.redirect('/home')
         } else {
             req.session.destroy((err) => {
                 if (err) {
                     console.log(err.message);
                 } else {
                     res.clearCookie('userId')
-                    res.redirect('/Home')
+                    res.redirect('/home')
                 }
             })
         }
@@ -673,20 +680,39 @@ const postOrderPlacement = async (req, res, next) => {
     try {
         if (req.body.newFormData) {
 
-
-
-            await UserModal.updateOne({ _id: req.session.userId }, {
-                $push: {
-                    orders: {
-                        $each: [{
-                            product: req.body.newFormData.productData,
-                            modeOfPayment: req.body.newFormData.modeOfPayment,
-                            addressToShip: req.body.newFormData.addressId,
-                            total: req.body.newFormData.total
-                        }], $position: 0
+            console.log(req.body.newFormData);
+            if (req.body.newFormData.razorpay_payment_id && req.body.newFormData.razorpay_order_id) {
+                await UserModal.updateOne({ _id: req.session.userId }, {
+                    $push: {
+                        orders: {
+                            $each: [{
+                                product: req.body.newFormData.productData,
+                                modeOfPayment: req.body.newFormData.modeOfPayment,
+                                addressToShip: req.body.newFormData.addressId,
+                                total: req.body.newFormData.total,
+                                razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
+                                razorpay_order_id: req.body.newFormData.razorpay_order_id
+                            }], $position: 0
+                        }
                     }
-                }
-            })
+                })
+
+            } else {
+                await UserModal.updateOne({ _id: req.session.userId }, {
+                    $push: {
+                        orders: {
+                            $each: [{
+                                product: req.body.newFormData.productData,
+                                modeOfPayment: req.body.newFormData.modeOfPayment,
+                                addressToShip: req.body.newFormData.addressId,
+                                total: req.body.newFormData.total
+
+                            }], $position: 0
+                        }
+                    }
+                })
+            }
+
 
 
             // await UserModal.updateOne({ _id: req.session.userId }, {
@@ -865,6 +891,46 @@ const postCancellOrder = async (req, res, next) => {
     }
 };
 
+const postRazorPayCreateOrder = async (req, res, next) => {
+    try {
+        console.log('inside postRazorPayCreateOrder');
+        console.log('req.body.newFormData.total', req.body.total);
+
+        const amount = req.body.total * 100
+        const options = {
+            amount: amount,
+            currency: 'INR',
+            receipt: 'razorUser@gmail.com'
+        }
+
+        razorpayInstance.orders.create(options,
+            (err, order) => {
+                if (!err) {
+                    res.status(200).send({
+                        success: true,
+                        msg: 'Order Created',
+                        order_id: order.id,
+                        amount: amount,
+                        key_id: RAZORPAY_ID_KEY,
+                        // product_name: req.body.name,
+                        // description: req.body.description,
+                        contact: "8567345632",
+                        name: "Sandeep Sharma",
+                        email: "sandeep@gmail.com"
+                    });
+                }
+                else {
+                    res.status(400).send({ success: false, msg: 'Something went wrong!' });
+                }
+            }
+        );
+
+    } catch (error) {
+        errorHandler(error, req, res, next)
+
+    }
+}
+
 
 module.exports = {
     userHome,
@@ -893,5 +959,6 @@ module.exports = {
     postOrderPlacement,
     getOrders,
     getOrderSinglePage,
-    postCancellOrder
+    postCancellOrder,
+    postRazorPayCreateOrder
 }

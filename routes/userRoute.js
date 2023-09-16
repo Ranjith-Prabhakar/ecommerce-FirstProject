@@ -47,4 +47,7 @@ router.get('/orders',userSessionHandler,userValidation,userController.getOrders)
 router.get('/orderSinglePage',userSessionHandler,userValidation,userController.getOrderSinglePage)
 router.post('/cancellOrder',userSessionHandler,userValidation,userController.postCancellOrder)
 
+//razor pay
+router.post("/razorPayCreateOrder",userSessionHandler,userValidation,userController.postRazorPayCreateOrder)
+
 module.exports = router

@@ -13,14 +13,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- custome css for general -->
     <link rel="stylesheet" href="/style/user/layoutHeader.css">
-    
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <!-- RazorPay -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 
 <body>
 
     <nav class="navbar navbar-expand-lg navbarBg ">
         <div class="container-fluid">
-            <a class="navbar-brand " href="Home">DigiWorld</a>
+            <a class="navbar-brand " href="/home">DigiWorld</a>
             <% locals.login || "" %>
                 <% locals.signUp || "" %>
                     <% if(!locals.signUp && !locals.login ) {%>
