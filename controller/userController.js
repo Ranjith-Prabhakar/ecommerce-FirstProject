@@ -70,10 +70,10 @@ const userHome = async (req, res, next) => {
 ///have to check it
 const getSearch = async (req, res, next) => {
     try {
-        if (req.session.isAdmin) {
-            res.redirect('/digiWorld/admin/adminPanel')
-        }
-        else if (req.session.userId) {
+        // if (req.session.isAdmin) {
+        //     res.redirect('/digiWorld/admin/adminPanel')
+        // }else
+         if (req.session.userId) {
             let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({
@@ -173,7 +173,7 @@ const postUserLogin = async (req, res, next) => {
                             let hash = await bcrypt.hash(req.body.password, 2)
                             req.session.userHash = hash
                             res.cookie('userId', hash)
-                            res.redirect('/home',)
+                            res.redirect('/',)
                         } else {
                             req.session.loginErrorMessage = 'invalid username or password'
                             res.redirect('/userLogin')

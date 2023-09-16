@@ -172,11 +172,11 @@
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination">
                                             <li class="page-item">
-                                                <a id="prevButton" class="page-link bg-black" href="#" aria-label="Previous">
+                                                <a id="prevButton" data-products-count="<%=locals.productsCount%>" class="page-link bg-black" href="#" aria-label="Previous">
                                                     <span aria-hidden="true">&laquo;</span>
                                                 </a>
                                             </li>
-                                            <% locals.productCount || "" %>
+                                            <% locals.productsCount || "" %>
                                                 <% if (locals.productsCount) { %>
                                                     <% for (let i=1; i <=locals.productsCount; i++) { %>
                                                         <li class="page-item"><a
@@ -189,7 +189,7 @@
 
 
                                                                 <li class="page-item">
-                                                                    <a class="page-link bg-black" href="#"
+                                                                    <a id="forwardButton" data-products-count="<%=locals.productsCount%>" class="page-link bg-black" href="#"
                                                                         aria-label="Next">
                                                                         <span aria-hidden="true">&raquo;</span>
                                                                     </a>
