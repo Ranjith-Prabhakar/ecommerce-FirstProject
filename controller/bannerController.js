@@ -21,19 +21,19 @@ const getBannerManagement = async(req, res,next) => {
 
 
 
-const getCreateBanner = async (req, res,next) => {
-    try {
-        if (req.session.isAdmin) {
-            const brand = await BrandModal.distinct('brandName')
-            res.render('./admin/bannerManagement/bannerCreation', { brand })
-        } else {
-            req.session.loginErrorMessage = 'Login First'
-            res.redirect('/adminLogin')
-        }
-    }catch(err){
-        errorHandler(err, req, res, next);
-    }
-}
+// const getCreateBanner = async (req, res,next) => {
+//     try {
+//         if (req.session.isAdmin) {
+//             const brand = await BrandModal.distinct('brandName')
+//             res.render('./admin/bannerManagement/bannerCreation', { brand })
+//         } else {
+//             req.session.loginErrorMessage = 'Login First'
+//             res.redirect('/adminLogin')
+//         }
+//     }catch(err){
+//         errorHandler(err, req, res, next);
+//     }
+// }
 
 const postCreateBanner = async (req, res,next) => {
     try {
@@ -55,6 +55,5 @@ const postCreateBanner = async (req, res,next) => {
 
 module.exports ={
     getBannerManagement,
-    getCreateBanner,
     postCreateBanner,  
 }

@@ -1,0 +1,190 @@
+<%- include('../../layout/admin/header') %>
+    <%- include('../../layout/admin/generalManagement') %>
+        <!-- coupon creation section -->
+
+        <!--  -->
+        <div class="col">
+            <button class="btn btn-primary mb-2" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">New</button>
+
+            <div class="offcanvas offcanvas-start text-bg-dark" data-bs-scroll="true" tabindex="-1"
+                id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+                    <button type="button" class="btn-close bg-white " data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+
+                    <form action="" name="couponForm">
+                        <label class="form-label mt-1 mb-0  " for="criteria">Criteria</label>
+                        <select name="criteria" id="criteria" class="form-select ">
+                            <option selected value="select">Select One</option>
+                            <option value="brand">Brand</option>
+                            <option value="product">Product</option>
+                            <option value="price">Price</option>
+                            <option value="date">Date Below</option>
+                            <option value="customer">Customer</option>
+                        </select>
+                        <div class="d-none hiddenDiv" id="brand">
+                            <% locals.brands || "" %>
+                                <% if(locals.brands.length) {%>
+                                    <label class="form-label mt-1 mb-0  " for="brand">brand</label>
+                                    <select name="brand" id="brand" class="form-select ">
+                                        <% locals.brands.forEach(brand=>{%>
+                                            <option value="<%=brand %>">
+                                                <%=brand %>
+                                            </option>
+                                            <%}) %>
+                                    </select>
+                                    <% } %>
+                        </div>
+                        <div class="d-none hiddenDiv" id="product">
+                            <% locals.products || "" %>
+                                <% if(locals.products.length) {%>
+                                    <label class="form-label mt-1 mb-0  " for="product">products</label>
+                                    <select name="product" id="product" class="form-select ">
+                                        <% locals.products.forEach(product=>{%>
+                                            <option value="<%=product.productName %>">
+                                                <%=product.productName %>
+                                            </option>
+                                            <%}) %>
+                                    </select>
+                                    <% } %>
+                        </div>
+                        <div class="d-none hiddenDiv" id="customer">
+                            <label class="form-label mt-1 mb-0  " for="noOfSuccessTransaction">No of successfull
+                                transactions</label>
+                            <input name="noOfSuccessTransaction" class="form-control" type="number"
+                                id="noOfSuccessTransaction">
+
+                        </div>
+                        <div class="d-none hiddenDiv" id="price">
+                            <label class="form-label mt-1 mb-0  " for="amountRange">Amount Range Above</label>
+                            <input name="amountRange" class="form-control" type="number" id="amountRange">
+
+                        </div>
+                        <div class="d-none hiddenDiv" id="date">
+                            <label class="form-label mt-1 mb-0  " for="dateBelow">Date Below</label>
+                            <input name="dateBelow" class="form-control" type="date" id="dateBelow">
+
+                        </div>
+
+                        <label class="form-label mt-1 mb-0  " for="Expiry">Expiry Days </label>
+                        <input name="expiryDays" class="form-control" type="number" id="Expiry">
+
+
+                        <label class="form-label mt-1 mb-0  " for="couponCode">Coupon Code</label>
+                        <input name="couponCode" class="form-control" type="text" id="couponCode">
+
+
+
+                        <label class="form-label mt-1 mb-0  " for="couponValue">Coupon Value</label>
+                        <input name="couponValue" class="form-control" type="text" id="couponValue">
+
+                        <input type="submit" class="btn btn-primary   mt-2 " value="Create">
+                    </form>
+
+
+                </div>
+            </div>
+            <!--  -->
+
+
+
+
+            <!-- existing coupons -->
+
+            <% locals.coupons || "" %>
+
+                <% if(locals.coupons) {%>
+                    <table class="table table-hover table-dark ">
+                        <thead>
+                            <tr>
+                                <td>Generated date</td>
+                                <td>Coupon Code</td>
+                                <td>Coupon Value</td>
+                                <td>Criteria</td>
+                                <td>Sub Criteria</td>
+                                <td>Expiry Date</td>
+                                <td>Days For</td>
+                                <td>Days Remaining</td>
+                                <td>Cancell</td>
+
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+
+                            <% locals.coupons.forEach(coupon=>{%>
+                                <tr >
+                                    <td>
+                                        <%=new Date(coupon.generatedDate).toLocaleDateString('en-US', { weekday: 'short'
+                                            , month: 'short' , day: 'numeric' , year: 'numeric' }) %>
+                                    </td>
+
+
+                                    <td>
+                                        <%=coupon.couponCode %>
+                                    </td>
+                                    <td>
+                                        <%=coupon.couponValue %>
+                                    </td>
+                                    <td>
+                                        <%=coupon.criteria %>
+                                    </td>
+                                    <td>
+                                        <% let
+                                            SubCriteria=['brand','product','amountRange','dateBelow','noOfSuccessTransaction']
+                                            %>
+                                            <% let value="" %>
+                                                <% if(coupon.brand) { value=coupon.brand }else if(coupon.product) {
+                                                    value=coupon.product } else if(coupon.amountRange) {
+                                                    value=coupon.amountRange } else if(coupon.dateBelow) { value=new
+                                                    Date(coupon.dateBelow ).toLocaleDateString('en-US', {
+                                                    weekday: 'short' , month: 'short' , day: 'numeric' , year: 'numeric'
+                                                    }) } else if(coupon.noOfSuccessTransaction) {
+                                                    value=coupon.noOfSuccessTransaction }%>
+
+                                                    <%=value?value : "" %>
+
+                                    </td>
+                                    <td>
+                                        <%=new Date(coupon.expiryDate).toLocaleDateString('en-US', { weekday: 'short' ,
+                                            month: 'short' , day: 'numeric' , year: 'numeric' }) %>
+                                    </td>
+
+                                    <td>
+                                        <%=coupon.expiryDays %>
+                                    </td>
+
+                                    <td>
+                                        <% const today=new Date(); %>
+                                            <% const expiryDate=new Date(coupon.expiryDate); %>
+                                                <% const timeDifference=expiryDate - today; %>
+                                                    <% const remainingDays=Math.ceil(timeDifference / (1000 * 60 * 60 *
+                                                        24)); %>
+
+                                                        <%= remainingDays %>
+                                    </td>
+                                    <td>
+                                        <%if(coupon.active){%>
+                                            <button name="cancell" data-coupon-id="<%=coupon._id%>"
+                                                class="btn btn-light">Cancell</button>
+                                            <%}else{%>
+                                                <button name="cancell" data-coupon-id="<%=coupon._id%>"
+                                                    class="btn btn-danger" disabled>Expired</button>
+
+                                                <%}%>
+                                    </td>
+                                </tr>
+                                <%})%>
+                                    <% } %>
+                        </tbody>
+                    </table>
+        </div>
+
+
+        </div>
+        </div>
+        <script src="/javaScript/admin/couponManagement.js"></script>
+        <%- include('../../layout/admin/footer') %>

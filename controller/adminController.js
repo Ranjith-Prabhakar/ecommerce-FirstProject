@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt')
 const nodeMailer = require('nodemailer')
 const { errorHandler } = require('../middleWare/errorMiddleWare')
 
-////////////////
+////////////////==============================================================================================
 
 // const getAdminSignUp  = (req,res)=>{
 //     res.render('./admin/adminSignUp')
@@ -27,6 +27,9 @@ const { errorHandler } = require('../middleWare/errorMiddleWare')
 //     res.end()
 // }
 
+
+////////////////==============================================================================================
+
 const getAdminLogin = (req, res, next) => {
     try {
         if (req.session.unAutherisedAdmin) {
@@ -45,46 +48,78 @@ const getAdminLogin = (req, res, next) => {
     }
 }
 
+// const postAdminLogin = async (req, res) => {
+//     try {
+//         const adminData = await AdminModal.findOne({ userName: req.body.userName, isAdmin: true })
+//         if (adminData) {
+//             bcrypt.compare(req.body.password, adminData.password, (err, result) => {
+//                 if (err) {
+//                     console.error('Error comparing passwords:', err);
+//                 } else {
+//                     if (result) {
+
+//                         // Create a Nodemailer transporter
+//                         let transporter = nodeMailer.createTransport({
+//                             service: "gmail",
+//                             auth: {
+//                                 user: process.env.nodeMailerEmail,
+//                                 pass: process.env.nodeMailerEmailPassword
+//                             }
+//                         })
+
+//                         // Generate a random OTP
+//                         const otp = randomString.generate({
+//                             length: 6,
+//                             charset: 'numeric',
+//                         });
+//                         // Define the email content
+//                         const mailOptions = {
+//                             from: process.env.nodeMailerEmail, // Sender email
+//                             to: adminData.email, // Recipient email
+//                             subject: 'OTP Verification Code',
+//                             text: `Your OTP is: ${otp}`,
+//                         };
+//                         // Send the email
+//                         transporter.sendMail(mailOptions, (error, info) => {
+//                             if (error) {
+//                                 console.log('Error sending email:', error);
+//                             } else {
+//                                 req.session.otp = otp
+//                                 res.redirect('/adminOtpVerificationCode')
+//                             }
+//                         });
+//                     } else {
+//                         req.session.unAutherisedAdmin = 'You are  unautherised to login'
+//                         res.redirect('/adminLogin')
+//                     }
+//                 }
+//             });
+//         } else {
+//             req.session.loginErrorMessage = 'invalid username or password'
+//             res.redirect('/digiWorld/admin/adminLogin')
+//         }
+
+
+//     } catch (error) {
+//         errorHandler(err, req, res, next);
+//     }
+// }
 const postAdminLogin = async (req, res) => {
     try {
         const adminData = await AdminModal.findOne({ userName: req.body.userName, isAdmin: true })
         if (adminData) {
-            bcrypt.compare(req.body.password, adminData.password, (err, result) => {
+            bcrypt.compare(req.body.password, adminData.password, async(err, result) => {
                 if (err) {
                     console.error('Error comparing passwords:', err);
                 } else {
                     if (result) {
+                        req.session.isAdmin = true
 
-                        // Create a Nodemailer transporter
-                        let transporter = nodeMailer.createTransport({
-                            service: "gmail",
-                            auth: {
-                                user: process.env.nodeMailerEmail,
-                                pass: process.env.nodeMailerEmailPassword
-                            }
-                        })
-
-                        // Generate a random OTP
-                        const otp = randomString.generate({
-                            length: 6,
-                            charset: 'numeric',
-                        });
-                        // Define the email content
-                        const mailOptions = {
-                            from: process.env.nodeMailerEmail, // Sender email
-                            to: adminData.email, // Recipient email
-                            subject: 'OTP Verification Code',
-                            text: `Your OTP is: ${otp}`,
-                        };
-                        // Send the email
-                        transporter.sendMail(mailOptions, (error, info) => {
-                            if (error) {
-                                console.log('Error sending email:', error);
-                            } else {
-                                req.session.otp = otp
-                                res.redirect('/adminOtpVerificationCode')
-                            }
-                        });
+                        let hash = await bcrypt.hash('helloworld',2)
+                        req.session.adminHash = hash
+            
+                        res.cookie('password',hash )
+                        res.redirect('/adminPanel')
                     } else {
                         req.session.unAutherisedAdmin = 'You are  unautherised to login'
                         res.redirect('/adminLogin')
@@ -104,40 +139,40 @@ const postAdminLogin = async (req, res) => {
 
 
 
-const getAdminOtpVerificationCode = async (req, res) => {
-    try {
-        if (req.session.otpErrorMessage) {
-            res.render('./admin/adminOtpVerificationCode', { otpErrorMessage: req.session.otpErrorMessage, otp: true })/////
-        } else {
-            res.render('./admin/adminOtpVerificationCode', { otp: true })/////
-        }
-    } catch (err) {
-        errorHandler(err, req, res, next);
-    }
+// const getAdminOtpVerificationCode = async (req, res) => {
+//     try {
+//         if (req.session.otpErrorMessage) {
+//             res.render('./admin/adminOtpVerificationCode', { otpErrorMessage: req.session.otpErrorMessage, otp: true })/////
+//         } else {
+//             res.render('./admin/adminOtpVerificationCode', { otp: true })/////
+//         }
+//     } catch (err) {
+//         errorHandler(err, req, res, next);
+//     }
 
-}
+// }
 
 
 
-const postAdminOtpVerificationCode = async (req, res) => {
-    try {
-        if (req.body.otp === req.session.otp) {
-            req.session.otp = ''
-            req.session.isAdmin = true
+// const postAdminOtpVerificationCode = async (req, res) => {
+//     try {
+//         if (req.body.otp === req.session.otp) {
+//             req.session.otp = ''
+//             req.session.isAdmin = true
 
-            let hash = await bcrypt.hash('helloworld',2)
-            req.session.adminHash = hash
+//             let hash = await bcrypt.hash('helloworld',2)
+//             req.session.adminHash = hash
 
-            res.cookie('password',hash )
-            res.redirect('/adminPanel')
-        } else {
-            req.session.otpErrorMessage = 'invalid otp'
-            res.redirect('/adminOtpVerificationCode')
-        }
-    } catch (err) {
-        errorHandler(err, req, res, next);
-    }
-}
+//             res.cookie('password',hash )
+//             res.redirect('/adminPanel')
+//         } else {
+//             req.session.otpErrorMessage = 'invalid otp'
+//             res.redirect('/adminOtpVerificationCode')
+//         }
+//     } catch (err) {
+//         errorHandler(err, req, res, next);
+//     }
+// }
 
 const getAdminPanel = (req, res) => {
 
@@ -185,8 +220,8 @@ module.exports = {
     // postAdminSignUp,
     getAdminLogin,
     postAdminLogin,
-    getAdminOtpVerificationCode,
-    postAdminOtpVerificationCode,
+    // getAdminOtpVerificationCode,
+    // postAdminOtpVerificationCode,
     getAdminPanel,
     postAdminLogout,
 

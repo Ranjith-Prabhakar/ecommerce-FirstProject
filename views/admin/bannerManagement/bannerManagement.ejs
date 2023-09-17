@@ -1,17 +1,63 @@
 <%- include('../../layout/admin/header') %>
     <%- include('../../layout/admin/generalManagement') %>
         <div class="col">
-            <div class="bg-dark   p-2     rounded-1  m-1   text-start  position-absolute "
-                style="top: 300px; left: 18px;">
-                <a class="nav-link text-white fs-5" href="/createBanner">Create Banner</a>
+
+
+
+            <!--  -->
+
+            <button class="btn btn-primary ms-3 mb-2" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+                Create
+            </button>
+
+            <div class="offcanvas offcanvas-start text-bg-dark" data-bs-backdrop="static" tabindex="-1"
+                id="staticBackdrop" aria-labelledby="staticBackdropLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="staticBackdropLabel">Offcanvas</h5>
+                    <button type="button" class="btn-close bg-white" data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <form action="/createBanner" method="post" enctype="multipart/form-data">
+                        <h1 class="text-white mb-3">Create Banner</h1>
+
+                        <% if(locals.brand.length) {%>
+
+                            <select class="form-select " id="brand" name="brandName">
+
+                                <% locals.brand.forEach(brandName=> {%>
+                                    <option value="<%=brandName%>">
+                                        <%=brandName%>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <% } else{%>
+                                <input type="text" name="brandName" placeholder="brandName">
+                                <% } %>
+
+                                    <br><input class="form-control " type="text" name="productName"
+                                        placeholder="productName" id="">
+                                    <br><input class="form-control " type="text" name="discription"
+                                        placeholder="discription" id="">
+                                    <br><input class="form-control " type="text" name="unitPrice"
+                                        placeholder="unitPrice" id="">
+                                    <br><input class="form-control " type="text" name="launchDate"
+                                        placeholder="launchDate" id="">
+                                    <br><input class="form-control " type="file" name="gallery" placeholder="images"
+                                        id="">
+                                    <br><button class="btn w-25 btn-outline-secondary " type="submit">submit</button>
+                    </form>
+                </div>
             </div>
+            <!--  -->
 
             <div class="container-fluid">
                 <% locals.banner || "" %>
                     <% locals.brand || "" %>
                         <% if(locals.banner.length) {%>
                             <div class="row">
-                                <% let count= 1 %>
+                                <% let count=1 %>
                                     <% locals.banner.forEach(banner=>{%>
                                         <div class="col">
                                             <img style="width: 330px;height: 200px;"
@@ -28,7 +74,7 @@
                                 <div name="bannerChange" class="row d-none">
                                     <div class="col-3">
                                         <form action="/createBanner" method="post" enctype="multipart/form-data">
-                                            <input type="hidden" name="imageName"  id="">
+                                            <input type="hidden" name="imageName" id="">
                                             <% if(locals.brand.length) {%>
                                                 <br>
                                                 <select class="form-select " id="brand" name="brandName">

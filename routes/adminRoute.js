@@ -7,8 +7,8 @@ const { adminRestriction,adminSessionHandler,adminValidation} = require('../midd
 // router.post('/adminSignUp',adminSessionHandler,adminRestriction,adminController.postAdminSignUp)
 router.get('/adminLogin',adminSessionHandler, adminRestriction, adminController.getAdminLogin)
 router.post('/adminLogin',adminSessionHandler,  adminRestriction, adminController.postAdminLogin)
-router.get('/adminOtpVerificationCode', adminSessionHandler, adminRestriction, adminController.getAdminOtpVerificationCode)
-router.post('/adminOtpVerificationCode',adminSessionHandler,  adminRestriction, adminController.postAdminOtpVerificationCode)
+// router.get('/adminOtpVerificationCode', adminSessionHandler, adminRestriction, adminController.getAdminOtpVerificationCode)
+// router.post('/adminOtpVerificationCode',adminSessionHandler,  adminRestriction, adminController.postAdminOtpVerificationCode)
 router.get('/adminPanel',adminValidation, adminSessionHandler,  adminController.getAdminPanel)///
 router.post('/adminLogout',adminValidation, adminSessionHandler,adminController.postAdminLogout)
 

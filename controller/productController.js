@@ -4,32 +4,54 @@ const { errorHandler } = require('../middleWare/errorMiddleWare')
 const fs = require('fs')
 const path = require('path')
 
-const getProductManagement = async (req, res) => {
+// const getProductManagement = async (req, res) => {
+//     try {
+//         const products = await ProductModal.find().sort({ unitPrice: 1 })
+//         res.render('./admin/productManagement/productManagement', { products, productManagement: true })
+
+//     } catch (err) {
+//         errorHandler(err, req, res, next);
+//     }
+// }
+
+const getProductManagement = async (req, res,next) => {
     try {
         const products = await ProductModal.find().sort({ unitPrice: 1 })
-        res.render('./admin/productManagement/productManagement', { products, productManagement: true })
-
-    } catch (err) {
-        errorHandler(err, req, res, next);
-    }
-}
-
-const getCreateProductManagement = async (req, res) => {
-    try {
-        if (req.session.isAdmin) {
+        
+        
             if (req.session.existingProduct) {
                 const brand = await BrandModal.distinct('brandName')
-                res.render('./admin/productManagement/createProduct', { brand, existingProduct: req.session.existingProduct })
+                // res.render('./admin/productManagement/createProduct', { brand, existingProduct: req.session.existingProduct })
+                res.render('./admin/productManagement/productManagement', { products, productManagement: true,brand })
             } else {
                 const brand = await BrandModal.distinct('brandName')
-                res.render('./admin/productManagement/createProduct', { brand })
+                res.render('./admin/productManagement/productManagement', { products, productManagement: true,brand })
+                // res.render('./admin/productManagement/createProduct', { brand })
             }
 
-        }
+    
+        // res.render('./admin/productManagement/productManagement', { products, productManagement: true,brand })
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
+
+// const getCreateProductManagement = async (req, res) => {
+//     try {
+//         if (req.session.isAdmin) {
+//             if (req.session.existingProduct) {
+//                 const brand = await BrandModal.distinct('brandName')
+//                 res.render('./admin/productManagement/createProduct', { brand, existingProduct: req.session.existingProduct })
+//             } else {
+//                 const brand = await BrandModal.distinct('brandName')
+//                 res.render('./admin/productManagement/createProduct', { brand })
+//             }
+
+//         }
+//     } catch (err) {
+//         errorHandler(err, req, res, next);
+//     }
+// }
 
 const postCreateProductManagement = async (req, res) => {
     try {
@@ -172,7 +194,6 @@ const postDeleteImage = async (req, res, next) => {
 
 module.exports = {
     getProductManagement,
-    getCreateProductManagement,
     postCreateProductManagement,
     postProductEditConfirm,
     postUpdateStock,

@@ -65,6 +65,7 @@ const Product = mongoose.Schema({
         required: true,
         default: "active"
     },
+    coupon:{couponId:ObjectId,amount:Number}
 
 }, {
     timestamps: true // Add timestamps option

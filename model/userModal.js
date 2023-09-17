@@ -144,6 +144,14 @@ const User = mongoose.Schema({
         addressToShip: ObjectId,
         razorpay_payment_id:String,
         razorpay_order_id:String
+    }],
+    wallet:[{
+        transaction:{
+            type:String,
+            enum:['Debit',"Credit"]
+        },
+        amount:Number,
+        balance:Number
     }]
 
 })
