@@ -226,6 +226,37 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // select coupon
+
+    let selectCoupon = document.querySelectorAll(".selectCoupon");
+    let myModal = document.getElementById('staticBackdrop');
+    let valueAfterCoupon = document.getElementById('valueAfterCoupon');
+    let singleProductUnitPriceElement = document.getElementById('singleProductUnitPrice'); // Rename this variable
+    let cartSumElement = document.getElementById('cartSum')
+    selectCoupon.forEach(selectCoupon => {
+        selectCoupon.addEventListener('click', (event) => {
+            event.preventDefault();
+            let couponValue = event.target.getAttribute('data-coupon-value');
+            let couponId = event.target.getAttribute('data-coupon-id')
+            couponValue = parseFloat(couponValue);
+            if (singleProductUnitPriceElement) {
+                let singleProductUnitPrice = parseFloat(singleProductUnitPriceElement.innerText); // Parse the value here
+                let adjustedValue = singleProductUnitPrice - couponValue;
+                valueAfterCoupon.innerText = adjustedValue.toFixed(2); // Convert to fixed decimal for display
+                valueAfterCoupon.setAttribute('data-coupon-id',couponId)
+                valueAfterCoupon.classList.remove('d-none')
+            } else if (cartSumElement) {
+                let cartSum = parseFloat(cartSumElement.innerText)
+                let adjustedValue = cartSum - couponValue;
+                valueAfterCoupon.innerText = adjustedValue.toFixed(2);
+                valueAfterCoupon.setAttribute('data-coupon-id',couponId)
+                valueAfterCoupon.classList.remove('d-none')
+            }
+            $(myModal).modal("hide");
+
+        });
+    });
+
 
     ///order placement
 
@@ -338,7 +369,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // })
 
-
+    ///order placement
     const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')
 
     const paymentOptionForm = document.forms.paymentOption
@@ -367,24 +398,44 @@ document.addEventListener("DOMContentLoaded", () => {
                             let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
                             let productPrice = parseFloat(singleProductUnitPrice.innerText)
                             let order_Quantity = parseFloat(orderQuantity.innerText)
+                            let price = parseFloat(valueAfterCoupon.innerText)
                             newFormData.productData[0] = {
                                 productId: productId,
                                 price: productPrice,
+
                                 orderQuantity: order_Quantity
                             }
-                            newFormData.total = productPrice
+                            if (price) {
+                                newFormData.total = price
+                                newFormData.couponId = valueAfterCoupon.getAttribute('data-coupon-id')
+                            } else {
+
+                                newFormData.total = productPrice
+                            }
 
                         } else {
                             let productList = document.getElementsByClassName('productList')
 
+                            let price = parseFloat(valueAfterCoupon.innerText)
                             for (i = 0; i < productList.length; i++) {
                                 let head4 = document.getElementById('orderQuantity' + i)
+
+
                                 newFormData.productData.unshift({
                                     productId: head4.getAttribute('data-productId'),
                                     price: head4.getAttribute('data-product-price'),
                                     orderQuantity: head4.firstElementChild.innerText
                                 })
-                                newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
+
+                                if (price) {
+                                    newFormData.total = price
+                                    newFormData.couponId = valueAfterCoupon.getAttribute('data-coupon-id')
+                                } else {
+    
+                                    newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
+                                }
+
+                                // newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
                                 console.log("newFormData.productData", newFormData.productData);
                             }
 
@@ -445,11 +496,11 @@ document.addEventListener("DOMContentLoaded", () => {
                                     "order_id": "" + res.order_id + "",
                                     "handler": async function (response) {
 
-                                        
+
                                         newFormData.razorpay_payment_id = response.razorpay_payment_id
                                         newFormData.razorpay_order_id = response.razorpay_order_id
 
-                                        console.log("newFormData",newFormData);
+                                        console.log("newFormData", newFormData);
                                         const success = await fetch('/orderPlacement', {
                                             method: 'post',
                                             headers: {
@@ -535,5 +586,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     })
+
 
 })

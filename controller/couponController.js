@@ -43,7 +43,7 @@ const postCreateCoupon = async(req,res,next)=>{
     const Coupon = await CouponModal(coupon)
      
     await Coupon.save()
-    await ProductModal.updateMany({unitPrice:{$gt:amountRange}},{$set:{"coupon.couponId":Coupon._id,'coupon.amount':couponValue}})
+    // await ProductModal.updateMany({unitPrice:{$gt:amountRange}},{$set:{"coupon.couponId":Coupon._id,'coupon.amount':couponValue}})
     res.json({success:true})
   } catch (error) {
     errorHandler(error,req,res,next)

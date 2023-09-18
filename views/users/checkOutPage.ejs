@@ -1,102 +1,115 @@
 <%- include('../layout/user/header') %>
-
+    <!-- product section -->
     <div class="">
         <% locals.singleProduct || "" %>
             <% locals.productList || "" %>
                 <% locals.user || "" %>
+                    <% let sum=0 %>
+                        <% if(locals.singleProduct) {%>
+                            <div class="container my-3 text-bg-dark  text-white rounded-3  p-2 ">
+                                <div class="row justify-content-between">
+                                    <div class="col">
+                                        <img class="checkOut-img-size"
+                                            src="/productImages/<%=singleProduct.gallery[0] %>" alt="product-Image"
+                                            srcset="">
+                                    </div>
+                                    <div class="col text-start  ">
+                                        <h4>
+                                            <%=singleProduct.productName %>
+                                        </h4>
+                                        <% if(singleProduct.quantity < 10 && singleProduct.quantity> 0) {%>
+                                            <h5>instock : <span class="text-warning ">Left Only
+                                                    <%=singleProduct.quantity %>
+                                                </span> </h5>
+                                            <% } else if(singleProduct.quantity < 1){%>
+                                                <h5 class="text-danger ">out of stock </h5>
+                                                <% } else{ %>
+                                                    <h5 class="text-success  ">instock </h5>
+                                                    <% } %>
+                                                        <h4>Unit Price: <%=singleProduct.unitPrice %>
+                                                        </h4>
+                                    </div>
+                                    <div class="col text-end">
+                                        <h4 id="singleProductUnitPrice">
+                                            <%=singleProduct.unitPrice %>
+                                        </h4>
+                                        <button id="increament" class="bi bi-plus btn btn-light "></button>
 
-                    <% if(locals.singleProduct) {%>
-                        <div class="container my-3 text-bg-dark  text-white rounded-3  p-2 ">
-                            <div class="row justify-content-between">
-                                <div class="col">
-                                    <img class="checkOut-img-size" src="/productImages/<%=singleProduct.gallery[0] %>"
-                                        alt="product-Image" srcset="">
-                                </div>
-                                <div class="col text-start  ">
-                                    <h4>
-                                        <%=singleProduct.productName %>
-                                    </h4>
-                                    <% if(singleProduct.quantity < 10 && singleProduct.quantity> 0) {%>
-                                        <h5>instock : <span class="text-warning ">Left Only
-                                                <%=singleProduct.quantity %>
-                                            </span> </h5>
-                                        <% } else if(singleProduct.quantity < 1){%>
-                                            <h5 class="text-danger ">out of stock </h5>
-                                            <% } else{ %>
-                                                <h5 class="text-success  ">instock </h5>
-                                                <% } %>
-                                                    <h4>Unit Price: <%=singleProduct.unitPrice %>
-                                                    </h4>
-                                </div>
-                                <div class="col text-end">
-                                    <h4 id="singleProductUnitPrice">
-                                        <%=singleProduct.unitPrice %>
-                                    </h4>
-                                    <button id="increament" class="bi bi-plus btn btn-light "></button>
+                                        <button class="btn btn-light " name="orderQuantity"
+                                            data-product-price="<%=locals.singleProduct.unitPrice%>"
+                                            data-productId="<%=locals.singleProduct._id %>"
+                                            data-stock-availability="<%=locals.singleProduct.quantity %>">1</button>
 
-                                    <button class="btn btn-light " name="orderQuantity"
-                                        data-product-price="<%=locals.singleProduct.unitPrice%>"
-                                        data-productId="<%=locals.singleProduct._id %>"
-                                        data-stock-availability="<%=locals.singleProduct.quantity %>">1</button>
+                                        <button id="decreament" class="bi bi-dash btn btn-light"></button>
 
-                                    <button id="decreament" class="bi bi-dash btn btn-light"></button>
+
+
+
+
+                                    </div>
+
+
                                 </div>
 
 
                             </div>
 
+                            <%} else if(locals.productList.length) {%>
 
-                        </div>
+                                <% for(let i=0;i<locals.productList.length;i++){ %>
+                                    <% sum +=productList[i].orderQuantity * productList[i].unitPrice %>
+                                        <div class="container my-3 text-bg-dark  text-white rounded-3  p-2 ">
+                                            <div class="row justify-content-between">
+                                                <div class="col">
+                                                    <img class="checkOut-img-size"
+                                                        src="/productImages/<%=productList[i].gallery[0] %>"
+                                                        alt="product-Image" srcset="">
+                                                </div>
 
-                        <%} else if(locals.productList.length) {%>
+                                                <div class="col text-start  ">
+                                                    <h4>
+                                                        <%=productList[i].productName %>
+                                                    </h4>
+                                                    <% if(productList[i].quantity < 10 && productList[i].quantity> 0)
+                                                        {%>
+                                                        <h5>instock : <span class="text-warning ">Left Only
+                                                                <%=productList[i].quantity %>
+                                                            </span> </h5>
+                                                        <% } else if(productList[i].quantity < 1){%>
+                                                            <h5 class="text-danger ">out of stock </h5>
+                                                            <% } else{ %>
+                                                                <h5 class="text-success  ">instock </h5>
+                                                                <% } %>
+                                                                    <h5>
+                                                                        Unit Price :<%= productList[i].unitPrice %>
+                                                                    </h5>
+                                                </div>
 
-                            <% for(let i=0;i<locals.productList.length;i++){ %>
-                                <div class="container my-3 text-bg-dark  text-white rounded-3  p-2 ">
-                                    <div class="row justify-content-between">
-                                        <div class="col">
-                                            <img class="checkOut-img-size"
-                                                src="/productImages/<%=productList[i].gallery[0] %>" alt="product-Image"
-                                                srcset="">
+                                                <div class="col text-end">
+
+                                                    <h4 id="orderQuantity<%=i%>" class="productList"
+                                                        data-productId="<%=productList[i]._id  %>"
+                                                        data-product-price="<%= productList[i].orderQuantity * productList[i].unitPrice %>">
+                                                        Order Quantity : <span>
+                                                            <%=productList[i].orderQuantity %>
+                                                        </span>
+                                                    </h4>
+                                                    <h4>Total : <%= productList[i].orderQuantity *
+                                                            productList[i].unitPrice %>
+                                                    </h4>
+
+                                                </div>
+
+                                            </div>
                                         </div>
 
-                                        <div class="col text-start  ">
-                                            <h4>
-                                                <%=productList[i].productName %>
-                                            </h4>
-                                            <% if(productList[i].quantity < 10 && productList[i].quantity> 0) {%>
-                                                <h5>instock : <span class="text-warning ">Left Only
-                                                        <%=productList[i].quantity %>
-                                                    </span> </h5>
-                                                <% } else if(productList[i].quantity < 1){%>
-                                                    <h5 class="text-danger ">out of stock </h5>
-                                                    <% } else{ %>
-                                                        <h5 class="text-success  ">instock </h5>
-                                                        <% } %>
-                                                            <h5>
-                                                                Unit Price :<%= productList[i].unitPrice %>
-                                                            </h5>
-                                        </div>
+                                        <% } %>
 
-                                        <div class="col text-end">
 
-                                            <h4 id="orderQuantity<%=i%>" class="productList"
-                                                data-productId="<%=productList[i]._id  %>"
-                                                data-product-price="<%= productList[i].orderQuantity * productList[i].unitPrice %>">
-                                                Order Quantity : <span>
-                                                    <%=productList[i].orderQuantity %>
-                                                </span>
-                                            </h4>
-                                            <h4>Total : <%= productList[i].orderQuantity * productList[i].unitPrice %>
-                                            </h4>
 
-                                        </div>
+                                            <% } %>
 
-                                    </div>
-                                </div>
 
-                                <% } %>
-
-                                    <% } %>
 
 
     </div>
@@ -225,60 +238,105 @@
             <br><br>
 
 
-            <!-- coupon section -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                Launch static backdrop modal
-            </button>
 
-            <!-- Modal -->
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- dummy -->
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <h1>test</h1>
-                            <!--  -->
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Understood</button>
-                        </div>
+
+
+            <!-- payment section -->
+            <div class="payment-method container text-bg-dark  text-white rounded-3  p-5">
+                <div class="row">
+                    <div class="col">
+                        <form action="" name="paymentOption">
+                            <input type="radio" id="cashOnDelivery" name="paymentMethod"
+                                class="me-2 form-check-input "><label for="cashOnDelivery">Cash On
+                                Delivery</label><br>
+                            <input type="radio" id="onlinePayment" name="paymentMethod"
+                                class="me-2 form-check-input"><label for="onlinePayment">UPI</label><br>
+                            <input class="mt-2 btn btn-light " type="submit" value="Place Order">
+                        </form>
+                    </div>
+                    <div class="col">
+
+                        <% if(locals.singleProduct) {%>
+                            <button type="button" class="btn btn-success  mt-3  " data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop">
+                                Apply Coupons
+                            </button>
+                            <br>
+                            <button id="valueAfterCoupon" class="btn btn-warning  mt-3 d-none"></button>
+                            <%}else{%>
+                                <button type="button" class="btn btn-success  mt-3  " data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop">
+                                    Apply Coupons
+                                </button>
+                                <br>
+                                <button id="valueAfterCoupon" class="btn btn-warning  mt-3 d-none"></button>
+                                <br>
+                                <button class="btn btn-primary mt-3 ">
+                                    Total<span id="cartSum">
+                                        <%=sum %>
+                                    </span>
+                                </button>
+                                <%}%>
+                                    <!-- coupon section -->
+
                     </div>
                 </div>
             </div>
 
 
-            <!-- payment section -->
-            <div class="payment-method container text-bg-dark  text-white rounded-3  p-5">
-                <form action="" name="paymentOption">
-                    <input type="radio" id="cashOnDelivery" name="paymentMethod" class="me-2 form-check-input "><label
-                        for="cashOnDelivery">Cash On
-                        Delivery</label><br>
-                    <input type="radio" id="onlinePayment" name="paymentMethod" class="me-2 form-check-input"><label
-                        for="onlinePayment">UPI</label><br>
-                    <input class="mt-2 btn btn-light " type="submit" value="Place Order">
-                </form>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+                aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable">
+                    <div class="modal-content bg-dark ">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title
+                            </h1>
+                            <button type="button" class="btn-close bg-white " data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <% if(locals.singleProduct) {%>
+                                <% locals. coupons.productCoupon || "" %>
+                                    <%if(locals.coupons.productCoupon){%>
+                                        <li data-coupon-id="<%=locals.coupons.productCoupon._id%>" data-coupon-value="<%=locals.coupons.productCoupon.couponValue%>"
+                                            class="selectCoupon text-white ">
+                                            <%=locals.coupons.productCoupon.couponCode%>
+                                        </li>
+                                        <%} else if(locals. coupons.brandCoupon){%>
+                                            <li data-coupon-id="<%=locals.coupons.brandCoupon._id%>" data-coupon-value="<%=locals.coupons.brandCoupon.couponValue%>"
+                                                class="selectCoupon text-white  ">
+                                                <%=locals.coupons.brandCoupon.couponCode%>
+                                            </li>
+                                            <%}%>
+
+                                                <%}else{%>
+                                                    <% locals. coupons.priceCoupons || "" %>
+                                                        <%if(locals. coupons.priceCoupons){%>
+                                                            <%if(locals. coupons.priceCoupons.length){%>
+                                                                <ul class="list-group">
+                                                                    <%locals. coupons.priceCoupons.forEach(priceCoupon=>
+                                                                        {%>
+                                                                        <li data-coupon-id="<%=priceCoupon._id%>" data-coupon-value="<%=priceCoupon.couponValue%>"
+                                                                            class="selectCoupon text-white list-group-item bg-dark  ">
+                                                                            <%= priceCoupon.couponCode%>
+                                                                        </li>
+                                                                        <%})%>
+                                                                </ul>
+                                                                <%}%>
+                                                                    <%}%>
+                                                                        <%}%>
+
+                        </div>
+                        // <div class="modal-footer">
+                        //     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        //     <button type="button" class="btn btn-primary">Understood</button>
+                        // </div>
+                    </div>
+
+                </div>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script src="/javaScript/user/header.js"></script>

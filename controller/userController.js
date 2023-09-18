@@ -2,6 +2,7 @@ const UserModal = require('../model/userModal')
 const BrandModal = require('../model/brandModal')
 const ProductModal = require('../model/productModal')
 const BannerModal = require('../model/bannarModal')
+const CouponModal = require('../model/couponModal')
 const bcrypt = require('bcrypt')
 const nodeMailer = require('nodemailer')
 const randomString = require('randomstring')
@@ -73,7 +74,7 @@ const getSearch = async (req, res, next) => {
         // if (req.session.isAdmin) {
         //     res.redirect('/digiWorld/admin/adminPanel')
         // }else
-         if (req.session.userId) {
+        if (req.session.userId) {
             let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({
@@ -605,15 +606,102 @@ const postRemoveFromCart = async (req, res, next) => {
     }
 }
 
+// const getCheckOutPage = async (req, res, next) => {
+//     try {
+//         if (req.query.productId) {//singleProduct
+//             let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
+//             let user = await UserModal.findOne({ _id: req.session.userId })
+//             let brands = await BrandModal.distinct('brandName')
+//             res.render('./users/checkOutPage', { singleProduct, user, brands });
+//             req.query.productId = '';
+//         } else if (req.session.selectedProducts && req.session.selectedProducts.length) {//selected cart
+//             let user = await UserModal.findOne({ _id: req.session.userId })
+//             let brands = await BrandModal.distinct('brandName')
+//             let productIds = req.session.selectedProducts.map((product) => product.productId);
+//             let matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
+
+//             let productList = matchingProducts.map((product) => {
+//                 let selectedProduct = req.session.selectedProducts.find((selected) => selected.productId === product._id.toString());
+//                 if (selectedProduct) {
+//                     return {
+//                         ...product.toObject(),
+//                         orderQuantity: selectedProduct.productQuantity,
+//                     };
+//                 } else {
+//                     return product.toObject();
+//                 }
+//             });
+//             req.session.selectedProducts.length = 0;
+//             req.session.productList = productList
+//             res.render('./users/checkOutPage', { productList, user, brands });
+//         } else if (req.query.cart) {
+//             const user = await UserModal.findOne({ _id: req.session.userId });
+//             let brands = await BrandModal.distinct('brandName')
+//             const cart = user.cart;
+//             const productIds = cart.map((item) => item.productId);
+
+//             const matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
+
+
+//             let productList = matchingProducts.map((product) => {
+//                 cart.forEach((cart) => {
+
+//                     if (cart.productId.equals(product._id)) {
+//                         let orderQuantity = cart.quantity
+//                         product.orderQuantity = orderQuantity
+//                     }
+//                 })
+//                 return product
+//             })
+
+//             req.query.cart = false;
+//             req.session.productList = productList
+//             console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
+//             res.render('./users/checkOutPage', { productList, user, brands });
+//         }
+//     } catch (error) {
+//         errorHandler(error, req, res, next);
+//     }
+// };
+
 const getCheckOutPage = async (req, res, next) => {
     try {
         if (req.query.productId) {//singleProduct
             let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
+            let coupons = {}
+            const productCoupon = await CouponModal.find({ active: true, criteria: 'product' })
+
+            if (productCoupon) {
+                let productValidation = productCoupon.find(productCoupon => productCoupon.product === singleProduct.productName)
+                console.log("productValidation", productValidation);
+                if (productValidation) {
+                    coupons.productCoupon = productValidation
+                } else {
+                    const brandCoupon = await CouponModal.find({ active: true, criteria: 'brand' })
+                    console.log("inner brandCoupon", brandCoupon);
+                    let brandValidation = brandCoupon.find(brandCoupon => brandCoupon.brand === singleProduct.brandName)
+                    if (brandValidation) {
+                        coupons.brandCoupon = brandValidation
+                    }
+                }
+            } else {
+                const brandCoupon = await CouponModal.find({ active: true, criteria: 'brand' })
+                console.log("brandCoupon", brandCoupon);
+                let brandValidation = brandCoupon.find(brandCoupon => brandCoupon.brand === singleProduct.brandName)
+                console.log("brandValidation", brandValidation);
+                if (brandValidation) {
+                    coupons.brandCoupon = brandValidation
+                }
+            }
             let user = await UserModal.findOne({ _id: req.session.userId })
             let brands = await BrandModal.distinct('brandName')
-            res.render('./users/checkOutPage', { singleProduct, user, brands });
+            res.render('./users/checkOutPage', { singleProduct, user, brands, coupons });
             req.query.productId = '';
         } else if (req.session.selectedProducts && req.session.selectedProducts.length) {//selected cart
+
+
+
+            let coupons = {}
             let user = await UserModal.findOne({ _id: req.session.userId })
             let brands = await BrandModal.distinct('brandName')
             let productIds = req.session.selectedProducts.map((product) => product.productId);
@@ -630,10 +718,47 @@ const getCheckOutPage = async (req, res, next) => {
                     return product.toObject();
                 }
             });
+
+
             req.session.selectedProducts.length = 0;
             req.session.productList = productList
-            res.render('./users/checkOutPage', { productList, user, brands });
-        } else if (req.query.cart) {
+            // 
+
+            const priceCoupon = await CouponModal.find({ active: true, criteria: 'price' })
+            console.log("priceCoupon", priceCoupon);
+
+            let total = productList.reduce((sum, productListElement) => {
+                let orderQuantity = productListElement.orderQuantity;
+                let unitPrice = productListElement.unitPrice;
+
+                // Check if orderQuantity and unitPrice are defined and not empty
+                if (orderQuantity && unitPrice) {
+                    orderQuantity = parseFloat(orderQuantity.trim());
+                    unitPrice = parseFloat(unitPrice.trim());
+
+                    // Check if the parsing was successful and both values are numbers
+                    if (!isNaN(orderQuantity) && !isNaN(unitPrice)) {
+                        return sum + (orderQuantity * unitPrice);
+                    }
+                }
+
+                // If any check fails, return the current sum without adding anything
+                return sum;
+            }, 0);
+
+            console.log(total);
+            let matchingPriceCoupons = priceCoupon.filter((priceCoupon) => {
+                return priceCoupon.amountRange < total
+            })
+
+            console.log("priceCoupon priceCoupon.amountRange", priceCoupon[0].amountRange);
+            console.log("priceCoupon priceCoupon.amountRange type of ", typeof priceCoupon[0].amountRange);
+            console.log("matchingPriceCoupons", matchingPriceCoupons);
+            coupons.priceCoupons = matchingPriceCoupons
+            res.render('./users/checkOutPage', { productList, user, brands, coupons });
+        } else if (req.query.cart) {//cart
+            console.log("cart", req.query.cart);
+            let coupons = [{ hello: true }]// this has to delete and make correct because it is a dummy
             const user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             const cart = user.cart;
@@ -653,16 +778,50 @@ const getCheckOutPage = async (req, res, next) => {
                 return product
             })
 
+
             req.query.cart = false;
             req.session.productList = productList
+
+            const priceCoupon = await CouponModal.find({ active: true, criteria: 'price' })
+            console.log("productList", productList);
+            console.log("priceCoupon", priceCoupon);
+
+            // let total = productList.reduce((sum, productListElement) => {
+            //     let orderQuantity = productListElement.orderQuantity;
+            //     let unitPrice = productListElement.unitPrice;
+
+            //     // Check if orderQuantity and unitPrice are defined and not empty
+            //     if (orderQuantity && unitPrice) {
+            //         orderQuantity = parseFloat(orderQuantity.trim());
+            //         unitPrice = parseFloat(unitPrice.trim());
+
+            //         // Check if the parsing was successful and both values are numbers
+            //         if (!isNaN(orderQuantity) && !isNaN(unitPrice)) {
+            //             return sum + (orderQuantity * unitPrice);
+            //         }
+            //     }
+
+            //     // If any check fails, return the current sum without adding anything
+            //     return sum;
+            // }, 0);
+
+            // console.log(total);
+            // let matchingPriceCoupons = priceCoupon.filter((priceCoupon) => {
+            //    return priceCoupon.amountRange < total
+            // })
+
+            // console.log("priceCoupon priceCoupon.amountRange", priceCoupon[0].amountRange);
+            // console.log("priceCoupon priceCoupon.amountRange type of ", typeof priceCoupon[0].amountRange);
+            // console.log("matchingPriceCoupons", matchingPriceCoupons);
+            // coupons.priceCoupons = matchingPriceCoupons
+
             console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
-            res.render('./users/checkOutPage', { productList, user, brands });
+            res.render('./users/checkOutPage', { productList, user, brands, coupons });
         }
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 };
-
 
 
 
@@ -682,35 +841,77 @@ const postOrderPlacement = async (req, res, next) => {
 
             console.log(req.body.newFormData);
             if (req.body.newFormData.razorpay_payment_id && req.body.newFormData.razorpay_order_id) {
-                await UserModal.updateOne({ _id: req.session.userId }, {
-                    $push: {
-                        orders: {
-                            $each: [{
-                                product: req.body.newFormData.productData,
-                                modeOfPayment: req.body.newFormData.modeOfPayment,
-                                addressToShip: req.body.newFormData.addressId,
-                                total: req.body.newFormData.total,
-                                razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
-                                razorpay_order_id: req.body.newFormData.razorpay_order_id
-                            }], $position: 0
+                console.log('inside if razore');
+                if (req.body.newFormData.couponId) {
+                    console.log('inside if first razor');
+                    await UserModal.updateOne({ _id: req.session.userId }, {
+                        $push: {
+                            orders: {
+                                $each: [{
+                                    product: req.body.newFormData.productData,
+                                    modeOfPayment: req.body.newFormData.modeOfPayment,
+                                    addressToShip: req.body.newFormData.addressId,
+                                    total: req.body.newFormData.total,
+                                    razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
+                                    razorpay_order_id: req.body.newFormData.razorpay_order_id,
+                                    couponId: req.body.newFormData.couponId
+                                }], $position: 0
+                            }
                         }
-                    }
-                })
+                    })
+                } else {
+                    console.log('inside else first razor');
+                    await UserModal.updateOne({ _id: req.session.userId }, {
+                        $push: {
+                            orders: {
+                                $each: [{
+                                    product: req.body.newFormData.productData,
+                                    modeOfPayment: req.body.newFormData.modeOfPayment,
+                                    addressToShip: req.body.newFormData.addressId,
+                                    total: req.body.newFormData.total,
+                                    razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
+                                    razorpay_order_id: req.body.newFormData.razorpay_order_id
+                                }], $position: 0
+                            }
+                        }
+                    })
+                }
+
 
             } else {
-                await UserModal.updateOne({ _id: req.session.userId }, {
-                    $push: {
-                        orders: {
-                            $each: [{
-                                product: req.body.newFormData.productData,
-                                modeOfPayment: req.body.newFormData.modeOfPayment,
-                                addressToShip: req.body.newFormData.addressId,
-                                total: req.body.newFormData.total
-
-                            }], $position: 0
+                console.log('inside cash on delivery else');
+                if (req.body.newFormData.couponId) {
+                    console.log('inside cash on delivery else == if coupon');
+                    console.log('inside cash on delivery else == if coupon ,couponId', req.body.newFormData.couponId);
+                    await UserModal.updateOne({ _id: req.session.userId }, {
+                        $push: {
+                            orders: {
+                                $each: [{
+                                    product: req.body.newFormData.productData,
+                                    modeOfPayment: req.body.newFormData.modeOfPayment,
+                                    addressToShip: req.body.newFormData.addressId,
+                                    total: req.body.newFormData.total,
+                                    couponId: req.body.newFormData.couponId
+                                }], $position: 0
+                            }
                         }
-                    }
-                })
+                    })
+                } else {
+                    console.log('inside cash on delivery else == else no coupon');
+                    await UserModal.updateOne({ _id: req.session.userId }, {
+                        $push: {
+                            orders: {
+                                $each: [{
+                                    product: req.body.newFormData.productData,
+                                    modeOfPayment: req.body.newFormData.modeOfPayment,
+                                    addressToShip: req.body.newFormData.addressId,
+                                    total: req.body.newFormData.total
+
+                                }], $position: 0
+                            }
+                        }
+                    })
+                }
             }
 
 

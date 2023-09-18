@@ -143,7 +143,8 @@ const User = mongoose.Schema({
         review: String,
         addressToShip: ObjectId,
         razorpay_payment_id:String,
-        razorpay_order_id:String
+        razorpay_order_id:String,
+        couponId:ObjectId
     }],
     wallet:[{
         transaction:{

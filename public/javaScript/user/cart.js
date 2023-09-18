@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('Failed to process products.');
                 }
             } catch (error) {
-                console.error(error);
+                console.log(error);
             }
         }
     });
