@@ -22,7 +22,7 @@
                             <h5>Status</h5>
                         </div>
                         <div class="col-2">
-                            <h5>Cancell</h5>
+                            <h5>Cancell/Return</h5>
                         </div>
 
 
@@ -57,9 +57,12 @@
                                         Cancellde By You
                                         <% } else if(locals.orders.orders[i].status==="cancelledByAdmin" ) {%>
                                             Cancellde By Admin
-                                            <% } else{%>
-                                                <%=locals.orders.orders[i].status%>
-                                                    <% } %>
+                                            <% } else if(locals.orders.orders[i].status==="returnInProgress" ) {%>
+                                                Return In Progress
+
+                                                <% } else{%>
+                                                    <%=locals.orders.orders[i].status%>
+                                                        <% } %>
                                 </h6>
                             </div>
                             <div class="col-2">
@@ -68,13 +71,23 @@
                                     <button data-orderid="<%=locals.orders.orders[i]._id %>" name="CancellButton"
                                         class="btn btn-danger text-dark  " disabled>Cancelled</button>
                                     <% }else if(locals.orders.orders[i].status==="delivered" ){%>
-                                        <button data-orderid="<%=locals.orders.orders[i]._id %>" name="CancellButton"
-                                            class="btn btn-success  text-dark  " disabled>Delivered</button>
-                                        <%}else { %>
+                                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                         data-bs-whatever="@getbootstrap" data-orderid="<%=locals.orders.orders[i]._id %>"
+                                         name="Delivered"
+                                            class="btn btn-success    text-dark  ">Return</button>
+                                        <% }else if(locals.orders.orders[i].status==="returnInProgress" ){%>
                                             <button data-orderid="<%=locals.orders.orders[i]._id %>"
-                                                name="CancellButton" class="btn btn-light ">Cancell</button>
-                                            <% } %>
-                                                <!-- <button type="button" data-orderid="<%=locals.orders.orders[i]._id %>"
+                                                name="returnInProgress" class="btn btn-warning    text-dark"
+                                                disabled>Return in Progress</button>
+
+                                            <% }else if(locals.orders.orders[i].status==="returned" ){%>
+                                                <button data-orderid="<%=locals.orders.orders[i]._id %>" name="Returned"
+                                                    class="btn btn-danger   text-dark  " disabled>Returned</button>
+                                                <%}else { %>
+                                                    <button data-orderid="<%=locals.orders.orders[i]._id %>"
+                                                        name="CancellButton" class="btn btn-light ">Cancell</button>
+                                                    <% } %>
+                                                        <!-- <button type="button" data-orderid="<%=locals.orders.orders[i]._id %>"
                                         name="CancellButton" class="btn btn-light " data-bs-toggle="tooltip"
                                         data-bs-placement="top" data-bs-custom-class="custom-tooltip"
                                         data-bs-title="This top tooltip is themed via CSS variables.">Cancelle</button> -->
@@ -86,6 +99,38 @@
                     </div>
                     <% } %>
                         <% } %>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Return</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form name="submitReturn">
+          <div class="mb-3">
+            <input name="orderId" id="submitReturnInput" type="hidden">
+            <label for="message-text" class="col-form-label">Reason:</label>
+            <textarea name="returnMessage" class="form-control" id="message-text" required></textarea>
+            <label for="modeOfRefund" class="col-form-label">What Action Do You Want To Choose</label>
+            <select name="modeOfRefund" class="form-select " id="modeOfRefund">
+                <option value="default">Choose An Action</option>
+                <option value="addToWallet">Add To Wallet</option>
+                <option value="transferToAccount">Transfer To Account</option>
+                <option value="ReplaceTheItem">Replace The Item</option>
+                </select>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/javaScript/user/header.js"></script>

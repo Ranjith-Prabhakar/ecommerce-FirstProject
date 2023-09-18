@@ -46,6 +46,7 @@ router.post('/orderPlacement',userSessionHandler,userValidation,userController.p
 router.get('/orders',userSessionHandler,userValidation,userController.getOrders)
 router.get('/orderSinglePage',userSessionHandler,userValidation,userController.getOrderSinglePage)
 router.post('/cancellOrder',userSessionHandler,userValidation,userController.postCancellOrder)
+router.post('/orderReturnRequest',userSessionHandler,userValidation,userController.postOrderReturnRequest)
 
 //razor pay
 router.post("/razorPayCreateOrder",userSessionHandler,userValidation,userController.postRazorPayCreateOrder)

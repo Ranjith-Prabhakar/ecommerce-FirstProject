@@ -952,7 +952,7 @@ const getOrders = async (req, res, next) => {
         let brands = await BrandModal.distinct('brandName')
         const user = await UserModal.findOne({ _id: req.session.userId })
         const orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: true })
-        console.log(orders);
+       
         res.render('./users/order', { orders, brands, user });
     } catch (error) {
         errorHandler(error, req, res, next)
@@ -1023,8 +1023,7 @@ const getOrderSinglePage = async (req, res, next) => {
         let orderId = req.query.Id;
         let orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: 1 }).lean();
         let order = orders.orders.find((order) => order._id.toString() === orderId.toString());
-        console.log("order", order);
-        console.log("order.product", order.product);
+     
 
         let completeData = await Promise.all(order.product.map(async (products) => {
             try {
@@ -1049,12 +1048,9 @@ const getOrderSinglePage = async (req, res, next) => {
         }));
 
         const addressToShip = user.shippingAddress.find((shippingAddress) => shippingAddress._id.toString() === order.addressToShip.toString())
-        console.log("completeData", completeData);
 
 
-        console.log("order.product (after populating)", order.product);
-        console.log(order.addressToShip);
-        console.log("addressToShip", addressToShip);
+      
 
         res.render('./users/orderSinglePage', { order: completeData, addressToShip, brands, user });
     } catch (error) {
@@ -1091,6 +1087,35 @@ const postCancellOrder = async (req, res, next) => {
         errorHandler(error, req, res, next);
     }
 };
+
+const postOrderReturnRequest = async (req, res, next) => {
+    try {
+
+        const userId = req.session.userId;
+        const { orderId, returnMessage,modeOfRefund } = req.body.newFormData
+        console.log("returnMessage", returnMessage);
+
+         await UserModal.updateOne(
+            {
+                _id: userId,
+                'orders._id': orderId // Find the user by ID and match the order with the specified orderId
+            },
+            {
+                $set: {
+                    'orders.$.status': 'returnInProgress', // Update the status of the matched order
+                    'orders.$.returnMessage': returnMessage,
+                    'orders.$.modeOfRefund': modeOfRefund
+                }
+            }
+        );
+        res.status(200).json({ success: true });
+
+    } catch (error) {
+        errorHandler(error, req, res, next)
+
+    }
+}
+
 
 const postRazorPayCreateOrder = async (req, res, next) => {
     try {
@@ -1161,5 +1186,6 @@ module.exports = {
     getOrders,
     getOrderSinglePage,
     postCancellOrder,
+    postOrderReturnRequest,
     postRazorPayCreateOrder
 }

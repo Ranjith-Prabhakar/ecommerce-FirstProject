@@ -136,7 +136,7 @@ const User = mongoose.Schema({
         coupon: String,
         status: {
             type: String,
-            enum: ['placed','cancelledByAdmin', 'cancelledByClient', 'packed','inTransit',"deliverd"],
+            enum: ['placed','cancelledByAdmin', 'cancelledByClient', 'packed','inTransit',"deliverd","returnInProgress","returned"],
             default: 'placed'
         },
         rating: String,
@@ -144,7 +144,9 @@ const User = mongoose.Schema({
         addressToShip: ObjectId,
         razorpay_payment_id:String,
         razorpay_order_id:String,
-        couponId:ObjectId
+        couponId:ObjectId,
+        returnMessage:String,
+        modeOfRefund:String
     }],
     wallet:[{
         transaction:{
