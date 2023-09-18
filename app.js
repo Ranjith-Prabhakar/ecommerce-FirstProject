@@ -19,6 +19,7 @@ const brandRoute = require('./routes/brandRoute')
 const productRoute = require('./routes/productRoute')
 const orderRoute = require('./routes/orderRoute')
 const couponRoute = require('./routes/couponRoute')
+const returnRoute = require('./routes/returnRoute')
 //importing scheduling middleware
 const couponExpiryMiddleWare = require('./middleWare/couponExpiry')
 //activation of coupon scheduling using corn
@@ -75,6 +76,7 @@ app.use(userManagementRoute)
 app.use(productRoute)
 app.use(orderRoute)
 app.use(couponRoute)
+app.use(returnRoute)
 
 
 

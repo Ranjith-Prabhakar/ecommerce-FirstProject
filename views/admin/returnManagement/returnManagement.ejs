@@ -1,0 +1,95 @@
+<%- include('../../layout/admin/header') %>
+    <%- include('../../layout/admin/generalManagement') %>
+        <% locals.returnReq || "" %>
+
+            <div class="col">
+                <% if(locals.returnReq.length) {%>
+                    <table class="table table-dark table-striped">
+                        <thead>
+                            <tr>
+                                <td>User Name</td>
+                                <td>Order Id</td>
+                                <td>Ordered Date</td>
+                                <td>Total</td>
+                                <td>Reason</td>
+                                <td>Mode Of Refund</td>
+                                <td>Confirm</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <% locals.returnReq.forEach(order=>{%>
+                                <tr>
+                                    <td>
+                                        <%=order.firstName.charAt(0).toUpperCase() +
+                                            order.firstName.slice(1).toLowerCase() + " "
+                                            +order.lastName.charAt(0).toUpperCase() +
+                                            order.lastName.slice(1).toLowerCase() %>
+                                    </td>
+                                    <td>
+                                        <%=order.orders._id %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(order.orders.orderDate).toLocaleDateString('en-US', {
+                                            weekday: 'short' , month: 'short' , day: 'numeric' , year: 'numeric' }) %>
+                                    </td>
+                                    <td>
+                                        <%=order.orders.total %>
+                                    </td>
+                                    <td>
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                            name="returnMessage" data-returnMessage="<%=order.orders.returnMessage %>"
+                                            class="btn btn-primary ">Click To Read</button>
+                                    </td>
+                                    <td>
+                                        <%=order.orders.modeOfRefund %>
+                                    </td>
+                                    <td>
+                                        <button name="confirmReturn" class="btn btn-success "
+                                        data-userId="<%=order._id %>"
+                                        data-orderId="<%=order.orders._id %>"
+                                        data-mode-of-refund="<%=order.orders.modeOfRefund %>"
+                                        data-amout="<%=order.orders.total %>"
+                                        >
+                                            Confirm
+                                        </button>
+                                    </td>
+                                </tr>
+                                <%}) %>
+                                    <% } else{%>
+                                        <div class="alert alert-danger w-50  text-center " role="alert">
+                                            No Return Requests To Show
+                                        </div>
+                                        <% } %>
+
+                        </tbody>
+                    </table>
+
+            </div>
+
+            </div>
+            </div>
+
+            <!-- Button trigger modal -->
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div id="returnMessageModalDiv" class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="/javaScript/admin/returnManagement.js"></script>
+            <%- include('../../layout/admin/footer') %>

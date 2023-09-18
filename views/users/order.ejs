@@ -71,9 +71,9 @@
                                     <button data-orderid="<%=locals.orders.orders[i]._id %>" name="CancellButton"
                                         class="btn btn-danger text-dark  " disabled>Cancelled</button>
                                     <% }else if(locals.orders.orders[i].status==="delivered" ){%>
-                                        <button type="button"  data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                         data-bs-whatever="@getbootstrap" data-orderid="<%=locals.orders.orders[i]._id %>"
-                                         name="Delivered"
+                                        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                            data-bs-whatever="@getbootstrap"
+                                            data-orderid="<%=locals.orders.orders[i]._id %>" name="Delivered"
                                             class="btn btn-success    text-dark  ">Return</button>
                                         <% }else if(locals.orders.orders[i].status==="returnInProgress" ){%>
                                             <button data-orderid="<%=locals.orders.orders[i]._id %>"
@@ -101,36 +101,42 @@
                         <% } %>
 
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Return</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form name="submitReturn">
-          <div class="mb-3">
-            <input name="orderId" id="submitReturnInput" type="hidden">
-            <label for="message-text" class="col-form-label">Reason:</label>
-            <textarea name="returnMessage" class="form-control" id="message-text" required></textarea>
-            <label for="modeOfRefund" class="col-form-label">What Action Do You Want To Choose</label>
-            <select name="modeOfRefund" class="form-select " id="modeOfRefund">
-                <option value="default">Choose An Action</option>
-                <option value="addToWallet">Add To Wallet</option>
-                <option value="transferToAccount">Transfer To Account</option>
-                <option value="ReplaceTheItem">Replace The Item</option>
-                </select>
-          </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </div>
-    </form>
-    </div>
-  </div>
-</div>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Return</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form name="submitReturn">
+                                                <div class="mb-3">
+                                                    <input name="orderId" id="submitReturnInput" type="hidden">
+                                                    <label for="message-text" class="col-form-label">Reason:</label>
+                                                    <textarea name="returnMessage" class="form-control"
+                                                        id="message-text" required></textarea>
+                                                    <label for="modeOfRefund" class="col-form-label">What Action Do You
+                                                        Want To Choose</label>
+                                                    <select name="modeOfRefund" class="form-select " id="modeOfRefund"
+                                                        required>
+                                                    
+                                                        <option value="addToWallet">Add To Wallet</option>
+                                                        <option value="transferToAccount">Transfer To Account</option>
+                                                        <option value="ReplaceTheItem">Replace The Item</option>
+                                                    </select>
+                                                </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/javaScript/user/header.js"></script>

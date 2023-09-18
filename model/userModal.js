@@ -51,7 +51,7 @@ const User = mongoose.Schema({
 
     shippingAddress: [{
 
-        name:{
+        name: {
             type: String,
         },
         country: {
@@ -112,50 +112,45 @@ const User = mongoose.Schema({
         productId: ObjectId,
     }],
     orders: [{
-        // orderDate: {
-        //     type: Date,
-        //     default: () => {
-        //         const currentDate = new Date();
-        //         const formattedDate = currentDate.toISOString().split('T')[0];
-        //         return formattedDate;
-        //     }
-        // },
         orderDate: {
             type: Date,
             default: () => new Date().toISOString()
         },
-        
+
         product: [{
             productId: ObjectId,
             orderQuantity: String,
             price: String,
         }],
-        total:String,
+        total: String,
         modeOfPayment: String,
         discount: String,
         coupon: String,
         status: {
             type: String,
-            enum: ['placed','cancelledByAdmin', 'cancelledByClient', 'packed','inTransit',"deliverd","returnInProgress","returned"],
+            enum: ['placed', 'cancelledByAdmin', 'cancelledByClient', 'packed', 'inTransit', "deliverd", "returnInProgress", "returned"],
             default: 'placed'
         },
         rating: String,
         review: String,
         addressToShip: ObjectId,
-        razorpay_payment_id:String,
-        razorpay_order_id:String,
-        couponId:ObjectId,
-        returnMessage:String,
-        modeOfRefund:String
+        razorpay_payment_id: String,
+        razorpay_order_id: String,
+        couponId: ObjectId,
+        returnMessage: String,
+        modeOfRefund: String
     }],
-    wallet:[{
-        transaction:{
-            type:String,
-            enum:['Debit',"Credit"]
-        },
-        amount:Number,
-        balance:Number
-    }]
+    wallet: {
+            balance:{type: Number,default:0},
+            transaction: [{
+                type: {
+                    type: String,
+                    enum: ['debit', "credit"]
+                },
+                amount: Number,
+            }]
+
+        }
 
 })
 

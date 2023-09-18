@@ -330,14 +330,14 @@ const postUserLogOut = (req, res, next) => {
 
             delete req.session.userId;
             res.clearCookie('userId')
-            res.redirect('/home')
+            res.redirect('/')
         } else {
             req.session.destroy((err) => {
                 if (err) {
                     console.log(err.message);
                 } else {
                     res.clearCookie('userId')
-                    res.redirect('/home')
+                    res.redirect('/')
                 }
             })
         }
