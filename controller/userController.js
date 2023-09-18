@@ -758,7 +758,7 @@ const getCheckOutPage = async (req, res, next) => {
             res.render('./users/checkOutPage', { productList, user, brands, coupons });
         } else if (req.query.cart) {//cart
             console.log("cart", req.query.cart);
-            let coupons = [{ hello: true }]// this has to delete and make correct because it is a dummy
+            let coupons = {}
             const user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             const cart = user.cart;
@@ -771,8 +771,8 @@ const getCheckOutPage = async (req, res, next) => {
                 cart.forEach((cart) => {
 
                     if (cart.productId.equals(product._id)) {
-                        let orderQuantity = cart.quantity
-                        product.orderQuantity = orderQuantity
+                        
+                        product.orderQuantity = cart.quantity
                     }
                 })
                 return product
@@ -785,35 +785,38 @@ const getCheckOutPage = async (req, res, next) => {
             const priceCoupon = await CouponModal.find({ active: true, criteria: 'price' })
             console.log("productList", productList);
             console.log("priceCoupon", priceCoupon);
+            // let sessionProductList = req.session.productList //because
+            let total = productList.reduce((sum, productListElement) => {
+                let orderQuantity = productListElement.orderQuantity;
+                let unitPrice = productListElement.unitPrice;
 
-            // let total = productList.reduce((sum, productListElement) => {
-            //     let orderQuantity = productListElement.orderQuantity;
-            //     let unitPrice = productListElement.unitPrice;
+                // Check if orderQuantity and unitPrice are defined and not empty
+                if (orderQuantity && unitPrice) {
+                    orderQuantity = orderQuantity;
+                    unitPrice = unitPrice;
 
-            //     // Check if orderQuantity and unitPrice are defined and not empty
-            //     if (orderQuantity && unitPrice) {
-            //         orderQuantity = parseFloat(orderQuantity.trim());
-            //         unitPrice = parseFloat(unitPrice.trim());
+                    // Check if the parsing was successful and both values are numbers
+                    if (!isNaN(orderQuantity) && !isNaN(unitPrice)) {
+                        return sum + (orderQuantity * unitPrice);
+                    }
+                }
 
-            //         // Check if the parsing was successful and both values are numbers
-            //         if (!isNaN(orderQuantity) && !isNaN(unitPrice)) {
-            //             return sum + (orderQuantity * unitPrice);
-            //         }
-            //     }
+                // If any check fails, return the current sum without adding anything
+                return sum;
+            }, 0);
 
-            //     // If any check fails, return the current sum without adding anything
-            //     return sum;
-            // }, 0);
+            console.log(total);
+            let matchingPriceCoupons = priceCoupon.filter((priceCoupon) => {
+               return priceCoupon.amountRange < total
+            })
+            let matchingPriceCouponsFiltered = matchingPriceCoupons.reduce((max,obj)=>{
+                return obj.amountRange > max.amountRange ? obj : max
+            },priceCoupon[0])
 
-            // console.log(total);
-            // let matchingPriceCoupons = priceCoupon.filter((priceCoupon) => {
-            //    return priceCoupon.amountRange < total
-            // })
-
-            // console.log("priceCoupon priceCoupon.amountRange", priceCoupon[0].amountRange);
-            // console.log("priceCoupon priceCoupon.amountRange type of ", typeof priceCoupon[0].amountRange);
-            // console.log("matchingPriceCoupons", matchingPriceCoupons);
-            // coupons.priceCoupons = matchingPriceCoupons
+            console.log("priceCoupon priceCoupon.amountRange", priceCoupon[0].amountRange);
+            console.log("priceCoupon priceCoupon.amountRange type of ", typeof priceCoupon[0].amountRange);
+            console.log("matchingPriceCoupons", matchingPriceCoupons);
+            coupons.priceCoupons = [matchingPriceCouponsFiltered]
 
             console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
             res.render('./users/checkOutPage', { productList, user, brands, coupons });
