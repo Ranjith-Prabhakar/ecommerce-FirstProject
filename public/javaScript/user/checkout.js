@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    //radio button 
+    //address radio button  
     const radioButtons = document.querySelectorAll('input[name="selectAddress"]');
 
 
@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectCoupon = document.querySelectorAll(".selectCoupon");
     let myModal = document.getElementById('staticBackdrop');
     let valueAfterCoupon = document.getElementById('valueAfterCoupon');
-    let singleProductUnitPriceElement = document.getElementById('singleProductUnitPrice'); // Rename this variable
+    let singleProductUnitPriceElement = document.getElementById('singleProductUnitPrice'); 
     let cartSumElement = document.getElementById('cartSum')
     selectCoupon.forEach(selectCoupon => {
         selectCoupon.addEventListener('click', (event) => {
@@ -240,7 +240,7 @@ document.addEventListener("DOMContentLoaded", () => {
             let couponId = event.target.getAttribute('data-coupon-id')
             couponValue = parseFloat(couponValue);
             if (singleProductUnitPriceElement) {
-                let singleProductUnitPrice = parseFloat(singleProductUnitPriceElement.innerText); // Parse the value here
+                let singleProductUnitPrice = parseFloat(singleProductUnitPriceElement.innerText);
                 let adjustedValue = singleProductUnitPrice - couponValue;
                 valueAfterCoupon.innerText = adjustedValue.toFixed(2); // Convert to fixed decimal for display
                 valueAfterCoupon.setAttribute('data-coupon-id',couponId)
@@ -371,16 +371,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     ///order placement
     const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')
-
     const paymentOptionForm = document.forms.paymentOption
-
-    console.log("paymentOptionForm", paymentOptionForm);
     paymentOptionForm.addEventListener('submit', async (event) => {
         event.preventDefault()
         let newFormData = {}
         for (let i = 0; i < radioButtons.length; i++) { // radioButtons is the variable created above
             if (radioButtons[i].checked === true) {
-
                 for (let j = 0; j < placeOrder.length; j++) {
                     let formData = document.forms["addressList" + i]
                     let formObject = new FormData(formData)
@@ -388,8 +384,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         newFormData[key] = value
                     }
                     if (placeOrder[j].checked === true) {
-
-
                         newFormData.modeOfPayment = placeOrder[j].id
                         newFormData.productData = []
                         newFormData.total = 0
@@ -402,55 +396,38 @@ document.addEventListener("DOMContentLoaded", () => {
                             newFormData.productData[0] = {
                                 productId: productId,
                                 price: productPrice,
-
                                 orderQuantity: order_Quantity
                             }
                             if (price) {
                                 newFormData.total = price
                                 newFormData.couponId = valueAfterCoupon.getAttribute('data-coupon-id')
                             } else {
-
                                 newFormData.total = productPrice
                             }
-
                         } else {
                             let productList = document.getElementsByClassName('productList')
-
                             let price = parseFloat(valueAfterCoupon.innerText)
                             for (i = 0; i < productList.length; i++) {
                                 let head4 = document.getElementById('orderQuantity' + i)
-
-
                                 newFormData.productData.unshift({
                                     productId: head4.getAttribute('data-productId'),
                                     price: head4.getAttribute('data-product-price'),
                                     orderQuantity: head4.firstElementChild.innerText
                                 })
-
                                 if (price) {
                                     newFormData.total = price
                                     newFormData.couponId = valueAfterCoupon.getAttribute('data-coupon-id')
                                 } else {
-    
                                     newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
                                 }
-
-                                // newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
-                                console.log("newFormData.productData", newFormData.productData);
                             }
-
                         }
-                        console.log("newFormData", newFormData);
-
                         break
                     }
-
                 }
-
             }
         }
         if (!newFormData.country) {
-            // alert("select an address for deliver ")
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -458,7 +435,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 footer: '<a href="">Why do I have this issue?</a>'
             })
         } else if (!newFormData.modeOfPayment) {
-            // alert("select the mode of payment ")
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -468,18 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         else {
             try {
-
-                console.log("newFormData", newFormData);
                 if (newFormData.modeOfPayment === "onlinePayment") {
-
-
-
-
-                    // $('.pay-form').submit(function(e){
-                    //     e.preventDefault();
-
-                    // var formData = $(this).serialize();
-
                     $.ajax({
                         url: "/razorPayCreateOrder",
                         type: "POST",
@@ -495,12 +460,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                     "image": "https://dummyimage.com/600x400/000/fff",
                                     "order_id": "" + res.order_id + "",
                                     "handler": async function (response) {
-
-
                                         newFormData.razorpay_payment_id = response.razorpay_payment_id
                                         newFormData.razorpay_order_id = response.razorpay_order_id
-
-                                        console.log("newFormData", newFormData);
                                         const success = await fetch('/orderPlacement', {
                                             method: 'post',
                                             headers: {
@@ -518,11 +479,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                             setTimeout(function () {
                                                 window.location.href = '/orders'
                                             }, 2000);
-
-
                                         }
-
-
                                     },
                                     "prefill": {
                                         "contact": "" + res.contact + "",
@@ -547,13 +504,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                         }
                     })
-
-                    // });
-
-
-
-
-
                 } else if (newFormData.modeOfPayment === "cashOnDelivery") {
                     const response = await fetch('/orderPlacement', {
                         method: 'post',
@@ -572,20 +522,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         setTimeout(function () {
                             window.location.href = '/orders'
                         }, 2000);
-
-
                     }
                 }
-
-
             } catch (error) {
                 console.log(error.message);
             }
-
         }
-
-
     })
-
-
 })

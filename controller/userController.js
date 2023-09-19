@@ -670,15 +670,12 @@ const getCheckOutPage = async (req, res, next) => {
             let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
             let coupons = {}
             const productCoupon = await CouponModal.find({ active: true, criteria: 'product' })
-
             if (productCoupon) {
                 let productValidation = productCoupon.find(productCoupon => productCoupon.product === singleProduct.productName)
-                console.log("productValidation", productValidation);
                 if (productValidation) {
                     coupons.productCoupon = productValidation
                 } else {
                     const brandCoupon = await CouponModal.find({ active: true, criteria: 'brand' })
-                    console.log("inner brandCoupon", brandCoupon);
                     let brandValidation = brandCoupon.find(brandCoupon => brandCoupon.brand === singleProduct.brandName)
                     if (brandValidation) {
                         coupons.brandCoupon = brandValidation
@@ -686,9 +683,7 @@ const getCheckOutPage = async (req, res, next) => {
                 }
             } else {
                 const brandCoupon = await CouponModal.find({ active: true, criteria: 'brand' })
-                console.log("brandCoupon", brandCoupon);
                 let brandValidation = brandCoupon.find(brandCoupon => brandCoupon.brand === singleProduct.brandName)
-                console.log("brandValidation", brandValidation);
                 if (brandValidation) {
                     coupons.brandCoupon = brandValidation
                 }
@@ -698,15 +693,11 @@ const getCheckOutPage = async (req, res, next) => {
             res.render('./users/checkOutPage', { singleProduct, user, brands, coupons });
             req.query.productId = '';
         } else if (req.session.selectedProducts && req.session.selectedProducts.length) {//selected cart
-
-
-
             let coupons = {}
             let user = await UserModal.findOne({ _id: req.session.userId })
             let brands = await BrandModal.distinct('brandName')
             let productIds = req.session.selectedProducts.map((product) => product.productId);
             let matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
-
             let productList = matchingProducts.map((product) => {
                 let selectedProduct = req.session.selectedProducts.find((selected) => selected.productId === product._id.toString());
                 if (selectedProduct) {
@@ -718,73 +709,47 @@ const getCheckOutPage = async (req, res, next) => {
                     return product.toObject();
                 }
             });
-
-
             req.session.selectedProducts.length = 0;
             req.session.productList = productList
-            // 
-
             const priceCoupon = await CouponModal.find({ active: true, criteria: 'price' })
-            console.log("priceCoupon", priceCoupon);
-
             let total = productList.reduce((sum, productListElement) => {
                 let orderQuantity = productListElement.orderQuantity;
                 let unitPrice = productListElement.unitPrice;
-
                 // Check if orderQuantity and unitPrice are defined and not empty
                 if (orderQuantity && unitPrice) {
                     orderQuantity = parseFloat(orderQuantity.trim());
                     unitPrice = parseFloat(unitPrice.trim());
-
                     // Check if the parsing was successful and both values are numbers
                     if (!isNaN(orderQuantity) && !isNaN(unitPrice)) {
                         return sum + (orderQuantity * unitPrice);
                     }
                 }
-
                 // If any check fails, return the current sum without adding anything
                 return sum;
             }, 0);
-
-            console.log(total);
             let matchingPriceCoupons = priceCoupon.filter((priceCoupon) => {
                 return priceCoupon.amountRange < total
             })
-
-            console.log("priceCoupon priceCoupon.amountRange", priceCoupon[0].amountRange);
-            console.log("priceCoupon priceCoupon.amountRange type of ", typeof priceCoupon[0].amountRange);
-            console.log("matchingPriceCoupons", matchingPriceCoupons);
             coupons.priceCoupons = matchingPriceCoupons
             res.render('./users/checkOutPage', { productList, user, brands, coupons });
         } else if (req.query.cart) {//cart
-            console.log("cart", req.query.cart);
             let coupons = {}
             const user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             const cart = user.cart;
             const productIds = cart.map((item) => item.productId);
-
             const matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
-
-
             let productList = matchingProducts.map((product) => {
                 cart.forEach((cart) => {
-
                     if (cart.productId.equals(product._id)) {
-                        
                         product.orderQuantity = cart.quantity
                     }
                 })
                 return product
             })
-
-
             req.query.cart = false;
             req.session.productList = productList
-
             const priceCoupon = await CouponModal.find({ active: true, criteria: 'price' })
-            console.log("productList", productList);
-            console.log("priceCoupon", priceCoupon);
             // let sessionProductList = req.session.productList //because
             let total = productList.reduce((sum, productListElement) => {
                 let orderQuantity = productListElement.orderQuantity;
@@ -805,20 +770,12 @@ const getCheckOutPage = async (req, res, next) => {
                 return sum;
             }, 0);
 
-            console.log(total);
             let matchingPriceCoupons = priceCoupon.filter((priceCoupon) => {
                return priceCoupon.amountRange < total
             })
             let matchingPriceCouponsFiltered = matchingPriceCoupons.reduce((max,obj)=>{
                 return obj.amountRange > max.amountRange ? obj : max
             },priceCoupon[0])
-
-            console.log("priceCoupon priceCoupon.amountRange", priceCoupon[0].amountRange);
-            console.log("priceCoupon priceCoupon.amountRange type of ", typeof priceCoupon[0].amountRange);
-            console.log("matchingPriceCoupons", matchingPriceCoupons);
-            coupons.priceCoupons = [matchingPriceCouponsFiltered]
-
-            console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
             res.render('./users/checkOutPage', { productList, user, brands, coupons });
         }
     } catch (error) {
@@ -841,12 +798,8 @@ const postBuySelectedProducts = (req, res, next) => {
 const postOrderPlacement = async (req, res, next) => {
     try {
         if (req.body.newFormData) {
-
-            console.log(req.body.newFormData);
             if (req.body.newFormData.razorpay_payment_id && req.body.newFormData.razorpay_order_id) {
-                console.log('inside if razore');
                 if (req.body.newFormData.couponId) {
-                    console.log('inside if first razor');
                     await UserModal.updateOne({ _id: req.session.userId }, {
                         $push: {
                             orders: {
@@ -863,7 +816,6 @@ const postOrderPlacement = async (req, res, next) => {
                         }
                     })
                 } else {
-                    console.log('inside else first razor');
                     await UserModal.updateOne({ _id: req.session.userId }, {
                         $push: {
                             orders: {
@@ -882,10 +834,7 @@ const postOrderPlacement = async (req, res, next) => {
 
 
             } else {
-                console.log('inside cash on delivery else');
                 if (req.body.newFormData.couponId) {
-                    console.log('inside cash on delivery else == if coupon');
-                    console.log('inside cash on delivery else == if coupon ,couponId', req.body.newFormData.couponId);
                     await UserModal.updateOne({ _id: req.session.userId }, {
                         $push: {
                             orders: {
@@ -900,7 +849,6 @@ const postOrderPlacement = async (req, res, next) => {
                         }
                     })
                 } else {
-                    console.log('inside cash on delivery else == else no coupon');
                     await UserModal.updateOne({ _id: req.session.userId }, {
                         $push: {
                             orders: {
