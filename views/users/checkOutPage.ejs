@@ -249,9 +249,18 @@
                             <input type="radio" id="cashOnDelivery" name="paymentMethod"
                                 class="me-2 form-check-input "><label for="cashOnDelivery">Cash On
                                 Delivery</label><br>
+
                             <input type="radio" id="onlinePayment" name="paymentMethod"
                                 class="me-2 form-check-input"><label for="onlinePayment">UPI</label><br>
-                            <input class="mt-2 btn btn-light " type="submit" value="Place Order">
+                            <% if(locals.user.wallet.balance){%>
+                                <input type="radio" id="wallet" name="paymentMethod" class="me-2 form-check-input"
+                                    data-bs-toggle="modal" data-bs-target="#walletModal"
+                                    data-wallet-balance="<%=locals.user.wallet.balance%>"><label id="walletLabel"
+                                    for="wallet">Wallet</label><br>
+                                <%}%>
+
+
+                                    <input class="mt-2 btn btn-light " type="submit" value="Place Order">
                         </form>
                     </div>
                     <div class="col">
@@ -263,6 +272,12 @@
                             </button>
                             <br>
                             <button id="valueAfterCoupon" class="btn btn-warning  mt-3 d-none"></button>
+                            <br>
+                            <button class="btn btn-primary mt-3 ">
+                                Total : <span id="cartSum">
+                                    <%=singleProduct.unitPrice %>
+                                </span>
+                            </button>
                             <%}else{%>
                                 <button type="button" class="btn btn-success  mt-3  " data-bs-toggle="modal"
                                     data-bs-target="#staticBackdrop">
@@ -272,7 +287,7 @@
                                 <button id="valueAfterCoupon" class="btn btn-warning  mt-3 d-none"></button>
                                 <br>
                                 <button class="btn btn-primary mt-3 ">
-                                    Total<span id="cartSum">
+                                    Total : <span id="cartSum">
                                         <%=sum %>
                                     </span>
                                 </button>
@@ -286,7 +301,7 @@
 
 
 
-            <!-- Modal -->
+            <!-- Modal for coupon-->
             <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable">
@@ -301,12 +316,14 @@
                             <% if(locals.singleProduct) {%>
                                 <% locals. coupons.productCoupon || "" %>
                                     <%if(locals.coupons.productCoupon){%>
-                                        <li data-coupon-id="<%=locals.coupons.productCoupon._id%>" data-coupon-value="<%=locals.coupons.productCoupon.couponValue%>"
+                                        <li data-coupon-id="<%=locals.coupons.productCoupon._id%>"
+                                            data-coupon-value="<%=locals.coupons.productCoupon.couponValue%>"
                                             class="selectCoupon text-white ">
                                             <%=locals.coupons.productCoupon.couponCode%>
                                         </li>
                                         <%} else if(locals. coupons.brandCoupon){%>
-                                            <li data-coupon-id="<%=locals.coupons.brandCoupon._id%>" data-coupon-value="<%=locals.coupons.brandCoupon.couponValue%>"
+                                            <li data-coupon-id="<%=locals.coupons.brandCoupon._id%>"
+                                                data-coupon-value="<%=locals.coupons.brandCoupon.couponValue%>"
                                                 class="selectCoupon text-white  ">
                                                 <%=locals.coupons.brandCoupon.couponCode%>
                                             </li>
@@ -319,7 +336,8 @@
                                                                 <ul class="list-group">
                                                                     <%locals. coupons.priceCoupons.forEach(priceCoupon=>
                                                                         {%>
-                                                                        <li data-coupon-id="<%=priceCoupon._id%>" data-coupon-value="<%=priceCoupon.couponValue%>"
+                                                                        <li data-coupon-id="<%=priceCoupon._id%>"
+                                                                            data-coupon-value="<%=priceCoupon.couponValue%>"
                                                                             class="selectCoupon text-white list-group-item bg-dark  ">
                                                                             <%= priceCoupon.couponCode%>
                                                                         </li>
@@ -331,13 +349,56 @@
 
                         </div>
                         // <div class="modal-footer">
-                        //     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        //     <button type="button" class="btn btn-primary">Understood</button>
-                        // </div>
+                            // <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            // <button type="button" class="btn btn-primary">Understood</button>
+                            // </div>
                     </div>
 
                 </div>
             </div>
+
+
+            <!-- Modal for wallet-->
+            <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="">
+                                <div class="mb-3">
+                                    <label for="recipient-name" class="col-form-label d-inline ">Balance In
+                                        Wallet: <span id="walletBalance"></span></label>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="recipient-name" class="col-form-label d-inline ">Payable Amount: <span
+                                            id="payableAmount"></span></label>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="recipient-name" class="col-form-label d-inline ">Balance Amount: <span
+                                            id="balanceAmount"></span></label>
+                                </div>
+                                <div>
+                                    <h4>Pay The Balance Using</h4>
+                                </div>
+                                <input type="radio" id="cashOnDeliveryWallet" name="paymentMethodWallet"
+                                    class="me-2 form-check-input "><label for="cashOnDeliveryWallet">Cash On
+                                    Delivery</label><br>
+                                <input type="radio" id="onlinePaymentWallet" name="paymentMethodWallet"
+                                    class="me-2 form-check-input "><label for="onlinePaymentWallet">UPI</label><br>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Send message</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script src="/javaScript/user/header.js"></script>
             <script src="/javaScript/user/checkout.js"></script>

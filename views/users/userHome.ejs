@@ -169,33 +169,48 @@
                                 </div>
                                 <% } %>
 
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination">
-                                            <li class="page-item">
-                                                <a id="prevButton" data-products-count="<%=locals.productsCount%>" class="page-link bg-black" href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">&laquo;</span>
-                                                </a>
-                                            </li>
-                                            <% locals.productsCount || "" %>
-                                                <% if (locals.productsCount) { %>
-                                                    <% for (let i=1; i <=locals.productsCount; i++) { %>
-                                                        <li class="page-item"><a
-                                                                class="paginationCount page-link bg-black" href="">
-                                                                <%= i %>
-                                                            </a></li>
-                                                        <% } %>
-                                                            <% } %>
+
+                                    <div class="container">
+                                        <div class="row ">
+                                            <div class="col d-flex justify-content-center align-content-center mt-5  ">
+
+                                                <nav aria-label="Page navigation example">
+                                                    <ul class="pagination">
+                                                        <li class="page-item">
+                                                            <a id="prevButton"
+                                                                data-products-count="<%=locals.productsCount%>"
+                                                                class="page-link bg-black" href="#"
+                                                                aria-label="Previous">
+                                                                <span  aria-hidden="true">&laquo;</span>
+                                                            </a>
+                                                        </li>
+                                                        <% locals.productsCount || "" %>
+                                                            <% if (locals.productsCount) { %>
+                                                                <% for (let i=1; i <=locals.productsCount; i++) { %>
+                                                                    <li class="page-item"><a
+                                                                            class="paginationCount page-link bg-black"
+                                                                            href="">
+                                                                            <%= i %>
+                                                                        </a></li>
+                                                                    <% } %>
+                                                                        <% } %>
 
 
 
-                                                                <li class="page-item">
-                                                                    <a id="forwardButton" data-products-count="<%=locals.productsCount%>" class="page-link bg-black" href="#"
-                                                                        aria-label="Next">
-                                                                        <span aria-hidden="true">&raquo;</span>
-                                                                    </a>
-                                                                </li>
-                                        </ul>
-                                    </nav>
+                                                                            <li class="page-item">
+                                                                                <a id="forwardButton"
+                                                                                    data-products-count="<%=locals.productsCount%>"
+                                                                                    class="page-link bg-black" href="#"
+                                                                                    aria-label="Next">
+                                                                                    <span
+                                                                                        aria-hidden="true">&raquo;</span>
+                                                                                </a>
+                                                                            </li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>
+                                    </div>
 
 
 

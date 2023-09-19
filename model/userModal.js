@@ -122,10 +122,16 @@ const User = mongoose.Schema({
             orderQuantity: String,
             price: String,
         }],
-        total: String,
+        grossTotal: String,
+        netTotal:String,
+        balanceToSettle:{
+            balance:Number,
+            settledMode:{
+                type:String,
+                enum:['byCash',"upi"]
+            }
+        },
         modeOfPayment: String,
-        discount: String,
-        coupon: String,
         status: {
             type: String,
             enum: ['placed', 'cancelledByAdmin', 'cancelledByClient', 'packed', 'inTransit', "deliverd", "returnInProgress", "returned"],
@@ -137,6 +143,8 @@ const User = mongoose.Schema({
         razorpay_payment_id: String,
         razorpay_order_id: String,
         couponId: ObjectId,
+        couponValue:Number,
+        walletDebit:Number,
         returnMessage: String,
         modeOfRefund: String
     }],

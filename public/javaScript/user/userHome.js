@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', (event) => {
   // pagination count buttons
   let pageNumber = 1
+
   let paginationCount = document.querySelectorAll('.paginationCount');
   for (let i = 0; i < paginationCount.length; i++) {
     paginationCount[i].addEventListener('click', async (event) => {
@@ -15,39 +16,30 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   //pagination prev button
   let prevButton = document.getElementById('prevButton')
+  console.log("prevButton", prevButton);
   prevButton.addEventListener('click', (event) => {
-    event.preventDefault()
-    console.log(prevButton);
-    let productsCount = prevButton.getAttribute('data-products-count')
-    productsCount = parseInt(productsCount)
+    event.preventDefault();
     if (pageNumber > 1) {
-      pageNumber--
+      console.log("pageNumber", pageNumber);
+      pageNumber--;
       window.location.href = `/home/${pageNumber}`;
     }
-
-
-  })
+  });
 
   //pagination forward button
   let forwardButton = document.getElementById('forwardButton')
   forwardButton.addEventListener('click', (event) => {
-    event.preventDefault()
-    let productsCount = forwardButton.getAttribute('data-products-count')
+    event.preventDefault();
+    let productsCount = forwardButton.getAttribute('data-products-count');
+    let parseProductsCount = parseInt(productsCount);
 
-
-    productsCount = parseInt(productsCount)
-
-    if (pageNumber <productsCount) {
-   
-      pageNumber++
+    if (pageNumber < parseProductsCount) {
+      pageNumber++;
+      console.log("pageNumber", pageNumber);
       window.location.href = `/home/${pageNumber}`;
-      
-      
-   
     }
+  });
 
-
-  })
 });
 // console.log("productsCount before ++", productsCount);
 // console.log("pageNumber before ++", pageNumber);
