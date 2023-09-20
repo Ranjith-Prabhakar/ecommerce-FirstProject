@@ -29,7 +29,7 @@ const postConfirmReturn = async (req, res, next) => {
           $set: { "orders.$.status": 'returned' },
           $push: {
             "wallet.transaction": {
-              $each: [{ type: "credit", amount: amount }],
+              $each: [{ typeOfTransaction: "credit", amount: amount }],
               $position: 0 // Insert at the beginning
             }
           },

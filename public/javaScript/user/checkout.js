@@ -270,7 +270,6 @@ document.addEventListener("DOMContentLoaded", () => {
     //click on wallet 
     const wallet = document.getElementById('wallet')
     let spanEl = document.getElementById('walletBalance')
-    let walletBalance = wallet.getAttribute('data-wallet-balance')
     let payableAmountEl = document.getElementById('payableAmount')
     let balanceAmountEl = document.getElementById('balanceAmount')
     let singleProductSum = document.getElementById('singleProductUnitPrice')
@@ -279,57 +278,90 @@ document.addEventListener("DOMContentLoaded", () => {
         singleProductPrice = parseFloat(singleProductUnitPriceElement.innerText) // single product
         console.log("singleProductUnitPriceElement", singleProductUnitPriceElement);
     }
+    if(wallet){
+        let walletBalance = wallet.getAttribute('data-wallet-balance')
+        wallet.addEventListener('click', (event) => {
+            let price = parseFloat(valueAfterCoupon.innerText) // after coupon
+            console.log('price', price);
+            let parseCartSum = 0
+            if (cartSumElement) {
+                parseCartSum = parseFloat(cartSumElement.innerText) // productList
+            }
+    
+            console.log("parseCartSum", parseCartSum);
+            console.log('inside listner');
+            console.log("wallet", wallet);
+            spanEl.innerText = walletBalance
+            if (price) {
+                console.log('inside price');
+                payableAmountEl.innerText = price
+                if (walletBalance > price) {
+                    balanceAmountEl.innerText = 0
+                } else {
+                    balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - price)
+                }
+    
+    
+            } else if (parseCartSum) {
+                console.log('inside parseCartSum');
+                payableAmountEl.innerText = parseCartSum
+                if (walletBalance > parseCartSum) {
+                    balanceAmountEl.innerText = 0
+    
+                } else {
+                    balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - parseCartSum)
+    
+                }
+            }
+            else if (singleProductPrice) {
+                console.log('inside singleProductPrice');
+                payableAmountEl.innerText = singleProductPrice
+                if (walletBalance > singleProductPrice) {
+                    balanceAmountEl.innerText = 0
+                } else {
+                    balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - singleProductPrice)
+                }
+    
+            }
+    
+            if (parseFloat(balanceAmountEl.innerText) > 0) {
+                document.getElementById('balancePayment').classList.remove('d-none')
+                document.getElementById('walletFooter').classList.add('d-none')
+    
+            }
+        })
+    }
+   
 
 
-    wallet.addEventListener('click', (event) => {
-        let price = parseFloat(valueAfterCoupon.innerText) // after coupon
-        console.log('price', price);
-        let parseCartSum = 0
-        if (cartSumElement) {
-            parseCartSum = parseFloat(cartSumElement.innerText) // productList
+   
+
+    // click on pay using wallet button on wallet modal
+    let walletModal = document.getElementById('walletModal')
+    let paymentMethodRadioButtonWallet = document.getElementById('wallet')
+    let payUsingWalletButton = document.getElementById('payUsingWalletButton')
+    payUsingWalletButton.addEventListener('click', (event) => {
+        event.preventDefault()
+        paymentMethodRadioButtonWallet.checked = true
+       
+        cartSumElement.innerText = balanceAmountEl.innerText
+        if (parseFloat(balanceAmountEl.innerText) !== 0) {
+            console.log('inside balanceAmountEl !== 0');
+            cartSumElement.setAttribute('data-wallet-money', `${spanEl.innerText}`)
+        } else {
+            console.log('else of inside balanceAmountEl !== 0');
+            cartSumElement.setAttribute('data-wallet-money', `${payableAmountEl.innerText}`)
         }
 
-        console.log("parseCartSum", parseCartSum);
-        console.log('inside listner');
-        console.log("wallet", wallet);
-        spanEl.innerText = walletBalance
-        if (price) {
-            console.log('inside price');
-            payableAmountEl.innerText = price
-            if (walletBalance > price) {
-                balanceAmountEl.innerText = 0
-            } else {
-                balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - price)
-            }
-
-
-        } else if (parseCartSum) {
-            console.log('inside parseCartSum');
-            payableAmountEl.innerText = parseCartSum
-            if (walletBalance > parseCartSum) {
-                balanceAmountEl.innerText = 0
-
-            } else {
-                balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - parseCartSum)
-
-            }
-        }
-        else if (singleProductPrice) {
-            console.log('inside singleProductPrice');
-            payableAmountEl.innerText = singleProductPrice
-            if (walletBalance > singleProductPrice) {
-                balanceAmountEl.innerText = 0
-            } else {
-                balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - singleProductPrice)
-            }
-
-        }
-
+       
+        $(walletModal).modal('hide');
 
     })
 
+
     // click on cash on delivery button on wallet modal
-    let walletModal = document.getElementById('walletModal')
+
+    // let walletModal = document.getElementById('walletModal')
     let paymentMethodRadioButtonCashOnDelivery = document.getElementById('cashOnDelivery')
     let cashOnDeliveryWallet = document.getElementById('cashOnDeliveryWallet')
     cashOnDeliveryWallet.addEventListener('click', (event) => {
@@ -523,14 +555,15 @@ document.addEventListener("DOMContentLoaded", () => {
                                 price: productPrice,
                                 orderQuantity: order_Quantity,
                                 // 
-                              
+
                             }
                             //   couponId= cartSumElement.getAttribute('data-coupon-id')                               
-                            newFormData.walletDebit= cartSumElement.getAttribute('data-wallet-money')
+                            newFormData.walletDebit = cartSumElement.getAttribute('data-wallet-money')
+                            newFormData.balaceToPay = cartSumElement.innerText
                             if (price) {
                                 newFormData.total = price
                                 newFormData.couponId = valueAfterCoupon.getAttribute('data-coupon-id')
-                                newFormData.couponValue=cartSumElement.getAttribute('data-coupon-value')
+                                newFormData.couponValue = cartSumElement.getAttribute('data-coupon-value')
                             } else {
                                 newFormData.total = productPrice
                             }
@@ -546,11 +579,12 @@ document.addEventListener("DOMContentLoaded", () => {
                                     price: head4.getAttribute('data-product-price'),
                                     orderQuantity: head4.firstElementChild.innerText
                                 })
-                                newFormData.walletDebit= cartSumElement.getAttribute('data-wallet-money')
+                                newFormData.walletDebit = cartSumElement.getAttribute('data-wallet-money')
+                                newFormData.balaceToPay = cartSumElement.innerText
                                 if (price) {
                                     newFormData.total = price
                                     newFormData.couponId = valueAfterCoupon.getAttribute('data-coupon-id')
-                                    newFormData.couponValue=cartSumElement.getAttribute('data-coupon-value')
+                                    newFormData.couponValue = cartSumElement.getAttribute('data-coupon-value')
                                 } else {
                                     newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
                                 }
@@ -640,8 +674,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                         }
                     })
-                } else if (newFormData.modeOfPayment === "cashOnDelivery") {
-                    newFormData.balaceToPay = cartSumElement.innerText
+                } else if (newFormData.modeOfPayment !== "onlinePayment") {
+                    
                     const response = await fetch('/orderPlacement', {
                         method: 'post',
                         headers: {

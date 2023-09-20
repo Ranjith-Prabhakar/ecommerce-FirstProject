@@ -34,7 +34,7 @@
                                             weekday: 'short' , month: 'short' , day: 'numeric' , year: 'numeric' }) %>
                                     </td>
                                     <td>
-                                        <%=order.orders.total %>
+                                        <%=order.orders.netTotal %>
                                     </td>
                                     <td>
                                         <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"
@@ -46,11 +46,9 @@
                                     </td>
                                     <td>
                                         <button name="confirmReturn" class="btn btn-success "
-                                        data-userId="<%=order._id %>"
-                                        data-orderId="<%=order.orders._id %>"
-                                        data-mode-of-refund="<%=order.orders.modeOfRefund %>"
-                                        data-amout="<%=order.orders.total %>"
-                                        >
+                                            data-userId="<%=order._id %>" data-orderId="<%=order.orders._id %>"
+                                            data-mode-of-refund="<%=order.orders.modeOfRefund %>"
+                                            data-amout="<%=order.orders.netTotal %>">
                                             Confirm
                                         </button>
                                     </td>

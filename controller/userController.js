@@ -10,6 +10,7 @@ require('dotenv').config()
 const { errorHandler } = require('../middleWare/errorMiddleWare')
 
 const Razorpay = require('razorpay');
+const userModal = require('../model/userModal')
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
 const razorpayInstance = new Razorpay({
@@ -798,6 +799,15 @@ const postBuySelectedProducts = (req, res, next) => {
 //////
 const postOrderPlacement = async (req, res, next) => {
     try {
+
+        if (req.body.newFormData.walletDebit) {
+            console.log("req.body.newFormData.walletDebit", req.body.newFormData.walletDebit);
+            console.log("req.body.newFormData.walletDebit typeof", typeof req.body.newFormData.walletDebit);
+            console.log("req.body.newFormData.walletDebit typeof", typeof -(parseFloat(req.body.newFormData.walletDebit)));
+            console.log("req.body.newFormData.walletDebit ", -(parseFloat(req.body.newFormData.walletDebit)));
+        }
+
+
         if (req.body.newFormData) {
             if (req.body.newFormData.razorpay_payment_id && req.body.newFormData.razorpay_order_id) {
                 if (req.body.newFormData.couponId) {
@@ -823,6 +833,18 @@ const postOrderPlacement = async (req, res, next) => {
                                     }], $position: 0
                                 }
                             }
+                            
+                        })
+                        await UserModal.updateOne({ _id: req.session.userId }, {
+                            $inc: {
+                                "wallet.balance": -(parseFloat(req.body.newFormData.walletDebit))
+                            },
+                            $push: {
+                                "wallet.transaction": {
+                                  $each: [{ typeOfTransaction: "debit", amount: parseFloat(req.body.newFormData.walletDebit) }],
+                                  $position: 0 // Insert at the beginning
+                                }
+                              }
                         })
                     } else {
                         await UserModal.updateOne({ _id: req.session.userId }, {
@@ -868,6 +890,18 @@ const postOrderPlacement = async (req, res, next) => {
                                     }], $position: 0
                                 }
                             }
+                            
+                        })
+                        await UserModal.updateOne({ _id: req.session.userId }, {
+                            $inc: {
+                                "wallet.balance": -(parseFloat(req.body.newFormData.walletDebit))
+                            },
+                            $push: {
+                                "wallet.transaction": {
+                                  $each: [{ typeOfTransaction: "debit", amount: parseFloat(req.body.newFormData.walletDebit) }],
+                                  $position: 0 // Insert at the beginning
+                                }
+                              }
                         })
                     } else {
                         await UserModal.updateOne({ _id: req.session.userId }, {
@@ -887,7 +921,7 @@ const postOrderPlacement = async (req, res, next) => {
                                         }
                                     }], $position: 0
                                 }
-                            }
+                            },
                         })
                     }
                 }
@@ -898,7 +932,7 @@ const postOrderPlacement = async (req, res, next) => {
                     if (req.body.newFormData.walletDebit) {
 
                         console.log('with coupon and wallet');
-                        console.log("req.body.newFormData",req.body.newFormData);
+                        console.log("req.body.newFormData", req.body.newFormData);
                         await UserModal.updateOne({ _id: req.session.userId }, {
                             $push: {
                                 orders: {
@@ -918,6 +952,19 @@ const postOrderPlacement = async (req, res, next) => {
                                     }], $position: 0
                                 }
                             }
+
+                        })
+                        // +====
+                        await UserModal.updateOne({ _id: req.session.userId }, {
+                            $inc: {
+                                "wallet.balance": -(parseFloat(req.body.newFormData.walletDebit))
+                            },
+                            $push: {
+                                "wallet.transaction": {
+                                  $each: [{ typeOfTransaction: "debit", amount: parseFloat(req.body.newFormData.walletDebit) }],
+                                  $position: 0 // Insert at the beginning
+                                }
+                              }
                         })
                     } else { //////////////
                         await UserModal.updateOne({ _id: req.session.userId }, {
@@ -959,6 +1006,18 @@ const postOrderPlacement = async (req, res, next) => {
                                     }], $position: 0
                                 }
                             }
+                        })
+
+                        await UserModal.updateOne({ _id: req.session.userId }, {
+                            $inc: {
+                                "wallet.balance": -(parseFloat(req.body.newFormData.walletDebit))
+                            },
+                            $push: {
+                                "wallet.transaction": {
+                                  $each: [{ typeOfTransaction: "debit", amount: parseFloat(req.body.newFormData.walletDebit) }],
+                                  $position: 0 // Insert at the beginning
+                                }
+                              }
                         })
                     } else {
                         await UserModal.updateOne({ _id: req.session.userId }, {
@@ -1186,12 +1245,23 @@ const postOrderReturnRequest = async (req, res, next) => {
 }
 
 
+const postWallet = async(req,res,next)=>{
+    try {
+        let wallet = await userModal.findOne({_id:req.session.userId},{_id:0,"wallet.balance":1})
+        console.log(wallet);
+        res.json({wallet})
+    } catch (error) {
+        errorHandler(error,req,res,next)
+        
+    }
+}
+
 const postRazorPayCreateOrder = async (req, res, next) => {
     try {
         console.log('inside postRazorPayCreateOrder');
         console.log('req.body.newFormData.total', req.body.total);
 
-        const amount = req.body.total * 100
+        const amount = req.body.balaceToPay * 100
         const options = {
             amount: amount,
             currency: 'INR',
@@ -1256,5 +1326,6 @@ module.exports = {
     getOrderSinglePage,
     postCancellOrder,
     postOrderReturnRequest,
+    postWallet,
     postRazorPayCreateOrder
 }

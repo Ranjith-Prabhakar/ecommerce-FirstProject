@@ -151,7 +151,7 @@ const User = mongoose.Schema({
     wallet: {
             balance:{type: Number,default:0},
             transaction: [{
-                type: {
+                typeOfTransaction: {
                     type: String,
                     enum: ['debit', "credit"]
                 },

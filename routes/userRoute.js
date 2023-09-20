@@ -48,6 +48,9 @@ router.get('/orderSinglePage',userSessionHandler,userValidation,userController.g
 router.post('/cancellOrder',userSessionHandler,userValidation,userController.postCancellOrder)
 router.post('/orderReturnRequest',userSessionHandler,userValidation,userController.postOrderReturnRequest)
 
+//wallet request for header
+router.post('/wallet',userSessionHandler,userValidation,userController.postWallet)
+
 //razor pay
 router.post("/razorPayCreateOrder",userSessionHandler,userValidation,userController.postRazorPayCreateOrder)
 
