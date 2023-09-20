@@ -777,7 +777,14 @@ const getCheckOutPage = async (req, res, next) => {
             })
             let matchingPriceCouponsFiltered = matchingPriceCoupons.reduce((max, obj) => {
                 return obj.amountRange > max.amountRange ? obj : max
-            }, priceCoupon[0])
+            },priceCoupon[0])
+
+            console.log("priceCoupon priceCoupon.amountRange", priceCoupon[0].amountRange);
+            console.log("priceCoupon priceCoupon.amountRange type of ", typeof priceCoupon[0].amountRange);
+            console.log("matchingPriceCoupons", matchingPriceCoupons);
+            coupons.priceCoupons = [matchingPriceCouponsFiltered]
+
+            console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
             res.render('./users/checkOutPage', { productList, user, brands, coupons });
         }
     } catch (error) {
@@ -799,240 +806,74 @@ const postBuySelectedProducts = (req, res, next) => {
 //////
 const postOrderPlacement = async (req, res, next) => {
     try {
-
-        if (req.body.newFormData.walletDebit) {
-            console.log("req.body.newFormData.walletDebit", req.body.newFormData.walletDebit);
-            console.log("req.body.newFormData.walletDebit typeof", typeof req.body.newFormData.walletDebit);
-            console.log("req.body.newFormData.walletDebit typeof", typeof -(parseFloat(req.body.newFormData.walletDebit)));
-            console.log("req.body.newFormData.walletDebit ", -(parseFloat(req.body.newFormData.walletDebit)));
-        }
-
-
         if (req.body.newFormData) {
+
+            console.log(req.body.newFormData);
             if (req.body.newFormData.razorpay_payment_id && req.body.newFormData.razorpay_order_id) {
                 if (req.body.newFormData.couponId) {
-                    if (req.body.newFormData.walletDebit) {
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $push: {
-                                orders: {
-                                    $each: [{
-                                        product: req.body.newFormData.productData,
-                                        modeOfPayment: req.body.newFormData.modeOfPayment + "AlongWithWallet",
-                                        addressToShip: req.body.newFormData.addressId,
-                                        netTotal: req.body.newFormData.total,
-                                        grossTotal: parseInt(req.body.newFormData.total) + parseInt(req.body.newFormData.couponValue),
-                                        razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
-                                        razorpay_order_id: req.body.newFormData.razorpay_order_id,
-                                        couponId: req.body.newFormData.couponId,
-                                        couponValue: req.body.newFormData.couponValue,
-                                        walletDebit: req.body.newFormData.walletDebit,
-                                        balanceToSettle: {
-                                            balance: 0,
-                                            settledMode: 'upi'
-                                        }
-                                    }], $position: 0
-                                }
+                    console.log('inside if first razor');
+                    await UserModal.updateOne({ _id: req.session.userId }, {
+                        $push: {
+                            orders: {
+                                $each: [{
+                                    product: req.body.newFormData.productData,
+                                    modeOfPayment: req.body.newFormData.modeOfPayment,
+                                    addressToShip: req.body.newFormData.addressId,
+                                    total: req.body.newFormData.total,
+                                    razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
+                                    razorpay_order_id: req.body.newFormData.razorpay_order_id,
+                                    couponId: req.body.newFormData.couponId
+                                }], $position: 0
                             }
-                            
-                        })
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $inc: {
-                                "wallet.balance": -(parseFloat(req.body.newFormData.walletDebit))
-                            },
-                            $push: {
-                                "wallet.transaction": {
-                                  $each: [{ typeOfTransaction: "debit", amount: parseFloat(req.body.newFormData.walletDebit) }],
-                                  $position: 0 // Insert at the beginning
-                                }
-                              }
-                        })
-                    } else {
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $push: {
-                                orders: {
-                                    $each: [{
-                                        product: req.body.newFormData.productData,
-                                        modeOfPayment: req.body.newFormData.modeOfPayment,
-                                        addressToShip: req.body.newFormData.addressId,
-                                        netTotal: req.body.newFormData.total,
-                                        grossTotal: parseInt(req.body.newFormData.total) + parseInt(req.body.newFormData.couponValue),
-                                        razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
-                                        razorpay_order_id: req.body.newFormData.razorpay_order_id,
-                                        couponId: req.body.newFormData.couponId,
-                                        couponValue: req.body.newFormData.couponValue,
-                                        balanceToSettle: {
-                                            balance: 0,
-                                            settledMode: 'upi'
-                                        }
-                                    }], $position: 0
-                                }
-                            }
-                        })
-                    }
+                        }
+                    })
                 } else {
-                    if (req.body.newFormData.walletDebit) {
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $push: {
-                                orders: {
-                                    $each: [{ //////
-                                        product: req.body.newFormData.productData,
-                                        modeOfPayment: req.body.newFormData.modeOfPayment + "AlongWithWallet",
-                                        addressToShip: req.body.newFormData.addressId,
-                                        netTotal: req.body.newFormData.total,
-                                        grossTotal: parseInt(req.body.newFormData.total),
-                                        razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
-                                        razorpay_order_id: req.body.newFormData.razorpay_order_id,
-                                        walletDebit: req.body.newFormData.walletDebit,
-                                        balanceToSettle: {
-                                            balance: 0,
-                                            settledMode: 'upi'
-                                        }
-                                    }], $position: 0
-                                }
+                    console.log('inside else first razor');
+                    await UserModal.updateOne({ _id: req.session.userId }, {
+                        $push: {
+                            orders: {
+                                $each: [{
+                                    product: req.body.newFormData.productData,
+                                    modeOfPayment: req.body.newFormData.modeOfPayment,
+                                    addressToShip: req.body.newFormData.addressId,
+                                    total: req.body.newFormData.total,
+                                    razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
+                                    razorpay_order_id: req.body.newFormData.razorpay_order_id
+                                }], $position: 0
                             }
-                            
-                        })
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $inc: {
-                                "wallet.balance": -(parseFloat(req.body.newFormData.walletDebit))
-                            },
-                            $push: {
-                                "wallet.transaction": {
-                                  $each: [{ typeOfTransaction: "debit", amount: parseFloat(req.body.newFormData.walletDebit) }],
-                                  $position: 0 // Insert at the beginning
-                                }
-                              }
-                        })
-                    } else {
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $push: {
-                                orders: {
-                                    $each: [{
-                                        product: req.body.newFormData.productData,
-                                        modeOfPayment: req.body.newFormData.modeOfPayment,
-                                        addressToShip: req.body.newFormData.addressId,
-                                        netTotal: req.body.newFormData.total,
-                                        grossTotal: req.body.newFormData.total,
-                                        razorpay_payment_id: req.body.newFormData.razorpay_payment_id,
-                                        razorpay_order_id: req.body.newFormData.razorpay_order_id,
-                                        balanceToSettle: {
-                                            balance: 0,
-                                            settledMode: 'upi'
-                                        }
-                                    }], $position: 0
-                                }
-                            },
-                        })
-                    }
+                        }
+                    })
                 }
 
 
-            } else {////////////////////////////////////////////////
+            } else {
+                console.log('inside cash on delivery else');
                 if (req.body.newFormData.couponId) {
-                    if (req.body.newFormData.walletDebit) {
-
-                        console.log('with coupon and wallet');
-                        console.log("req.body.newFormData", req.body.newFormData);
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $push: {
-                                orders: {
-                                    $each: [{
-                                        product: req.body.newFormData.productData,
-                                        modeOfPayment: req.body.newFormData.modeOfPayment + "AlongWithWallet",
-                                        addressToShip: req.body.newFormData.addressId,
-                                        netTotal: req.body.newFormData.total,
-                                        grossTotal: parseInt(req.body.newFormData.total) + parseInt(req.body.newFormData.couponValue),
-                                        couponId: req.body.newFormData.couponId,
-                                        couponValue: req.body.newFormData.couponValue,
-                                        walletDebit: req.body.newFormData.walletDebit,
-                                        balanceToSettle: {
-                                            balance: req.body.newFormData.balaceToPay
-
-                                        }
-                                    }], $position: 0
-                                }
+                    console.log('inside cash on delivery else == if coupon');
+                    console.log('inside cash on delivery else == if coupon ,couponId', req.body.newFormData.couponId);
+                    await UserModal.updateOne({ _id: req.session.userId }, {
+                        $push: {
+                            orders: {
+                                $each: [{
+                                    product: req.body.newFormData.productData,
+                                    modeOfPayment: req.body.newFormData.modeOfPayment,
+                                    addressToShip: req.body.newFormData.addressId,
+                                    total: req.body.newFormData.total,
+                                    couponId: req.body.newFormData.couponId
+                                }], $position: 0
                             }
-
-                        })
-                        // +====
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $inc: {
-                                "wallet.balance": -(parseFloat(req.body.newFormData.walletDebit))
-                            },
-                            $push: {
-                                "wallet.transaction": {
-                                  $each: [{ typeOfTransaction: "debit", amount: parseFloat(req.body.newFormData.walletDebit) }],
-                                  $position: 0 // Insert at the beginning
-                                }
-                              }
-                        })
-                    } else { //////////////
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $push: {
-                                orders: {
-                                    $each: [{
-                                        product: req.body.newFormData.productData,
-                                        modeOfPayment: req.body.newFormData.modeOfPayment,
-                                        addressToShip: req.body.newFormData.addressId,
-                                        netTotal: req.body.newFormData.total,
-                                        grossTotal: parseInt(req.body.newFormData.total) + parseInt(req.body.newFormData.couponValue),
-                                        couponId: req.body.newFormData.couponId,
-                                        couponValue: req.body.newFormData.couponValue,
-                                        balanceToSettle: {
-                                            balance: parseFloat(req.body.newFormData.balaceToPay) - parseFloat(req.body.newFormData.couponValue)
-
-                                        }
-                                    }], $position: 0
-                                }
-                            }
-                        })
-                    }
+                        }
+                    })
                 } else {
-                    if (req.body.newFormData.walletDebit) {
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $push: {
-                                orders: {
-                                    $each: [{
-                                        product: req.body.newFormData.productData,
-                                        modeOfPayment: req.body.newFormData.modeOfPayment + "AlongWithWallet",
-                                        addressToShip: req.body.newFormData.addressId,
-                                        netTotal: req.body.newFormData.total,
-                                        grossTotal: parseInt(req.body.newFormData.total),
-                                        walletDebit: req.body.newFormData.walletDebit,
-                                        balanceToSettle: {
-                                            balance: req.body.newFormData.balaceToPay
-
-                                        }
-                                    }], $position: 0
-                                }
-                            }
-                        })
-
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $inc: {
-                                "wallet.balance": -(parseFloat(req.body.newFormData.walletDebit))
-                            },
-                            $push: {
-                                "wallet.transaction": {
-                                  $each: [{ typeOfTransaction: "debit", amount: parseFloat(req.body.newFormData.walletDebit) }],
-                                  $position: 0 // Insert at the beginning
-                                }
-                              }
-                        })
-                    } else {
-                        await UserModal.updateOne({ _id: req.session.userId }, {
-                            $push: {
-                                orders: {
-                                    $each: [{
-                                        product: req.body.newFormData.productData,
-                                        modeOfPayment: req.body.newFormData.modeOfPayment,
-                                        addressToShip: req.body.newFormData.addressId,
-                                        netTotal: req.body.newFormData.total,
-                                        grossTotal: req.body.newFormData.total,
-                                        balanceToSettle: {
-                                            balance: req.body.newFormData.balaceToPay
-
-                                        }
+                    console.log('inside cash on delivery else == else no coupon');
+                    await UserModal.updateOne({ _id: req.session.userId }, {
+                        $push: {
+                            orders: {
+                                $each: [{
+                                    product: req.body.newFormData.productData,
+                                    modeOfPayment: req.body.newFormData.modeOfPayment,
+                                    addressToShip: req.body.newFormData.addressId,
+                                    total: req.body.newFormData.total
 
                                     }], $position: 0
                                 }
