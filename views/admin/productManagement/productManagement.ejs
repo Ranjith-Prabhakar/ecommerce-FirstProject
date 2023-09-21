@@ -101,6 +101,7 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             <% let count=1 %>
                                 <% for (let product of products) { %>
                                     <tr>
@@ -121,136 +122,14 @@
                                             <%= product.unitPrice %>
                                         </td>
 
-
                                         <td>
 
-                                            <!--  -->
+                                            <!-- edit data modal button -->
                                             <button type="button" class="btn btn-outline-secondary"
                                                 data-bs-toggle="modal" data-bs-target="#exampleModal"
-                                                data-bs-whatever="@mdo">Edit</button>
+                                                data-bs-whatever="@mdo" data-product="<%=JSON.stringify(product)%>"
+                                                name="productEditButton">Edit</button>
 
-                                            <div class="modal fade" id="exampleModal" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h1 class="modal-title fs-5 text-black "
-                                                                id="exampleModalLabel">New message</h1>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <!-- ==== -->
-                                                            <form id="productEditform" name="productEdit"
-                                                                action="/productEditConfirm" method="post">
-                                                                <div class="d-flex">
-                                                                    <div class="one mt-3 ">
-
-                                                                        <input type="hidden" name="id"
-                                                                            value="<%=product._id %>">
-                                                                        <label for="" class="text-black ">Product
-                                                                            Name</label>
-                                                                        <input class="form-control w-75 " type="text"
-                                                                            name="productName"
-                                                                            value="<%=product.productName%>"
-                                                                            placeholder="<%=product.productName%>"
-                                                                            id="productName">
-                                                                        <label for="" class="text-black ">Quantity
-                                                                        </label>
-                                                                        <input class="form-control w-75 " type="text"
-                                                                            name="quantity"
-                                                                            value="<%=product.quantity %>"
-                                                                            placeholder="<%=product.quantity %>"
-                                                                            id="quantity">
-                                                                        <label for="" class="text-black ">Unit
-                                                                            price</label>
-                                                                        <input class="form-control w-75 " type="text"
-                                                                            name="unitPrice"
-                                                                            value="<%=product.unitPrice %>"
-                                                                            placeholder="<%=product.unitPrice %>">
-
-                                                                        <!-- -->
-
-                                                                        <!-- <input class="form-control w-75 " type="file" name="gallery0"
-                                                                            value="<%=product.gallery[0] %>" placeholder="<%=product.gallery[0] %>">
-                                                                        <input class="form-control w-75 " type="file" name="gallery1"
-                                                                            value="<%=product.gallery[1] %>" placeholder="<%=product.gallery[1] %>" >
-                                                                        <input class="form-control w-75 " type="file" name="gallery2"
-                                                                            value="<%=product.gallery[2] %>" placeholder="<%=product.gallery[2] %>">
-                                                                        <textarea  class="form-control w-75 " name="discription"
-                                                                            value="<%=product.specification.discription %>"
-                                                                            placeholder="<%=product.specification.discription %>"> </textarea>
-                                                                         -->
-
-
-
-                                                                        <!-- -->
-
-
-                                                                        <label for="" class="text-black ">Front
-                                                                            Camera</label>
-                                                                        <input class="form-control w-75 " type="text"
-                                                                            name="frontCamera"
-                                                                            value="<%=product.specification.frontCamera %>"
-                                                                            placeholder="<%=product.specification.frontCamera %>">
-
-
-                                                                        <label for="" class="text-black ">Back
-                                                                            Camera</label>
-                                                                        <input class="form-control w-75 " type="text"
-                                                                            name="backCamera"
-                                                                            value="<%=product.specification.backCamera %>"
-                                                                            placeholder="<%=product.specification.backCamera %>">
-                                                                    </div>
-                                                                    <div class="two mt-4">
-                                                                        <label for="" class="text-black ">RAM</label>
-                                                                        <input class="form-control w-75 " type="text"
-                                                                            name="ram"
-                                                                            value="<%=product.specification.ram %>"
-                                                                            placeholder="<%=product.specification.ram %>">
-
-
-                                                                        <label for="" class="text-black ">Internal
-                                                                            Storage</label>
-                                                                        <input class="form-control w-100 " type="text"
-                                                                            name="internalStorage"
-                                                                            value="<%=product.specification.internalStorage %>"
-                                                                            placeholder="<%=product.specification.internalStorage %>">
-                                                                        <label for=""
-                                                                            class="text-black ">Battery</label>
-                                                                        <input class="form-control w-100 " type="text"
-                                                                            name="battery"
-                                                                            value="<%=product.specification.battery %>"
-                                                                            placeholder="<%=product.specification.battery %>">
-                                                                        <label for=""
-                                                                            class="text-black ">Processor</label>
-                                                                        <input class="form-control w-100 " type="text"
-                                                                            name="processor"
-                                                                            value="<%=product.specification.processor %>"
-                                                                            placeholder="<%=product.specification.processor %>">
-                                                                        <label for="" class="text-black ">Charger
-                                                                            Type</label>
-                                                                        <input class="form-control w-100 mb-2 "
-                                                                            type="text" name="chargerType"
-                                                                            value="<%=product.specification.chargerType %>"
-                                                                            placeholder="<%=product.specification.chargerType %>">
-
-
-                                                                    </div>
-                                                                </div>
-
-                                                                <!-- ==== -->
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit"
-                                                                class="btn btn-primary">Submit</button>
-                                                        </div>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
 
 
                                             <!--  -->
@@ -331,6 +210,76 @@
                 <!--  -->
 
                 <% } %>
+                    <!-- edit data modal body -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5 text-black " id="exampleModalLabel">Product Data</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- ==== -->
+                                    <form id="productEditform" name="productEdit" action="/productEditConfirm"
+                                        method="post">
+                                        <div class="d-flex">
+                                            <div class="one mt-3 ">
+
+                                                <input type="hidden" name="id" id="editFormId">
+                                                <label for="editProductName" class="text-black ">Product
+                                                    Name</label>
+                                                <input class="form-control w-75 text-dark " type="text"
+                                                    name="productName" id="editProductName">
+                                                <label for="" class="text-black ">Quantity
+                                                </label>
+                                                <input class="form-control w-75 " type="text" name="quantity"
+                                                    id="editQuantity">
+                                                <label for="" class="text-black ">Unit
+                                                    price</label>
+                                                <input class="form-control w-75 " type="text" name="unitPrice" id="editUnitPrice">
+                                                <label for="" class="text-black ">Front
+                                                    Camera</label>
+                                                <input class="form-control w-75 " type="text" name="frontCamera" id="editFrontCamera">
+
+
+                                                <label for="" class="text-black ">Back
+                                                    Camera</label>
+                                                <input class="form-control w-75 " type="text" name="backCamera" id="editBackCamera">
+                                            </div>
+                                            <div class="two mt-4">
+                                                <label for="" class="text-black ">RAM</label>
+                                                <input class="form-control w-75 " type="text" name="ram" id="editRam">
+
+
+                                                <label for="" class="text-black ">Internal
+                                                    Storage</label>
+                                                <input class="form-control w-100 " type="text" name="internalStorage" id="editInternalStorage" >
+                                                <label for="" class="text-black ">Battery</label>
+                                                <input class="form-control w-100 " type="text" name="battery" id="editBattery">
+                                                <label for="" class="text-black ">Processor</label>
+                                                <input class="form-control w-100 " type="text" name="processor" id="editProcessor">
+                                                <label for="" class="text-black ">Charger
+                                                    Type</label>
+                                                <input class="form-control w-100 mb-2 " type="text" name="chargerType" id="editChargerType">
+
+
+                                            </div>
+                                        </div>
+
+                                        <!-- ==== -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
 
         </div>
         </div>

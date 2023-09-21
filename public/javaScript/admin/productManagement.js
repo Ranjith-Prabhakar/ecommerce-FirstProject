@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+
+
     //    soft delete
 
     const freezForms = document.querySelectorAll('.softDelete')
@@ -63,6 +65,50 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         })
     })
+
+
+    //modal data updation while clicking on stock data edit 
+
+    let productEditButton = document.querySelectorAll('button[name="productEditButton"]')
+    console.log("productEditButton", productEditButton);
+    productEditButton.forEach(button => {
+        button.addEventListener('click', (event) => {
+            event.preventDefault();
+            let product = button.getAttribute('data-product');
+            let parsedProduct = JSON.parse(product);
+            let editFormId = document.getElementById('editFormId')
+            editFormId.value = parsedProduct._id
+            editFormId.placeholder=parsedProduct._id
+            let editProductName = document.getElementById('editProductName')
+            editProductName.value = parsedProduct.productName
+            editProductName.placeholder=parsedProduct.productName
+            let editQuantity = document.getElementById('editQuantity')
+            editQuantity.value = parsedProduct.quantity
+            editQuantity.placeholder=parsedProduct.quantity
+            let editUnitPrice = document.getElementById('editUnitPrice')
+            editUnitPrice.value = parsedProduct.unitPrice
+            editUnitPrice.placeholder=parsedProduct.unitPrice
+            let editFrontCamera = document.getElementById('editFrontCamera')
+            editFrontCamera.value = parsedProduct.frontCamera
+            editFrontCamera.placeholder=parsedProduct.frontCamera
+            let editBackCamera = document.getElementById('editBackCamera')
+            editBackCamera.value = parsedProduct.backCamera
+            editBackCamera.placeholder=parsedProduct.backCamera
+            let editRam = document.getElementById('editRam')
+            editRam.value = parsedProduct.ram
+            editRam.placeholder=parsedProduct.ram
+            let editInternalStorage = document.getElementById('editInternalStorage')
+            editInternalStorage.value = parsedProduct.internalStorage
+            editInternalStorage.placeholder=parsedProduct.internalStorage
+            let editBattery = document.getElementById('editBattery')
+            editBattery.value = parsedProduct.battery
+            editBattery.placeholder=parsedProduct.battery
+            let editProcessor = document.getElementById('editProcessor')
+            editProcessor.value = parsedProduct.processor
+            editProcessor.placeholder=parsedProduct.processor
+        })
+    })
+
 
 
     // stock edit 

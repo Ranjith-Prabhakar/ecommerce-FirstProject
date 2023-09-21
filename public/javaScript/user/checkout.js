@@ -24,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 let productPrice = orderQuantity.getAttribute('data-product-price')
 
                 singleProductUnitPrice.innerText = increase * parseInt(productPrice)
+                
+                let cartSum = document.getElementById('cartSum')
+                cartSum.innerText = singleProductUnitPrice.innerText
 
             }
         })
@@ -45,6 +48,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
                 let productPrice = orderQuantity.getAttribute('data-product-price')
                 singleProductUnitPrice.innerText = decrease * parseInt(productPrice)
+
+                let cartSum = document.getElementById('cartSum')
+                cartSum.innerText = singleProductUnitPrice.innerText
             }
         })
     }
@@ -269,72 +275,55 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //click on wallet 
     const wallet = document.getElementById('wallet')
-    let spanEl = document.getElementById('walletBalance')
+    let walletBalanceEl = document.getElementById('walletBalance')
     let payableAmountEl = document.getElementById('payableAmount')
     let balanceAmountEl = document.getElementById('balanceAmount')
-    let singleProductSum = document.getElementById('singleProductUnitPrice')
-    let singleProductPrice = 0
-    if (singleProductSum) {
-        singleProductPrice = parseFloat(singleProductUnitPriceElement.innerText) // single product
-        console.log("singleProductUnitPriceElement", singleProductUnitPriceElement);
-    }
-    if(wallet){
+    if (wallet) {
+        console.log("wallet", wallet);
         let walletBalance = wallet.getAttribute('data-wallet-balance')
+        console.log("walletBalance", walletBalance);
         wallet.addEventListener('click', (event) => {
-            let price = parseFloat(valueAfterCoupon.innerText) // after coupon
-            console.log('price', price);
-            let parseCartSum = 0
-            if (cartSumElement) {
-                parseCartSum = parseFloat(cartSumElement.innerText) // productList
+            let singleProductSum = document.getElementById('singleProductUnitPrice')
+            let singleProductPrice = 0
+            if (singleProductSum) {
+                singleProductPrice = parseFloat(singleProductUnitPriceElement.innerText) // single product
             }
-    
-            console.log("parseCartSum", parseCartSum);
-            console.log('inside listner');
-            console.log("wallet", wallet);
-            spanEl.innerText = walletBalance
+            let price = parseFloat(valueAfterCoupon.innerText) // after coupon
+            parseCartSum = parseFloat(cartSumElement.innerText) // productList
+            walletBalanceEl.innerText = walletBalance
             if (price) {
-                console.log('inside price');
                 payableAmountEl.innerText = price
                 if (walletBalance > price) {
                     balanceAmountEl.innerText = 0
                 } else {
                     balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - price)
                 }
-    
-    
             } else if (parseCartSum) {
-                console.log('inside parseCartSum');
                 payableAmountEl.innerText = parseCartSum
                 if (walletBalance > parseCartSum) {
                     balanceAmountEl.innerText = 0
-    
                 } else {
                     balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - parseCartSum)
-    
                 }
             }
             else if (singleProductPrice) {
-                console.log('inside singleProductPrice');
                 payableAmountEl.innerText = singleProductPrice
                 if (walletBalance > singleProductPrice) {
                     balanceAmountEl.innerText = 0
                 } else {
                     balanceAmountEl.innerText = Math.abs(parseFloat(walletBalance) - singleProductPrice)
                 }
-    
             }
-    
             if (parseFloat(balanceAmountEl.innerText) > 0) {
                 document.getElementById('balancePayment').classList.remove('d-none')
                 document.getElementById('walletFooter').classList.add('d-none')
-    
             }
         })
     }
-   
 
 
-   
+
+
 
     // click on pay using wallet button on wallet modal
     let walletModal = document.getElementById('walletModal')
@@ -343,17 +332,17 @@ document.addEventListener("DOMContentLoaded", () => {
     payUsingWalletButton.addEventListener('click', (event) => {
         event.preventDefault()
         paymentMethodRadioButtonWallet.checked = true
-       
+
         cartSumElement.innerText = balanceAmountEl.innerText
         if (parseFloat(balanceAmountEl.innerText) !== 0) {
             console.log('inside balanceAmountEl !== 0');
-            cartSumElement.setAttribute('data-wallet-money', `${spanEl.innerText}`)
+            cartSumElement.setAttribute('data-wallet-money', `${walletBalanceEl.innerText}`)
         } else {
             console.log('else of inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${payableAmountEl.innerText}`)
         }
 
-       
+
         $(walletModal).modal('hide');
 
     })
@@ -376,7 +365,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cartSumElement.innerText = balanceAmountEl.innerText
         if (parseFloat(balanceAmountEl.innerText) !== 0) {
             console.log('inside balanceAmountEl !== 0');
-            cartSumElement.setAttribute('data-wallet-money', `${spanEl.innerText}`)
+            cartSumElement.setAttribute('data-wallet-money', `${walletBalanceEl.innerText}`)
         } else {
             console.log('else of inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${payableAmountEl.innerText}`)
@@ -403,7 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
         cartSumElement.innerText = balanceAmountEl.innerText
         if (parseFloat(balanceAmountEl.innerText) !== 0) {
             console.log('inside balanceAmountEl !== 0');
-            cartSumElement.setAttribute('data-wallet-money', `${spanEl.innerText}`)
+            cartSumElement.setAttribute('data-wallet-money', `${walletBalanceEl.innerText}`)
         } else {
             console.log('else of inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${payableAmountEl.innerText}`)
@@ -675,7 +664,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         }
                     })
                 } else if (newFormData.modeOfPayment !== "onlinePayment") {
-                    
+
                     const response = await fetch('/orderPlacement', {
                         method: 'post',
                         headers: {
