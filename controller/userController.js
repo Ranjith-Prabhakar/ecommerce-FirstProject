@@ -691,8 +691,8 @@ const getCheckOutPage = async (req, res, next) => {
                 }
             }
             let user = await UserModal.findOne({ _id: req.session.userId })
-            console.log("user",user);
-            console.log("user wallet",user.wallet.balance);
+            console.log("user", user);
+            console.log("user wallet", user.wallet.balance);
             let brands = await BrandModal.distinct('brandName')
             res.render('./users/checkOutPage', { singleProduct, user, brands, coupons });
             req.query.productId = '';
@@ -835,7 +835,7 @@ const postOrderPlacement = async (req, res, next) => {
                                     }], $position: 0
                                 }
                             }
-                            
+
                         })
                         await UserModal.updateOne({ _id: req.session.userId }, {
                             $inc: {
@@ -846,7 +846,7 @@ const postOrderPlacement = async (req, res, next) => {
                                     $each: [
                                         {
                                             typeOfTransaction: 'debit',
-                                           amount: parseFloat(req.body.newFormData.walletDebit)
+                                            amount: parseFloat(req.body.newFormData.walletDebit)
                                         }
                                     ], $position: 0
 
@@ -897,7 +897,7 @@ const postOrderPlacement = async (req, res, next) => {
                                     }], $position: 0
                                 }
                             }
-                            
+
                         })
                         await UserModal.updateOne({ _id: req.session.userId }, {
                             $inc: {
@@ -907,8 +907,8 @@ const postOrderPlacement = async (req, res, next) => {
                                 "wallet.transaction": {
                                     $each: [
                                         {
-                                           typeOfTransaction: 'debit',
-                                           amount: parseFloat(req.body.newFormData.walletDebit)
+                                            typeOfTransaction: 'debit',
+                                            amount: parseFloat(req.body.newFormData.walletDebit)
                                         }
                                     ], $position: 0
 
@@ -1266,14 +1266,14 @@ const postOrderReturnRequest = async (req, res, next) => {
     }
 }
 
-const postWallet = async(req,res,next)=>{
+const postWallet = async (req, res, next) => {
     try {
-        let wallet = await UserModal.find({_id:req.session.userId},{_id:0,"wallet.balance":1})
-        console.log("wallet",wallet);
-        res.json({wallet})
+        let wallet = await UserModal.find({ _id: req.session.userId }, { _id: 0, "wallet.balance": 1 })
+        console.log("wallet", wallet);
+        res.json({ wallet })
     } catch (error) {
-        errorHandler(error,req,res,next)
-        
+        errorHandler(error, req, res, next)
+
     }
 }
 
@@ -1318,6 +1318,33 @@ const postRazorPayCreateOrder = async (req, res, next) => {
     }
 }
 
+const postAddWalletMoney = async (req, res, next) => {
+    try {
+        console.log("req.body.newFormData", req.body.newFormData);
+        let result =  await UserModal.updateOne({ _id: req.session.userId }, {
+            $inc: {
+                "wallet.balance":(parseFloat(req.body.newFormData.amount))
+            },
+            $push: {
+                "wallet.transaction": {
+                    $each: [
+                        {
+                            typeOfTransaction: 'credit',
+                            amount: parseFloat(req.body.newFormData.amount)
+                        }
+                    ], $position: 0
+
+                }
+            }
+        })
+        let wallet = await UserModal.find({ _id: req.session.userId }, { _id: 0, "wallet.balance": 1 })
+        console.log(result);
+        res.json({ success: true ,wallet})
+    } catch (error) {
+        errorHandler(error, req, res, next)
+
+    }
+}
 
 module.exports = {
     userHome,
@@ -1349,5 +1376,6 @@ module.exports = {
     postCancellOrder,
     postOrderReturnRequest,
     postWallet,
-    postRazorPayCreateOrder
+    postRazorPayCreateOrder,
+    postAddWalletMoney
 }

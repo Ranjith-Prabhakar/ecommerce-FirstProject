@@ -71,7 +71,9 @@
                                                     </li>
                                                     <li><a class="dropdown-item" href="/orders">Orders</a></li>
                                                     <li><a class="dropdown-item" href="#">WishList</a></li>
-                                                    <li><a id="walletInNav" class="dropdown-item" href="#">Wallet</a></li>
+                                                    <li><a id="walletInNav" class="dropdown-item" href="#"
+                                                            data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                            data-bs-whatever="@getbootstrap">Wallet</a></li>
                                                     <li><a class="dropdown-item" href="#">Notifications</a></li>
                                                     <li>
                                                         <hr class="dropdown-divider">
@@ -152,4 +154,34 @@
         </div>
     </div>
 
-    
+
+    <!-- add money to wallet -->
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h4>Your Wallet Balance Is : <span id="walletMoneyBalance"></span> </h4>
+                    <button id="addMoneyToWallet" type="button" class="btn btn-primary text-white">Add Money To
+                        Wallet</button>
+                    <form id="addMoneyWalletForm" name="addWalletMoney" class="d-none">
+                        <input class="form-control mt-1 " type="text" name="accountNo" placeholder="Account Number">
+                        <input class="form-control mt-1 " type="text" name="ifsc" placeholder="IFSC">
+                        <input class="form-control mt-1 " type="text" name="amount" placeholder="Amount">
+                        <input class="form-control mt-1 " type="text" name="branch" placeholder="Branch">
+                        <input class="form-control mt-1 " type="text" name="uId" placeholder="UID">
+                        <input type="submit" class="btn btn-success mt-1 ">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
