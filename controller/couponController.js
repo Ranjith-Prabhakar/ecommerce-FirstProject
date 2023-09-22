@@ -3,62 +3,64 @@ const CouponModal = require('../model/couponModal')
 const ProductModal = require('../model/productModal')
 const BrandModal = require('../model/brandModal')
 
-const getCouponManagement = async(req,res,next)=>{
+const getCouponManagement = async (req, res, next) => {
   try {
     console.log('inside getCouponManagement');
     const brands = await BrandModal.distinct('brandName')
     const products = await ProductModal.find({})
-    const coupons = await CouponModal.find({}).sort({createdAt:-1})
-    res.render('./admin/couponManagement/couponManagement',{brands,products,coupons})
+    const coupons = await CouponModal.find({}).sort({ createdAt: -1 })
+    res.render('./admin/couponManagement/couponManagement', { brands, products, coupons })
 
   } catch (error) {
-    errorHandler(error,req,res,next)
-    
+    errorHandler(error, req, res, next)
+
   }
 }
 
-const postCreateCoupon = async(req,res,next)=>{
+const postCreateCoupon = async (req, res, next) => {
   try {
     console.log('inside postCreateCoupon');
-    console.log("req.body.newFormData",req.body.newFormData);
-    let {noOfSuccessTransaction,product,dateBelow,expiryDays,amountRange,couponCode,couponValue,criteria,brand} = req.body.newFormData
-    let coupon ={
-      expiryDays:expiryDays,
-      couponCode:couponCode,
-      couponValue:couponValue,
-      criteria:criteria,
+    console.log("req.body.newFormData", req.body.newFormData);
+    let { noOfSuccessTransaction, product, dateBelow, expiryDays, amountRange, couponCode, couponValue, criteria, brand } = req.body.newFormData
+    let coupon = {
+      expiryDays: expiryDays,
+      couponCode: couponCode,
+      couponValue: couponValue,
+      criteria: criteria,
     }
 
-    if(criteria === 'brand'){
+    if (criteria === 'brand') {
       coupon.brand = brand
-    }else if(criteria === "product" ){
+    } else if (criteria === "product") {
       coupon.product = product
-    }else if(criteria === "price"){
+    } else if (criteria === "price") {
       coupon.amountRange = amountRange
-    }else if(criteria === 'date'){
-      coupon.dateBelow = dateBelow 
-    }else if (criteria === 'customer'){
+    } else if (criteria === 'date') {
+      coupon.dateBelow = dateBelow
+    } else if (criteria === 'customer') {
       coupon.noOfSuccessTransaction = noOfSuccessTransaction
     }
     const Coupon = await CouponModal(coupon)
-     
+
     await Coupon.save()
     // await ProductModal.updateMany({unitPrice:{$gt:amountRange}},{$set:{"coupon.couponId":Coupon._id,'coupon.amount':couponValue}})
-    res.json({success:true})
+    res.json({ success: true })
   } catch (error) {
-    errorHandler(error,req,res,next)
-    
+    errorHandler(error, req, res, next)
+
   }
 }
 
-const postCouponCancell = async(req,res,next)=>{
+const postCouponCancell = async (req, res, next) => {
   try {
     console.log('inside postCouponCancell');
-    await CouponModal.updateOne({_id:req.body.couponData.couponId},{$set:{active:false}})
-    res.json({success:true})
+    console.log("req.body.couponData", req.body.couponData);
+    let result = await CouponModal.updateOne({ _id: req.body.couponData.couponId }, { $set: { active: false } })
+    console.log("result",result);
+    res.json({ success: true })
   } catch (error) {
-    errorHandler(req,res,next)
-    
+    errorHandler(req, res, next)
+
   }
 }
 module.exports = {

@@ -26,7 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
             title: 'Order Has Been Cancelled Successfully',
             footer: '<a href="">Why do I have this issue?</a>'
           })
-          window.location.reload()
+          setTimeout(() => {
+
+            window.location.reload()
+          }, 2000)
         }
       } catch (error) {
         console.log(error.message);
@@ -58,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let [key, value] of formData.entries()) {
       newFormData[key] = value
     }
-    console.log("newFormData",newFormData);
+    console.log("newFormData", newFormData);
     try {
       const response = await fetch('/orderReturnRequest', {
         method: 'post',
@@ -72,7 +75,10 @@ document.addEventListener("DOMContentLoaded", () => {
           title: 'Order Cancellation Request Has Been Recorded Successfully',
           // footer: '<a href="">Why do I have this issue?</a>'
         })
-        window.location.reload()
+        setTimeout(() => {
+          window.location.reload()
+        }, 2000)
+
       }).catch(err => {
         Swal.fire({
           icon: 'error',

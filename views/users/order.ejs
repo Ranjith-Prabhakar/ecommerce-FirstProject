@@ -77,7 +77,7 @@
                                             class="btn btn-success    text-dark  ">Return</button>
                                         <% }else if(locals.orders.orders[i].status==="returnInProgress" ){%>
                                             <button data-orderid="<%=locals.orders.orders[i]._id %>"
-                                                name="returnInProgress" class="btn btn-warning    text-dark"
+                                                name="returnInProgress" class="btn btn-warning    text-dark order-returnInProgress-button"
                                                 disabled>Return in Progress</button>
 
                                             <% }else if(locals.orders.orders[i].status==="returned" ){%>
@@ -87,6 +87,7 @@
                                                     <button data-orderid="<%=locals.orders.orders[i]._id %>"
                                                         name="CancellButton" class="btn btn-light ">Cancell</button>
                                                     <% } %>
+
                                                         <!-- <button type="button" data-orderid="<%=locals.orders.orders[i]._id %>"
                                         name="CancellButton" class="btn btn-light " data-bs-toggle="tooltip"
                                         data-bs-placement="top" data-bs-custom-class="custom-tooltip"

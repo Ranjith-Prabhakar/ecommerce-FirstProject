@@ -14,22 +14,22 @@ const path = require('path')
 //     }
 // }
 
-const getProductManagement = async (req, res,next) => {
+const getProductManagement = async (req, res, next) => {
     try {
         const products = await ProductModal.find().sort({ unitPrice: 1 })
-        
-        
-            if (req.session.existingProduct) {
-                const brand = await BrandModal.distinct('brandName')
-                // res.render('./admin/productManagement/createProduct', { brand, existingProduct: req.session.existingProduct })
-                res.render('./admin/productManagement/productManagement', { products, productManagement: true,brand })
-            } else {
-                const brand = await BrandModal.distinct('brandName')
-                res.render('./admin/productManagement/productManagement', { products, productManagement: true,brand })
-                // res.render('./admin/productManagement/createProduct', { brand })
-            }
 
-    
+
+        if (req.session.existingProduct) {
+            const brand = await BrandModal.distinct('brandName')
+            // res.render('./admin/productManagement/createProduct', { brand, existingProduct: req.session.existingProduct })
+            res.render('./admin/productManagement/productManagement', { products, productManagement: true, brand })
+        } else {
+            const brand = await BrandModal.distinct('brandName')
+            res.render('./admin/productManagement/productManagement', { products, productManagement: true, brand })
+            // res.render('./admin/productManagement/createProduct', { brand })
+        }
+
+
         // res.render('./admin/productManagement/productManagement', { products, productManagement: true,brand })
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -173,19 +173,19 @@ const postDeleteImage = async (req, res, next) => {
     try {
         console.log("inside postDeleteImage");
         console.log(req.body.productData);
-        let {productId,imageName}=req.body.productData
+        let { productId, imageName } = req.body.productData
         const filePath = path.join(__dirname, '..', 'public', 'productImages', imageName);
 
         if (fs.existsSync(filePath)) {
             fs.unlinkSync(filePath);
             console.log('Image deleted');
-            await ProductModal.updateOne({_id:productId},{$pull:{gallery:imageName}})
+            await ProductModal.updateOne({ _id: productId }, { $pull: { gallery: imageName } })
             res.json({ success: true })
 
         } else {
             console.log('Image not found');
             res.status(404).json({ success: false, message: 'Image not found' });
-          }
+        }
     } catch (error) {
         errorHandler(error, req, res, next)
 

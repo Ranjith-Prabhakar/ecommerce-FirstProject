@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //modal data updation while clicking on stock data edit 
 
     let productEditButton = document.querySelectorAll('button[name="productEditButton"]')
-    console.log("productEditButton", productEditButton);
     productEditButton.forEach(button => {
         button.addEventListener('click', (event) => {
             event.preventDefault();
@@ -78,34 +77,37 @@ document.addEventListener('DOMContentLoaded', () => {
             let parsedProduct = JSON.parse(product);
             let editFormId = document.getElementById('editFormId')
             editFormId.value = parsedProduct._id
-            editFormId.placeholder=parsedProduct._id
+            editFormId.placeholder = parsedProduct._id
             let editProductName = document.getElementById('editProductName')
             editProductName.value = parsedProduct.productName
-            editProductName.placeholder=parsedProduct.productName
+            editProductName.placeholder = parsedProduct.productName
             let editQuantity = document.getElementById('editQuantity')
             editQuantity.value = parsedProduct.quantity
-            editQuantity.placeholder=parsedProduct.quantity
+            editQuantity.placeholder = parsedProduct.quantity
             let editUnitPrice = document.getElementById('editUnitPrice')
             editUnitPrice.value = parsedProduct.unitPrice
-            editUnitPrice.placeholder=parsedProduct.unitPrice
+            editUnitPrice.placeholder = parsedProduct.unitPrice
             let editFrontCamera = document.getElementById('editFrontCamera')
-            editFrontCamera.value = parsedProduct.frontCamera
-            editFrontCamera.placeholder=parsedProduct.frontCamera
+            editFrontCamera.value = parsedProduct.specification.frontCamera
+            editFrontCamera.placeholder = parsedProduct.specification.frontCamera
             let editBackCamera = document.getElementById('editBackCamera')
-            editBackCamera.value = parsedProduct.backCamera
-            editBackCamera.placeholder=parsedProduct.backCamera
+            editBackCamera.value = parsedProduct.specification.backCamera
+            editBackCamera.placeholder = parsedProduct.specification.backCamera
             let editRam = document.getElementById('editRam')
-            editRam.value = parsedProduct.ram
-            editRam.placeholder=parsedProduct.ram
+            editRam.value = parsedProduct.specification.ram
+            editRam.placeholder = parsedProduct.specification.ram
             let editInternalStorage = document.getElementById('editInternalStorage')
-            editInternalStorage.value = parsedProduct.internalStorage
-            editInternalStorage.placeholder=parsedProduct.internalStorage
+            editInternalStorage.value = parsedProduct.specification.internalStorage
+            editInternalStorage.placeholder = parsedProduct.specification.internalStorage
             let editBattery = document.getElementById('editBattery')
-            editBattery.value = parsedProduct.battery
-            editBattery.placeholder=parsedProduct.battery
+            editBattery.value = parsedProduct.specification.battery
+            editBattery.placeholder = parsedProduct.specification.battery
             let editProcessor = document.getElementById('editProcessor')
-            editProcessor.value = parsedProduct.processor
-            editProcessor.placeholder=parsedProduct.processor
+            editProcessor.value = parsedProduct.specification.processor
+            editProcessor.placeholder = parsedProduct.specification.processor
+            let editChargerType = document.getElementById('editChargerType')
+            editChargerType.value = parsedProduct.specification.chargerType
+            editChargerType.placeholder = parsedProduct.specification.chargerType
         })
     })
 
@@ -113,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // stock edit 
     const productEditForm = document.getElementById('productEditform')
-    console.log(productEditForm);
     productEditForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         let formRawObj = document.forms.productEdit;
@@ -123,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let [key, value] of formObj) {
             finalformObj[key] = value;
         }
-        console.log(finalformObj);
 
         try {
             const response = await fetch('/productEditConfirm', {
@@ -191,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
             productId: deleteButton.getAttribute('data-product-id'),
             imageName: deleteButton.getAttribute('data-product-img'),
         }
-        console.log("productData========", productData);
         const response = await fetch('/deleteImage', {
             method: "post",
             headers: {

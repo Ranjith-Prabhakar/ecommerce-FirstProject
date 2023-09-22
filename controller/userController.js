@@ -780,6 +780,8 @@ const getCheckOutPage = async (req, res, next) => {
             let matchingPriceCouponsFiltered = matchingPriceCoupons.reduce((max, obj) => {
                 return obj.amountRange > max.amountRange ? obj : max
             }, priceCoupon[0])
+            console.log('matchingPriceCouponsFiltered', matchingPriceCouponsFiltered);
+            coupons.priceCoupons = matchingPriceCoupons
             res.render('./users/checkOutPage', { productList, user, brands, coupons });
         }
     } catch (error) {
@@ -1321,9 +1323,9 @@ const postRazorPayCreateOrder = async (req, res, next) => {
 const postAddWalletMoney = async (req, res, next) => {
     try {
         console.log("req.body.newFormData", req.body.newFormData);
-        let result =  await UserModal.updateOne({ _id: req.session.userId }, {
+        let result = await UserModal.updateOne({ _id: req.session.userId }, {
             $inc: {
-                "wallet.balance":(parseFloat(req.body.newFormData.amount))
+                "wallet.balance": (parseFloat(req.body.newFormData.amount))
             },
             $push: {
                 "wallet.transaction": {
@@ -1339,7 +1341,7 @@ const postAddWalletMoney = async (req, res, next) => {
         })
         let wallet = await UserModal.find({ _id: req.session.userId }, { _id: 0, "wallet.balance": 1 })
         console.log(result);
-        res.json({ success: true ,wallet})
+        res.json({ success: true, wallet })
     } catch (error) {
         errorHandler(error, req, res, next)
 
