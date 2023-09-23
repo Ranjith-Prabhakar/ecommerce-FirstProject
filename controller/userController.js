@@ -8,7 +8,8 @@ const nodeMailer = require('nodemailer')
 const randomString = require('randomstring')
 require('dotenv').config()
 const { errorHandler } = require('../middleWare/errorMiddleWare')
-
+// global variables
+let errorMessages
 const Razorpay = require('razorpay');
 const userModal = require('../model/userModal')
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
@@ -19,25 +20,6 @@ const razorpayInstance = new Razorpay({
 });
 
 
-
-// const userHome = async (req, res, next) => { //15-9-23 11:21
-//     try {
-//         if (req.session.userId) {
-//             let user = await UserModal.findOne({ _id: req.session.userId });
-//             let brands = await BrandModal.distinct('brandName')
-//             let products = await ProductModal.find({ freez: { $eq: 'active' } })
-//             let banner = await BannerModal.find()
-//             res.render('./users/userHome', { user, brands, products, banner })
-//         } else {
-//             let brands = await BrandModal.distinct('brandName')
-//             let products = await ProductModal.find({ freez: { $eq: 'active' } })
-//             let banner = await BannerModal.find()
-//             res.render('./users/userHome', { brands: brands, products, banner })
-//         }
-//     } catch (err) {
-//         errorHandler(err, req, res, next);
-//     }
-// }
 
 
 const userHome = async (req, res, next) => {
@@ -107,17 +89,12 @@ const getSearch = async (req, res, next) => {
 
 const getUserLogin = async (req, res, next) => {
     try {
-        if (req.session.userSignUpSuccess) {
-            res.render('./users/userLogin', { userSignUpSuccess: req.session.userSignUpSuccess, login: true })
-            req.session.userSignUpSuccess = ''
-        } else if (req.session.loginErrorMessage) {
-            res.render('./users/userLogin', { loginErrorMessage: req.session.loginErrorMessage, login: true })
-            req.session.loginErrorMessage = ''
-        } else if (req.session.block) {
-            res.render('./users/userLogin', { block: req.session.block, login: true })
-            req.session.block = ''
-        } else {
-            res.render('./users/userLogin', { login: true })
+        if (errorMessages) {
+            res.render('./users/userLogin', { errorMessages})
+            errorMessages = ""
+        }
+        else {
+            res.render('./users/userLogin')
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -126,10 +103,10 @@ const getUserLogin = async (req, res, next) => {
 
 const postUserLogin = async (req, res, next) => {
     try {
-        const userData = await UserModal.findOne({ userName: req.body.userName })
+        const userData = await UserModal.findOne({ email: req.body.email })
         if (userData) {
             if (!userData.status) {
-                req.session.block = 'you are blocked by admin'
+                errorMessages = 'you are blocked by admin'
                 res.redirect('/userLogin')
             } else if (!userData.isVerified) {
                 // Create a Nodemailer transporter
@@ -177,7 +154,7 @@ const postUserLogin = async (req, res, next) => {
                             res.cookie('userId', hash)
                             res.redirect('/',)
                         } else {
-                            req.session.loginErrorMessage = 'invalid username or password'
+                            errorMessages = 'invalid username or password'
                             res.redirect('/userLogin')
                         }
                     }
@@ -185,7 +162,7 @@ const postUserLogin = async (req, res, next) => {
             }
 
         } else {
-            req.session.loginErrorMessage = 'invalid username or password'
+            errorMessages = 'invalid username or password'
             res.redirect('/userLogin')
         }
     } catch (err) {
@@ -197,7 +174,6 @@ const postUserLogin = async (req, res, next) => {
 
 const getUserSignUp = async (req, res, next) => {
     try {
-        console.log('in user signUp');
         if (req.session.errorMessage) {
             res.render('./users/userSignUp', { errorMessage: req.session.errorMessage, signUp: true })
             req.session.errorMessage = ''
@@ -237,8 +213,9 @@ const postUserSignUp = async (req, res, next) => {
             text: `Your OTP is: ${otp}`,
         };
 
-        const { userName, email } = req.body
-        const validation = await UserModal.findOne({ $or: [{ userName: userName }, { email: email }] })
+        const { email } = req.body
+        // const validation = await UserModal.findOne({ $or: [{ userName: userName }, { email: email }] })
+        const validation = await UserModal.findOne({ email: email })
         if (validation) {
             if (!validation.isVerified) {
                 // Send the email
@@ -250,10 +227,11 @@ const postUserSignUp = async (req, res, next) => {
                         res.redirect('/userOtpVerificationCode')
                     }
                 });
-            } else {
-                req.session.errorMessage = 'invalid userName or password'
-                res.redirect('/userSignUp')
             }
+            //  else {
+            //     req.session.errorMessage = 'invalid userName or password'
+            //     res.redirect('/userSignUp')
+            // }
 
         } else {
             let hash = await bcrypt.hash(req.body.password, 4)
@@ -263,7 +241,7 @@ const postUserSignUp = async (req, res, next) => {
                 lastName: req.body.lastName,
                 email: req.body.email,
                 phone: req.body.phone,
-                userName: req.body.userName,
+                // userName: req.body.userName,
                 password: hash,
             })
             const user = await newUser.save()
@@ -275,10 +253,13 @@ const postUserSignUp = async (req, res, next) => {
                     console.log('Error sending email:', error);
                 } else {
                     req.session.otp = otp
+
                     res.redirect('/userOtpVerificationCode')
                 }
             });
         }
+        console.log('inside postUserSignUp');
+        console.log('inside postUserSignUp');
     } catch (err) {
         errorHandler(err, req, res, next);
     }
@@ -305,12 +286,67 @@ const getUserOtpVerificationCode = async (req, res, next) => {
 
 }
 
+const getResendOtp = async (req, res, next) => {
+    try {
+        console.log('inside postResendOtp');
+        console.log("req.session.email", req.session.userEmail);
+
+        // Create a Nodemailer transporter
+        let transporter = nodeMailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.nodeMailerEmail,
+                pass: process.env.nodeMailerEmailPassword
+            }
+        })
+
+        // Generate a random OTP
+        let reotp = randomString.generate({
+            length: 6,
+            charset: 'numeric',
+        });
+        console.log("This is the reotp: ", reotp)
+        // Define the email content
+        const mailOptions = {
+            from: process.env.nodeMailerEmail, // Sender email
+            to: req.session.userEmail, // Recipient email
+            subject: 'OTP Verification Code',
+            text: `Your OTP is: ${reotp}`,
+        };
+        // Send the email
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error sending email:', error);
+            } else {
+                // console.log('here in test place=====');
+                // console.log("req.session ===>", req.session.otp);
+                // delete req.session.otp
+                // console.log("req.session ===>", req.session.otp);
+
+                // console.log('req.session.otp, first ===>', req.session.otp);
+            }
+
+        });
+        req.session.otp = reotp
+
+        res.json({ success: true })
+    } catch (error) {
+        errorHandler(req, res, next)
+
+    }
+}
+
 const postUserOtpVerificationCode = async (req, res, next) => {
+    setTimeout(() => { console.log("set req.session.otp", req.session.otp) }, 10000)
 
     try {
+
+        console.log("req.body.otp", req.body.otp);
+        console.log("req.session.otp , RE", req.session.otp);
+        console.log("req.session ---->", req.session);
         if (req.body.otp === req.session.otp) {
             await UserModal.updateOne({ email: req.session.userEmail }, { $set: { isVerified: true } })
-            req.session.userSignUpSuccess = 'signedUp successfully, Login Now'
+            errorMessages = 'signedUp successfully, Login Now'
             res.redirect('/userLogin')
             req.session.userEmail = ''
             req.session.otp = ''
@@ -464,14 +500,14 @@ const postEditAddress = async (req, res, next) => {
     console.log('inside postEditAddress ');
     try {
         if (req.body.userObject) {
-            let { firstName, lastName, email, phone, userName } = req.body.userObject
+            let { firstName, lastName, email, phone } = req.body.userObject
             await UserModal.updateOne({ _id: req.session.userId }, {
                 $set: {
                     firstName: firstName,
                     lastName: lastName,
                     email: email,
                     phone: phone,
-                    userName: userName
+
                 }
             })
 
@@ -1354,6 +1390,7 @@ module.exports = {
     getUserSignUp,
     postUserSignUp,
     getUserOtpVerificationCode,
+    getResendOtp,
     postUserOtpVerificationCode,
     getUserLogin,
     postUserLogin,

@@ -12,6 +12,7 @@ router.post('/userLogin', userSessionHandler, userRestriction, userController.po
 router.get('/userSignUp', userSessionHandler, userRestriction, userController.getUserSignUp)
 router.post('/userSignUp', userSessionHandler, userRestriction, userController.postUserSignUp)
 router.get('/userOtpVerificationCode', userSessionHandler, userRestriction, userController.getUserOtpVerificationCode)
+router.get('/resendOtp',userSessionHandler,userRestriction,userController.getResendOtp)
 router.post('/userOtpVerificationCode', userSessionHandler, userRestriction, userController.postUserOtpVerificationCode)
 
 router.get('/brandPage', userSessionHandler, userController.getBrandPage)

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-
+//password matching
 
     let confirmPassword = document.getElementById('Confirm_Password')
 
@@ -24,4 +24,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
             submitButton.removeAttribute('disabled')
         }
     })
+
+    
 })

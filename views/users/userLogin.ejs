@@ -4,29 +4,20 @@
         <div class="row vh-100 justify-content-center justify-content-sm-end  align-items-center ">
             <div class="col-4">
                 <form action="/userLogin" method="post">
-                    <% locals.userSignUpSuccess || '' %>
-                        <% locals.loginErrorMessage || '' %>
-                            <% locals.block || '' %>
-
-                                <% if(locals.userSignUpSuccess) {%>
-                                    <h6 class="text-success ">
-                                        <%= userSignUpSuccess %>
-                                    </h6>
-                                    <% } else if(locals.loginErrorMessage) {%>
-                                        <h6 class="text-danger  ">
-                                            <%= loginErrorMessage %>
-                                        </h6>
-                                        <% } else if(locals.block) {%>
-                                            <h6 class="text-warning ">
-                                                <%= block %>
-                                            </h6>
-                                            <% } %>
-                                                <label class="form-label text-white " for="userName">User
-                                                    Name</label>
-                                                <input class="form-control w-75 " type="text" name="userName"
-                                                    placeholder="userName" id="userName" required>
+                    <% if (locals.errorMessages === 'you are blocked by admin' || locals.errorMessages === 'invalid username or password') { %>
+                        <h6 class="text-danger">
+                            <%= locals.errorMessages %>
+                        </h6>
+                    <% } else if (locals.errorMessages) { %>
+                        <h6 class="text-success">
+                            <%= locals.errorMessages %>
+                        </h6>
+                    <% } %>
+                                                <label class="form-label text-white " for="email">Email</label>
+                                                <input class="form-control w-75 " type="text" name="email"
+                                                    placeholder="email" id="email" required>
                                                 <label class="form-label text-white " for="password">Password</label>
-                                                <input class="form-control w-75  mb-3" type="password" name="password"
+                                                <input pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" class="form-control w-75  mb-3" type="password" name="password"
                                                     placeholder="password" id="password" required>
                                                 <button type="submit"
                                                     class="btn btn-primary loginButtonColor w-50">Submit</button>

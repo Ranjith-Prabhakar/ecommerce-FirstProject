@@ -3,6 +3,12 @@
     <div class="container">
         <div class="row vh-100 justify-content-center align-items-center ">
             <div class="col-4 text-center ">
+                <div>
+                    <div id="timer" class="text-white ">
+                        00:20
+                    </div>
+                    <button id="resendOTP" class="d-none">Resend The OTP</button>
+                </div>
                 <form action="/userOtpVerificationCode" method="post">
                     <% locals.otpErrorMessage?locals.otpErrorMessage:'' %>
                         <% locals.notVerified?locals.notVerified:'' %>
@@ -15,13 +21,16 @@
                                         <%= locals.notVerified %>
                                     </h6>
                                     <% } %>
+                                      
                                         <input class="form-control mb-3 " type="text" name="otp"
-                                            placeholder="enter the otp">
-                                        <button type="submit" class="btn btn-primary loginButtonColor w-50">Submit</button>
+                                            placeholder="enter the otp" required>
+                                        <button type="submit"
+                                            class="btn btn-primary loginButtonColor w-50">Submit</button>
+
                 </form>
                 </form>
             </div>
         </div>
     </div>
-
+    <script src="/javaScript/user/userOtpVerificationCode.js"></script>
     <%- include('../layout/user/footer') %>

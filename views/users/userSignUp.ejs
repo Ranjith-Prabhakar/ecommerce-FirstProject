@@ -21,16 +21,16 @@
                                     placeholder="email">
                                 <label class="form-label text-white " for="phone">Phone Number</label>
                                 <input class="form-control w-75 " id="phone" required type="text" name="phone"
-                                    placeholder="phone">
-                                <label class="form-label text-white " for="userName">User Name</label>
+                                    placeholder="phone" maxlength="10" >
+                                <!-- <label class="form-label text-white " for="userName">User Name</label>
                                 <input class="form-control w-75 " id="userName" required type="text" name="userName"
-                                    placeholder="User Name">
-                                <label class="form-label text-white " for="password">Password</label>
+                                    placeholder="User Name"> -->
+                                <label class="form-label text-white " for="password" >Password</label>
                                 <input class="form-control w-75" id="password" required type="password" name="password"
-                                    placeholder="Password">
+                                    placeholder="Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
                                 <label class="form-label text-white " id="confirm_password_label" for="Confirm_Password" data-value="Confirm Password">Confirm Password</label>
                                 <input class="form-control w-75 mb-3" id="Confirm_Password" required type="password"
-                                    name="Confirm_Password" placeholder="Confirm Password">
+                                    name="Confirm_Password" placeholder="Confirm Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
 
 
                                 <button type="submit" id="submitButton"

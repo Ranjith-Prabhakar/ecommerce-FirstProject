@@ -10,3 +10,7 @@
   border-radius: 10px;
   color: white;
 }
+.read-only {
+  background-color: #2e2b2b; /* Change to your desired read-only style */
+  cursor: not-allowed; /* Change to your desired cursor style */
+}

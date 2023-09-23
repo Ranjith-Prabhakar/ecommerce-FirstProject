@@ -28,91 +28,181 @@
 
 
 
+                                <%if(cartProducts[i].quantity < 1){%>
+                                    <div class=" cartProducts ">
+                                        <div class="container ">
+                                            <div
+                                                class="read-only row mb-3 cart-item-background justify-content-center align-items-center ">
+                                                <div class="col-3">
+                                                    <div class="d-flex">
+                                                        <!-- Example checkbox for a product -->
+                                                        <!-- <div id="checkbox" class="me-2 ">
+                                                            <input class="form-check-input" type="checkbox"
+                                                                id="productCheckbox_<%=cartProducts[i]._id%>"
+                                                                data-index="<%=i%>"
+                                                                data-product-id="<%=cartProducts[i]._id%>"
+                                                                data-product-price="<%=cartProducts[i].unitPrice  %>">
+                                                        </div> -->
 
-                                <div class="cartProducts">
-                                    <div class="container ">
-                                        <div
-                                            class="row mb-3 cart-item-background justify-content-center align-items-center ">
-                                            <div class="col-3">
-                                                <div class="d-flex">
-                                                    <!-- Example checkbox for a product -->
-                                                    <div id="checkbox" class="me-2 ">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            id="productCheckbox_<%=cartProducts[i]._id%>"
-                                                            data-index="<%=i%>"
-                                                            data-product-id="<%=cartProducts[i]._id%>"
-                                                            data-product-price="<%=cartProducts[i].unitPrice  %>">
-                                                    </div>
-
-                                                    <!-- product image -->
-                                                    <div id="image">
-                                                        <img class="rounded-1  cart-Product-Image"
-                                                            src="/productImages/<%=cartProducts[i].gallery[0]%>"
-                                                            alt="phone" srcset="">
+                                                        <!-- product image -->
+                                                        <div id="image">
+                                                            <img class="rounded-1  cart-Product-Image"
+                                                                src="/productImages/<%=cartProducts[i].gallery[0]%>"
+                                                                alt="phone" srcset="">
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- product data -->
-                                            <div class="col-5">
-                                                <div id="data-1">
-                                                    <form action="/singleProductPage" method="get">
-                                                        <input type="hidden" name="id" value="<%=cartProducts[i]._id%>">
-                                                        <input class="fs-5 fw-bold  nav-link " type="submit"
-                                                            value="<%=cartProducts[i].productName %>">
-                                                    </form>
+                                                <!-- product data -->
+                                                <div class="col-5">
+                                                    <div id="data-1">
+                                                        <form action="/singleProductPage" method="get">
+                                                            <input type="hidden" name="id"
+                                                                value="<%=cartProducts[i]._id%>">
+                                                            <input class="fs-5 fw-bold  nav-link " type="submit"
+                                                                value="<%=cartProducts[i].productName %>">
+                                                        </form>
 
-                                                    <% if(cartProducts[i].quantity < 10 && cartProducts[i].quantity> 0)
-                                                        {%>
+                                                        <% if(cartProducts[i].quantity < 10 && cartProducts[i].quantity>
+                                                            0)
+                                                            {%>
 
-                                                        <h6 class="text-warning fw-light">Left Only
-                                                            <%=cartProducts[i].quantity %>
-                                                        </h6>
-                                                        <% } else if(cartProducts[i].quantity < 1){%>
-                                                            <h6 class="text-danger fw-light">out of stock </h6>
-                                                            <% } else{ %>
-                                                                <h6 class="text-success fw-light  ">instock </h6>
-                                                                <% } %>
+                                                            <h6 class="text-warning fw-light">Left Only
+                                                                <%=cartProducts[i].quantity %>
+                                                            </h6>
+                                                            <% } else if(cartProducts[i].quantity < 1){%>
+                                                                <h6 class="text-danger fw-light">out of stock </h6>
+                                                                <% } else{ %>
+                                                                    <h6 class="text-success fw-light  ">instock </h6>
+                                                                    <% } %>
 
-                                                                    <div>
-                                                                        <a class="btn btn-outline-light "
-                                                                            href="/checkOutPage?productId=<%=cartProducts[i]._id%>">Place
-                                                                            order</a>
-                                                                        <button
-                                                                            class="removeFromCart btn btn-light bi-trash-fill "
-                                                                            data-product-id="<%=cartProducts[i]._id%>"></button>
-                                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div id="data-2">
-                                                    <h5 id="productPrice<%=i %>">
-                                                        <%=cartProducts[i].unitPrice * cartProducts[i].cartQuantity%>
-                                                    </h5>
-
-                                                    <div>
-                                                        <button class="increase bi bi-plus btn btn-light "
-                                                            data-product-price="<%=cartProducts[i].unitPrice %>"></button>
-                                                        <button id="cartUpdate<%=i%>" class="btn btn-light "
-                                                            value=" <%=cartProducts[i].cartQuantity%>"
-                                                            data-product-quantity="<%=cartProducts[i].quantity %>"
-                                                            data-product-id="<%=cartProducts[i]._id%>">
-                                                            <%=cartProducts[i].cartQuantity%>
-                                                        </button>
-                                                        <button class="decrease  bi bi-dash btn btn-light"></button>
+                                                                        <div>
+                                                                                
+                                                                                        <button
+                                                                                            class="removeFromCart btn btn-light bi-trash-fill "
+                                                                                            data-product-id="<%=cartProducts[i]._id%>"></button>
+                                                                        </div>
                                                     </div>
-
                                                 </div>
-                                            </div>
+                                                <div class="col">
+                                                    <div id="data-2">
+                                                        <h5 id="productPrice<%=i %>">
+                                                            <%=cartProducts[i].unitPrice *
+                                                                cartProducts[i].cartQuantity%>
+                                                        </h5>
 
+                                                        <div>
+                                                            <button class="increase bi bi-plus btn btn-light "
+                                                                data-product-price="<%=cartProducts[i].unitPrice %>"></button>
+                                                            <button id="cartUpdate<%=i%>" class="btn btn-light "
+                                                                value=" <%=cartProducts[i].cartQuantity%>"
+                                                                data-product-quantity="<%=cartProducts[i].quantity %>"
+                                                                data-product-id="<%=cartProducts[i]._id%>">
+                                                                <%=cartProducts[i].cartQuantity%>
+                                                            </button>
+                                                            <button class="decrease  bi bi-dash btn btn-light"></button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                             <% } else{%>
+                                        <div class="cartProducts">
+                                            <div class="container ">
+                                                <div
+                                                    class="row mb-3 cart-item-background justify-content-center align-items-center ">
+                                                    <div class="col-3">
+                                                        <div class="d-flex">
+                                                            <!-- Example checkbox for a product -->
+                                                            <div id="checkbox" class="me-2 ">
+                                                                <input class="form-check-input" type="checkbox"
+                                                                    id="productCheckbox_<%=cartProducts[i]._id%>"
+                                                                    data-index="<%=i%>"
+                                                                    data-product-id="<%=cartProducts[i]._id%>"
+                                                                    data-product-price="<%=cartProducts[i].unitPrice  %>">
+                                                            </div>
 
-                                <% } %>
-                                    <% } %>
+                                                            <!-- product image -->
+                                                            <div id="image">
+                                                                <img class="rounded-1  cart-Product-Image"
+                                                                    src="/productImages/<%=cartProducts[i].gallery[0]%>"
+                                                                    alt="phone" srcset="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- product data -->
+                                                    <div class="col-5">
+                                                        <div id="data-1">
+                                                            <form action="/singleProductPage" method="get">
+                                                                <input type="hidden" name="id"
+                                                                    value="<%=cartProducts[i]._id%>">
+                                                                <input class="fs-5 fw-bold  nav-link " type="submit"
+                                                                    value="<%=cartProducts[i].productName %>">
+                                                            </form>
+
+                                                            <% if(cartProducts[i].quantity < 10 &&
+                                                                cartProducts[i].quantity> 0)
+                                                                {%>
+
+                                                                <h6 class="text-warning fw-light">Left Only
+                                                                    <%=cartProducts[i].quantity %>
+                                                                </h6>
+                                                                <% } else if(cartProducts[i].quantity < 1){%>
+                                                                    <h6 class="text-danger fw-light">out of stock </h6>
+                                                                    <% } else{ %>
+                                                                        <h6 class="text-success fw-light  ">instock
+                                                                        </h6>
+                                                                        <% } %>
+
+                                                                            <div>
+                                                                                <%if(cartProducts[i].quantity < 1){%>
+                                                                                    <a class="btn btn-outline-light ">Cant
+                                                                                        buy</a>
+                                                                                    <% }else{ %>
+                                                                                        <a class="btn btn-outline-light "
+                                                                                            href="/checkOutPage?productId=<%=cartProducts[i]._id%>">Buy
+                                                                                            Now</a>
+                                                                                        <%}%>
+                                                                                            <button
+                                                                                                class="removeFromCart btn btn-light bi-trash-fill "
+                                                                                                data-product-id="<%=cartProducts[i]._id%>"></button>
+                                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div id="data-2">
+                                                            <h5 id="productPrice<%=i %>">
+                                                                <%=cartProducts[i].unitPrice *
+                                                                    cartProducts[i].cartQuantity%>
+                                                            </h5>
+
+                                                            <div>
+                                                                <button class="increase bi bi-plus btn btn-light "
+                                                                    data-product-price="<%=cartProducts[i].unitPrice %>"></button>
+                                                                <button id="cartUpdate<%=i%>" class="btn btn-light "
+                                                                    value=" <%=cartProducts[i].cartQuantity%>"
+                                                                    data-product-quantity="<%=cartProducts[i].quantity %>"
+                                                                    data-product-id="<%=cartProducts[i]._id%>">
+                                                                    <%=cartProducts[i].cartQuantity%>
+                                                                </button>
+                                                                <button
+                                                                    class="decrease  bi bi-dash btn btn-light"></button>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% } %>
+                                            <% } %>
+                                                <% } %>
 
 
-                                    
-                                        <script src="/javaScript/user/header.js"></script>
-                                        <script src="/javaScript/user/cart.js"></script>
-                                        <%- include('../layout/user/footer') %>
+
+                                                    <script src="/javaScript/user/header.js"></script>
+                                                    <script src="/javaScript/user/cart.js"></script>
+                                                    <%- include('../layout/user/footer') %>
