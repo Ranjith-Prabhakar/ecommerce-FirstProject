@@ -1,38 +1,38 @@
 <%- include('../layout/admin/header') %>
-
-
-    <div class="container-fluid p-3 ">
-        <div class="row">
-            <div class="col-2">
-                <div class="box py-1 ps-2     rounded-1  m-1   text-start ">
-                    <a class="nav-link text-white  " href="/adminPanel">Home</a>
-                </div>
-                <div class="box py-1 ps-2     rounded-1  m-1   text-start ">
-                    <a class="nav-link text-white  " href="/userManagement">User Management</a>
-                </div>
-                <div class="box py-1 ps-2     rounded-1  m-1   text-start ">
-                    <a class="nav-link text-white  " href="/productManagement">Product Management</a>
-                </div>
-
-                <div class="box py-1 ps-2     rounded-1  m-1   text-start ">
-                    <a class="nav-link text-white  " href="/catagoryManagement">Catagory Management</a>
-                </div>
-                <div class="box py-1 ps-2     rounded-1  m-1   text-start ">
-                    <a class="nav-link text-white  " href="/bannerManagement">Banner Management</a>
-                </div>
-                <div class="box py-1 ps-2     rounded-1  m-1   text-start ">
-                    <a class="nav-link text-white  " href="/orderManagement">Order Management</a>
-                </div>
-                <div class="box py-1 ps-2     rounded-1  m-1   text-start ">
-                    <a class="nav-link text-white  " href="/couponManagement">Coupon Management</a>
-                </div>
-                <div class="box py-1 ps-2     rounded-1  m-1   text-start ">
-                    <a class="nav-link text-white  " href="/returnManagement">Return Management</a>
+    <%- include('../layout/admin/generalManagement') %>
+        <div class="col">
+            <div class="row">
+                <div class="row align-items-center justify-content-between">
+                    <div class="col-3">
+                        <% locals.filterData || "" %>
+                            <div>
+                                <canvas data-result="<%=JSON.stringify(locals.filterData)%>" id="firstCan"
+                                    class="text-white "></canvas>
+                            </div>
+                    </div>
+                    <div class="col-4">
+                        <button class="btn btn-primary ">sales report</button>
+                    </div>
                 </div>
             </div>
 
-
+            <div class="row mt-4 ">
+                <div class="col-6">
+                    <div>
+                        <canvas id="secondCan"></canvas>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div>
+                        <canvas id="thirdCan"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+        </div>
+        </div>
+        </div>
 
-    <%- include('../layout/admin/footer') %>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="/javaScript/admin/adminPanel.js"></script>
+        <%- include('../layout/admin/footer') %>

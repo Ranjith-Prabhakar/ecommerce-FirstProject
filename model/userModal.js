@@ -86,9 +86,9 @@ const User = mongoose.Schema({
             type: String,
             // required: true
         },
-        landMark: {
-            type: String,
-        },
+        // landMark: {
+        //     type: String,
+        // },
     }],
     isVerified: {
         type: Boolean,

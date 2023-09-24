@@ -10,6 +10,7 @@ require('dotenv').config()
 const { errorHandler } = require('../middleWare/errorMiddleWare')
 // global variables
 let errorMessages
+//razorpay
 const Razorpay = require('razorpay');
 const userModal = require('../model/userModal')
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
@@ -137,7 +138,7 @@ const postUserLogin = async (req, res, next) => {
                     } else {
                         req.session.otp = otp
                         req.session.userEmail = userData.email
-                        req.session.notVerified = 'you have to verify fist to login'
+                        errorMessages = 'you have to verify fist to login'
                         res.redirect('/userOtpVerificationCode')
                     }
                 });
@@ -270,12 +271,12 @@ const postUserSignUp = async (req, res, next) => {
 
 const getUserOtpVerificationCode = async (req, res, next) => {
     try {
-        if (req.session.otpErrorMessage) {
-            res.render('./users/userOtpVerificationCode', { otpErrorMessage: req.session.otpErrorMessage })
-            req.session.otpErrorMessage = ''
-        } else if (req.session.notVerified) {
-            res.render('./users/userOtpVerificationCode', { notVerified: req.session.notVerified })
-            req.session.notVerified = ''
+        if (errorMessages) {
+            res.render('./users/userOtpVerificationCode', { errorMessages })
+            errorMessages = ''
+        } else if (errorMessages) {
+            res.render('./users/userOtpVerificationCode', { errorMessages })
+            errorMessages = ''
         }
         else {
             res.render('./users/userOtpVerificationCode')
@@ -351,7 +352,7 @@ const postUserOtpVerificationCode = async (req, res, next) => {
             req.session.userEmail = ''
             req.session.otp = ''
         } else {
-            req.session.otpErrorMessage = 'invalid otp'
+           errorMessages = 'invalid otp'
             res.redirect('/userOtpVerificationCode')
         }
     } catch (err) {

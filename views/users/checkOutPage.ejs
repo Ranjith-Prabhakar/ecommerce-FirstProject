@@ -135,7 +135,7 @@
                                     id="<%= i %>">
                                 <h2 class="d-inline ms-2 ">Address <%=i+1 %>
                                 </h2>
-                                
+
 
                             </div>
                             <label for="">Country</label>
@@ -197,31 +197,34 @@
                     <div class="d-flex">
                         <div id="formData" class=" d-none d-flex ">
                             <div class="one">
+                                <label for="name"> Name<input class="form-control " required name="name" id="name"
+                                        type="text"></label>
                                 <label for="country">Country <input class="form-control " required name="country"
                                         id="country" type="text"></label>
                                 <label for="state"> State <input class="form-control " required name="state" id="state"
                                         type="text"></label>
-                                <label for="district">District<input class="form-control " required name="district"
-                                        id="district" type="text"></label>
+
                             </div>
 
                             <div class="two">
+                                <label for="district">District<input class="form-control " required name="district"
+                                        id="district" type="text"></label>
                                 <label for="city"> City <input class="form-control " required name="city" id="city"
                                         type="text"></label>
                                 <label for="pincode"> Pincode <input class="form-control " required name="pincode"
                                         id="pincode" type="text"></label>
-                                <label for="street"> Street <input class="form-control " required name="street"
-                                        id="street" type="text"></label>
 
                             </div>
 
                             <div class="three">
+                                <label for="street"> Street <input class="form-control " required name="street"
+                                        id="street" type="text"></label>
+
                                 <label for="houseName">House Name<input class="form-control " required name="houseName"
                                         id="houseName" type="text"></label>
                                 <label for="buildingNo">Building No<input class="form-control " required
                                         name="buildingNo" id="buildingNo" type="text"></label>
-                                <label for="landMark"> Land Mark<input class="form-control " required name="landMark"
-                                        id="landMark" type="text"></label>
+
                             </div>
 
 
@@ -372,9 +375,7 @@
                         <div class="modal-body">
                             <form action="">
                                 <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label d-inline "
-                                    
-                                    >Balance In
+                                    <label for="recipient-name" class="col-form-label d-inline ">Balance In
                                         Wallet: <span id="walletBalance"></span></label>
                                 </div>
                                 <div class="mb-3">

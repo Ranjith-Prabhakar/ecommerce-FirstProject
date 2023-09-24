@@ -1,7 +1,7 @@
 let timerEl = document.getElementById("timer");
 let resendOTP = document.getElementById('resendOTP')
 let timeInterval;
-let countDown = 20;
+let countDown = 10;
 let isCounting = false;
 function startCountDown() {
   if (!isCounting) {
