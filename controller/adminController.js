@@ -371,48 +371,48 @@ const getAdminPanel = async (req, res, next) => {
                     console.error(err);
                 });
             //brands and product counts
-                let brandsAndProduct = await BrandModal.find({})
-                filterData.brandsAndProduct = brandsAndProduct
+            let brandsAndProduct = await BrandModal.find({})
+            filterData.brandsAndProduct = brandsAndProduct
 
-                //brands and revenue
-                await UserModal.aggregate([
-                    {
-                        $unwind: '$orders',
+            //brands and revenue
+            await UserModal.aggregate([
+                {
+                    $unwind: '$orders',
+                },
+                {
+                    $match: {
+                        'orders.status': 'delivered', // Filter orders with status "delivered"
                     },
-                    {
-                        $match: {
-                            'orders.status': 'delivered', // Filter orders with status "delivered"
-                        },
+                },
+                {
+                    $unwind: '$orders.product',
+                },
+                {
+                    $lookup: {
+                        from: 'products', // Replace with the actual name of your products collection
+                        localField: 'orders.product.productId',
+                        foreignField: '_id',
+                        as: 'productInfo',
                     },
-                    {
-                        $unwind: '$orders.product',
+                },
+                {
+                    $unwind: '$productInfo',
+                },
+                {
+                    $group: {
+                        _id: '$productInfo.brandName', // Use brandName as the _id
+                        totalSales: { $sum: 1 },
+                        totalAmountReceived: { $sum: { $toDouble: '$orders.grossTotal' } }, // Assuming grossTotal is a string, convert it to a number
                     },
-                    {
-                        $lookup: {
-                            from: 'products', // Replace with the actual name of your products collection
-                            localField: 'orders.product.productId',
-                            foreignField: '_id',
-                            as: 'productInfo',
-                        },
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        totalSales: 1,
+                        totalAmountReceived: 1,
                     },
-                    {
-                        $unwind: '$productInfo',
-                    },
-                    {
-                        $group: {
-                            _id: '$productInfo.brandName', // Use brandName as the _id
-                            totalSales: { $sum: 1 },
-                            totalAmountReceived: { $sum: { $toDouble: '$orders.grossTotal' } }, // Assuming grossTotal is a string, convert it to a number
-                        },
-                    },
-                    {
-                        $project: {
-                            _id: 1,
-                            totalSales: 1,
-                            totalAmountReceived: 1,
-                        },
-                    },
-                ]) .exec()
+                },
+            ]).exec()
                 .then((result) => {
                     console.log("result", result);
                     filterData.brandRevenue = result
@@ -421,7 +421,7 @@ const getAdminPanel = async (req, res, next) => {
                 .catch((err) => {
                     console.error(err);
                 });
-                
+
 
             res.render('./admin/adminPanel', { adminPanel: true, filterData })
 
@@ -459,7 +459,37 @@ const postAdminLogout = (req, res) => {
     }
 }
 
+const getSalesReport = async (req, res, next) => {
+    try {
+            let orders = await UserModal.find({}, { firstName: 1, lastName: 1, orders: 1 });
+            let salesReport = []
+            for (let i = 0; i < orders.length; i++) {
+              for (let j = 0; j < orders[i].orders.length; j++) {
+                salesReport.push({
+                  userId: orders[i]._id,
+                  firstName: orders[i].firstName,
+                  lastName: orders[i].lastName,
+                  total: orders[i].orders[j].grossTotal,
+                  orderId: orders[i].orders[j]._id,
+                  orderDate: orders[i].orders[j].orderDate,
+                  status: orders[i].orders[j].status
+                })
+              }
+            }
+            let delivered = salesReport.filter(salesReport=>salesReport.status === "delivered")
+        
+        // console.log(salesReport);
+        
+        
+        // console.log("salesReport", salesReport);
+        console.log("delivered", delivered);
 
+        res.render('./admin/salesReport/salesReport', { delivered})
+    } catch (error) {
+        errorHandler(error, req, res, next)
+
+    }
+}
 
 
 module.exports = {
@@ -471,6 +501,7 @@ module.exports = {
     // postAdminOtpVerificationCode,
     getAdminPanel,
     postAdminLogout,
+    getSalesReport
 
 
 

@@ -5,109 +5,165 @@
             <% locals.productList || "" %>
                 <% locals.user || "" %>
                     <% let sum=0 %>
-                        <% if(locals.singleProduct) {%>
-                            <div class="container my-3 text-bg-dark  text-white rounded-3  p-2 ">
-                                <div class="row justify-content-between">
-                                    <div class="col">
-                                        <img class="checkOut-img-size"
-                                            src="/productImages/<%=singleProduct.gallery[0] %>" alt="product-Image"
-                                            srcset="">
-                                    </div>
-                                    <div class="col text-start  ">
-                                        <h4>
-                                            <%=singleProduct.productName %>
-                                        </h4>
-                                        <% if(singleProduct.quantity < 10 && singleProduct.quantity> 0) {%>
-                                            <h5>instock : <span class="text-warning ">Left Only
-                                                    <%=singleProduct.quantity %>
-                                                </span> </h5>
-                                            <% } else if(singleProduct.quantity < 1){%>
-                                                <h5 class="text-danger ">out of stock </h5>
-                                                <% } else{ %>
-                                                    <h5 class="text-success  ">instock </h5>
-                                                    <% } %>
-                                                        <h4>Unit Price: <%=singleProduct.unitPrice %>
-                                                        </h4>
-                                    </div>
-                                    <div class="col text-end">
-                                        <h4 id="singleProductUnitPrice">
-                                            <%=singleProduct.unitPrice %>
-                                        </h4>
-                                        <button id="increament" class="bi bi-plus btn btn-light "></button>
-
-                                        <button class="btn btn-light " name="orderQuantity"
-                                            data-product-price="<%=locals.singleProduct.unitPrice%>"
-                                            data-productId="<%=locals.singleProduct._id %>"
-                                            data-stock-availability="<%=locals.singleProduct.quantity %>">1</button>
-
-                                        <button id="decreament" class="bi bi-dash btn btn-light"></button>
-
-
-
-
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </div>
-
-                            <%} else if(locals.productList.length) {%>
-
-                                <% for(let i=0;i<locals.productList.length;i++){ %>
-                                    <% sum +=productList[i].orderQuantity * productList[i].unitPrice %>
-                                        <div class="container my-3 text-bg-dark  text-white rounded-3  p-2 ">
-                                            <div class="row justify-content-between">
+                        <div class="container mt-3 ">
+                            <div class="row">
+                                <div class="col-6">
+                                    <% if(locals.singleProduct) {%>
+                                        <div class="container p-2  my-1 text-bg-dark  text-white rounded-3  ">
+                                            <div class="row justify-content-between  ">
                                                 <div class="col">
                                                     <img class="checkOut-img-size"
-                                                        src="/productImages/<%=productList[i].gallery[0] %>"
+                                                        src="/productImages/<%=singleProduct.gallery[0] %>"
                                                         alt="product-Image" srcset="">
                                                 </div>
-
                                                 <div class="col text-start  ">
-                                                    <h4>
-                                                        <%=productList[i].productName %>
-                                                    </h4>
-                                                    <% if(productList[i].quantity < 10 && productList[i].quantity> 0)
-                                                        {%>
-                                                        <h5>instock : <span class="text-warning ">Left Only
-                                                                <%=productList[i].quantity %>
-                                                            </span> </h5>
-                                                        <% } else if(productList[i].quantity < 1){%>
-                                                            <h5 class="text-danger ">out of stock </h5>
-                                                            <% } else{ %>
-                                                                <h5 class="text-success  ">instock </h5>
-                                                                <% } %>
-                                                                    <h5>
-                                                                        Unit Price :<%= productList[i].unitPrice %>
-                                                                    </h5>
+                                                    <h6>
+                                                        <%=singleProduct.productName %>
+                                                    </h6>
+                                                    <h6>Unit Price: <%=singleProduct.unitPrice %>
+                                                    </h6>
                                                 </div>
-
                                                 <div class="col text-end">
-
-                                                    <h4 id="orderQuantity<%=i%>" class="productList"
-                                                        data-productId="<%=productList[i]._id  %>"
-                                                        data-product-price="<%= productList[i].orderQuantity * productList[i].unitPrice %>">
-                                                        Order Quantity : <span>
-                                                            <%=productList[i].orderQuantity %>
+                                                    <h6>
+                                                        Total : <i class="bi bi-currency-rupee"></i><span
+                                                            id="singleProductUnitPrice">
+                                                            <%=singleProduct.unitPrice %>
                                                         </span>
-                                                    </h4>
-                                                    <h4>Total : <%= productList[i].orderQuantity *
-                                                            productList[i].unitPrice %>
-                                                    </h4>
-
+                                                    </h6>
+                                                    <button id="increament"
+                                                        class="bi bi-plus btn btn-dark checkOut-incOrdec-button-color ">
+                                                    </button>
+                                                    <button class="btn btn-dark  " name="orderQuantity"
+                                                        data-product-price="<%=locals.singleProduct.unitPrice%>"
+                                                        data-productId="<%=locals.singleProduct._id %>"
+                                                        data-stock-availability="<%=locals.singleProduct.quantity %>">1</button>
+                                                    <button id="decreament"
+                                                        class="bi bi-dash btn  btn-dark checkOut-incOrdec-button-color"></button>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <%} else if(locals.productList.length) {%>
+                                            <% for(let i=0;i<locals.productList.length;i++){ %>
+                                                <% sum +=productList[i].orderQuantity * productList[i].unitPrice %>
+                                                    <div
+                                                        class="container p-2  my-1 text-bg-dark  text-white rounded-3  p-2 ">
+                                                        <div class="row justify-content-between  ">
+                                                            <div class="col">
+                                                                <img class="checkOut-img-size"
+                                                                    src="/productImages/<%=productList[i].gallery[0] %>"
+                                                                    alt="product-Image" srcset="">
+                                                            </div>
+
+                                                            <div class="col text-start  ">
+                                                                <h6>
+                                                                    <%=productList[i].productName %>
+                                                                </h6>
+                                                                <h6>
+                                                                    Unit Price :<%= productList[i].unitPrice %>
+                                                                </h6>
+                                                            </div>
+
+                                                            <div class="col text-end">
+
+                                                                <h6 id="orderQuantity<%=i%>" class="productList"
+                                                                    data-productId="<%=productList[i]._id  %>"
+                                                                    data-product-price="<%= productList[i].orderQuantity * productList[i].unitPrice %>">
+                                                                    Order Quantity : <span>
+                                                                        <%=productList[i].orderQuantity %>
+                                                                    </span>
+                                                                </h6>
+                                                                <h6>Total : <i class="bi bi-currency-rupee"></i>
+                                                                    <%= productList[i].orderQuantity *
+                                                                        productList[i].unitPrice %>
+                                                                </h6>
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <% } %>
+
+
+
+                                                        <% } %>
+                                </div>
+                                <div class="col-6">
+                                    <!-- payment section -->
+                                    <div class="payment-method container text-bg-dark  text-white rounded-3  p-2 mb-3 ">
+                                        <div class="row justify-content-between ">
+                                            <div class="col-5">
+                                                <form action="" name="paymentOption">
+                                                    <input type="radio" id="cashOnDelivery" name="paymentMethod"
+                                                        class="me-2 form-check-input "><label for="cashOnDelivery">Cash
+                                                        On
+                                                        Delivery</label><br>
+
+                                                    <input type="radio" id="onlinePayment" name="paymentMethod"
+                                                        class="me-2 form-check-input"><label
+                                                        for="onlinePayment">UPI</label><br>
+                                                    <% if(locals.user.wallet.balance){%>
+                                                        <input type="radio" id="wallet" name="paymentMethod"
+                                                            class="me-2 form-check-input" data-bs-toggle="modal"
+                                                            data-bs-target="#walletModal"
+                                                            data-wallet-balance="<%=locals.user.wallet.balance%>"><label
+                                                            id="walletLabel" for="wallet">Wallet</label><br>
+                                                        <%}%>
+
+
+                                                            <input class="mt-2 btn btn-light" type="submit"
+                                                                value="Place Order">
+                                                </form>
+                                            </div>
+                                            <div class="col-7">
+                                                <!-- coupon section -->
+                                                <% if(locals.singleProduct) {%>
+                                                    <button type="button"
+                                                        class="btn btn-success   checkOut-price-buttons"
+                                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                        Apply Coupons
+                                                    </button>
+                                                    <br>
+                                                    <!-- <button id="valueAfterCoupon" class="btn btn-warning mt-2   d-none">
+                                                    </button> -->
+                                                    <button id="hiddenCouponDiv" style="font-size: 12px;"
+                                                        class="btn btn-warning  mt-2  d-none checkOut-price-buttons">
+                                                        Atfer Coupon :<i class="bi bi-currency-rupee"></i><span
+                                                            id="valueAfterCoupon"></span></button>
+                                                    <br>
+                                                    <button class="btn btn-primary mt-2 checkOut-price-buttons">
+                                                        Total :<i class="bi bi-currency-rupee"></i> <span id="cartSum">
+                                                            <%=singleProduct.unitPrice %>
+                                                        </span>
+                                                    </button>
+                                                    <%}else{%>
+                                                        <button type="button"
+                                                            class="btn btn-success  checkOut-price-buttons  "
+                                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                            Apply Coupons
+                                                        </button>
+                                                        <br>
+                                                        <button id="hiddenCouponDiv" style="font-size: 12px;"
+                                                            class="btn btn-warning  mt-2   d-none checkOut-price-buttons">
+                                                            Price Atfer Coupon : <i
+                                                                class="bi bi-currency-rupee"></i><span
+                                                                id="valueAfterCoupon"></span></button>
+                                                        <br>
+                                                        <button class="btn btn-primary mt-2  checkOut-price-buttons">
+                                                            Total : <i class="bi bi-currency-rupee"></i> <span
+                                                                id="cartSum">
+                                                                <%=sum %>
+                                                            </span>
+                                                        </button>
+                                                        <%}%>
+
 
                                             </div>
                                         </div>
-
-                                        <% } %>
-
-
-
-                                            <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
 
 
@@ -115,84 +171,13 @@
     </div>
 
     <!-- shipping address -->
-    <% if(locals.user.shippingAddress.length) {%>
-
-        <div class="container ">
-            <div class="row text-bg-dark  text-white rounded-3  p-2 ">
-                <% for(let i=0;i<=locals.user.shippingAddress.length-1;i++) {%>
-
-                    <div class="col-4 g-5  ">
-
-                        <form action="" name="addressList<%=i %>">
 
 
+    <div class="container mt-3 ">
 
-                            <input type="hidden" name="userId" value="<%locals.user._id%>">
-                            <input type="hidden" name="addressId" value="<%=locals.user.shippingAddress[i]._id  %>">
-
-                            <div class="d-flex justify-content-start  ">
-                                <input class="form-check-input" type="radio" name="selectAddress" value="<%= i %>"
-                                    id="<%= i %>">
-                                <h2 class="d-inline ms-2 ">Address <%=i+1 %>
-                                </h2>
-
-
-                            </div>
-                            <label for="">Country</label>
-                            <input class="form-control" name="country" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].country %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].country %>">
-                            <label for="">State</label>
-                            <input class="form-control" name="state" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].state %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].state %>">
-                            <label for="">District</label>
-                            <input class="form-control" name="district" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].district %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].district %>">
-                            <label readonly="true" for="">City</label>
-                            <input class="form-control" name="city" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].city %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].city %>">
-                            <label readonly="true" for="">Pincode</label>
-                            <input class="form-control" name="pincode" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].pincode %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].pincode %>">
-                            <label for="">Street</label>
-                            <input class="form-control" name="street" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].street %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].street %>">
-                            <label for="">House Name</label>
-                            <input class="form-control" name="houseName" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].houseName %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].houseName %>">
-                            <label for="">Building No</label>
-                            <input class="form-control" name="buildingNo" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].buildingNo %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].buildingNo %>">
-                            <label for="">Land Mark</label>
-                            <input class="form-control" name="landMark" readonly="true" type="text"
-                                value="<%=locals.user.shippingAddress[i].landMark %>"
-                                data-original-value="<%=locals.user.shippingAddress[i].landMark %>">
-
-                            <div class="mt-4 ">
-                                <button class="addressEdit btn btn-light ">Edit</button>
-                                <button class="addressDelete btn btn-light "
-                                    data-objectId="<%=locals.user.shippingAddress[i]._id  %>">Delete</button>
-                                <button class="updateAddress d-none btn btn-light " readonly="true"
-                                    type="submit">Update</button>
-                            </div>
-                        </form>
-                    </div>
-
-
-                    <% } %>
-            </div>
-        </div>
-        <% } %>
-            <br><br>
+        <div class="row text-bg-dark  text-white rounded-3  p-2 ">
             <!-- create new address -->
-            <div class="createNewAddress container text-bg-dark  text-white rounded-3  p-5">
+            <div class="createNewAddress">
                 <form action="" name="createAddress">
                     <div class="d-flex">
                         <div id="formData" class=" d-none d-flex ">
@@ -239,176 +224,173 @@
                     </div>
                 </form>
             </div>
-            <br><br>
-
-
-
-
-
-            <!-- payment section -->
-            <div class="payment-method container text-bg-dark  text-white rounded-3  p-5">
-                <div class="row">
-                    <div class="col">
-                        <form action="" name="paymentOption">
-                            <input type="radio" id="cashOnDelivery" name="paymentMethod"
-                                class="me-2 form-check-input "><label for="cashOnDelivery">Cash On
-                                Delivery</label><br>
-
-                            <input type="radio" id="onlinePayment" name="paymentMethod"
-                                class="me-2 form-check-input"><label for="onlinePayment">UPI</label><br>
-                            <% if(locals.user.wallet.balance){%>
-                                <input type="radio" id="wallet" name="paymentMethod" class="me-2 form-check-input"
-                                    data-bs-toggle="modal" data-bs-target="#walletModal"
-                                    data-wallet-balance="<%=locals.user.wallet.balance%>"><label id="walletLabel"
-                                    for="wallet">Wallet</label><br>
-                                <%}%>
-
-
-                                    <input class="mt-2 btn btn-light " type="submit" value="Place Order">
+            <% if(locals.user.shippingAddress.length) {%>
+                <!-- existing addresses -->
+                <% for(let i=0;i<=locals.user.shippingAddress.length-1;i++) {%>
+                    <div class="col-3  ">
+                        <form action="" name="addressList<%=i %>">
+                            <input type="hidden" name="userId" value="<%locals.user._id%>">
+                            <input type="hidden" name="addressId" value="<%=locals.user.shippingAddress[i]._id  %>">
+                            <div class="d-flex justify-content-start  ">
+                                <input class="form-check-input" type="radio" name="selectAddress" value="<%= i %>"
+                                    id="<%= i %>">
+                                <h5 class="d-inline ms-2 ">Address <%=i+1 %>
+                                </h5>
+                            </div>
+                            <label class="checkOut-label    " for="">Country</label>
+                            <input class="form-control checkOut-input " name="country" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].country %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].country %>">
+                            <label class="checkOut-label" for="">State</label>
+                            <input class="form-control checkOut-input" name="state" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].state %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].state %>">
+                            <label class="checkOut-label" for="">District</label>
+                            <input class="form-control checkOut-input" name="district" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].district %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].district %>">
+                            <label class="checkOut-label" readonly="true" for="">City</label>
+                            <input class="form-control checkOut-input" name="city" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].city %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].city %>">
+                            <label class="checkOut-label" readonly="true" for="">Pincode</label>
+                            <input class="form-control checkOut-input" name="pincode" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].pincode %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].pincode %>">
+                            <label class="checkOut-label" for="">Street</label>
+                            <input class="form-control checkOut-input" name="street" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].street %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].street %>">
+                            <label class="checkOut-label" for="">House Name</label>
+                            <input class="form-control checkOut-input" name="houseName" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].houseName %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].houseName %>">
+                            <label class="checkOut-label" for="">Building No</label>
+                            <input class="form-control checkOut-input" name="buildingNo" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].buildingNo %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].buildingNo %>">
+                            <label class="checkOut-label" for="">Land Mark</label>
+                            <input class="form-control checkOut-input" name="landMark" readonly="true" type="text"
+                                value="<%=locals.user.shippingAddress[i].landMark %>"
+                                data-original-value="<%=locals.user.shippingAddress[i].landMark %>">
+                            <div class="mt-2 ">
+                                <button class="addressEdit btn btn-light checkOut-address-button">Edit</button>
+                                <button class="addressDelete btn btn-light checkOut-address-button"
+                                    data-objectId="<%=locals.user.shippingAddress[i]._id  %>">Delete</button>
+                                <button class="updateAddress d-none btn btn-light checkOut-address-button"
+                                    readonly="true" type="submit">Update</button>
+                            </div>
                         </form>
                     </div>
-                    <div class="col">
-
-                        <% if(locals.singleProduct) {%>
-                            <button type="button" class="btn btn-success  mt-3  " data-bs-toggle="modal"
-                                data-bs-target="#staticBackdrop">
-                                Apply Coupons
-                            </button>
-                            <br>
-                            <button id="valueAfterCoupon" class="btn btn-warning  mt-3 d-none"> </button>
-                            <br>
-                            <button class="btn btn-primary mt-3 ">
-                                Total : <span id="cartSum">
-                                    <%=singleProduct.unitPrice %>
-                                </span>
-                            </button>
-                            <%}else{%>
-                                <button type="button" class="btn btn-success  mt-3  " data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop">
-                                    Apply Coupons
-                                </button>
-                                <br>
-                                <button id="valueAfterCoupon" class="btn btn-warning  mt-3 d-none"></button>
-                                <br>
-                                <button class="btn btn-primary mt-3 ">
-                                    Total : <span id="cartSum">
-                                        <%=sum %>
-                                    </span>
-                                </button>
-                                <%}%>
-                                    <!-- coupon section -->
-
+                    <% } %>
+        </div>
+    </div>
+    <% } %>
+        <br><br>
+        <!-- Modal for coupon-->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+            aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class="modal-content bg-dark ">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title
+                        </h1>
+                        <button type="button" class="btn-close bg-white " data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
-                </div>
-            </div>
-
-
-
-
-            <!-- Modal for coupon-->
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-                aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable">
-                    <div class="modal-content bg-dark ">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title
-                            </h1>
-                            <button type="button" class="btn-close bg-white " data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <% if(locals.singleProduct) {%>
-                                <% locals. coupons.productCoupon || "" %>
-                                    <%if(locals.coupons.productCoupon){%>
-                                        <li data-coupon-id="<%=locals.coupons.productCoupon._id%>"
-                                            data-coupon-value="<%=locals.coupons.productCoupon.couponValue%>"
-                                            class="selectCoupon text-white ">
-                                            <%=locals.coupons.productCoupon.couponCode%>
+                    <div class="modal-body">
+                        <% if(locals.singleProduct) {%>
+                            <% locals. coupons.productCoupon || "" %>
+                                <%if(locals.coupons.productCoupon){%>
+                                    <li data-coupon-id="<%=locals.coupons.productCoupon._id%>"
+                                        data-coupon-value="<%=locals.coupons.productCoupon.couponValue%>"
+                                        class="selectCoupon text-white ">
+                                        <%=locals.coupons.productCoupon.couponCode%>
+                                    </li>
+                                    <%} else if(locals. coupons.brandCoupon){%>
+                                        <li data-coupon-id="<%=locals.coupons.brandCoupon._id%>"
+                                            data-coupon-value="<%=locals.coupons.brandCoupon.couponValue%>"
+                                            class="selectCoupon text-white  ">
+                                            <%=locals.coupons.brandCoupon.couponCode%>
                                         </li>
-                                        <%} else if(locals. coupons.brandCoupon){%>
-                                            <li data-coupon-id="<%=locals.coupons.brandCoupon._id%>"
-                                                data-coupon-value="<%=locals.coupons.brandCoupon.couponValue%>"
-                                                class="selectCoupon text-white  ">
-                                                <%=locals.coupons.brandCoupon.couponCode%>
-                                            </li>
-                                            <%}%>
+                                        <%}%>
 
-                                                <%}else{%>
-                                                    <% locals. coupons.priceCoupons || "" %>
-                                                        <%if(locals. coupons.priceCoupons){%>
-                                                            <%if(locals. coupons.priceCoupons.length){%>
-                                                                <ul class="list-group">
-                                                                    <%locals. coupons.priceCoupons.forEach(priceCoupon=>
-                                                                        {%>
-                                                                        <li data-coupon-id="<%=priceCoupon._id%>"
-                                                                            data-coupon-value="<%=priceCoupon.couponValue%>"
-                                                                            class="selectCoupon text-white list-group-item bg-dark  ">
-                                                                            <%= priceCoupon.couponCode%>
-                                                                        </li>
-                                                                        <%})%>
-                                                                </ul>
+                                            <%}else{%>
+                                                <% locals. coupons.priceCoupons || "" %>
+                                                    <%if(locals. coupons.priceCoupons){%>
+                                                        <%if(locals. coupons.priceCoupons.length){%>
+                                                            <ul class="list-group">
+                                                                <%locals. coupons.priceCoupons.forEach(priceCoupon=>
+                                                                    {%>
+                                                                    <li data-coupon-id="<%=priceCoupon._id%>"
+                                                                        data-coupon-value="<%=priceCoupon.couponValue%>"
+                                                                        class="selectCoupon text-white list-group-item bg-dark  ">
+                                                                        <%= priceCoupon.couponCode%>
+                                                                    </li>
+                                                                    <%})%>
+                                                            </ul>
+                                                            <%}%>
                                                                 <%}%>
                                                                     <%}%>
-                                                                        <%}%>
 
-                        </div>
-                        // <div class="modal-footer">
-                            // <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            // <button type="button" class="btn btn-primary">Understood</button>
-                            // </div>
                     </div>
-
-                </div>
-            </div>
-
-
-            <!-- Modal for wallet-->
-
-            <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form action="">
-                                <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label d-inline ">Balance In
-                                        Wallet: <span id="walletBalance"></span></label>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label d-inline ">Payable Amount: <span
-                                            id="payableAmount"></span></label>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="recipient-name" class="col-form-label d-inline ">Balance Amount: <span
-                                            id="balanceAmount"></span></label>
-                                </div>
-
-                                <div id="balancePayment" class="d-none">
-                                    <div>
-                                        <h4>Pay The Balance Using</h4>
-                                    </div>
-                                    <input type="radio" id="cashOnDeliveryWallet" name="paymentMethodWallet"
-                                        class="me-2 form-check-input "><label for="cashOnDeliveryWallet">Cash On
-                                        Delivery</label><br>
-                                    <input type="radio" id="onlinePaymentWallet" name="paymentMethodWallet"
-                                        class="me-2 form-check-input "><label for="onlinePaymentWallet">UPI</label><br>
-                                </div>
-                        </div>
-                        <div id="walletFooter" class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button id="payUsingWalletButton" type="button" class="btn btn-primary">Pay Using
-                                Wallet</button>
-                        </div>
-                        </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
-            </div>
 
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-            <script src="/javaScript/user/header.js"></script>
-            <script src="/javaScript/user/checkout.js"></script>
-            <%- include('../layout/user/footer') %>
+            </div>
+        </div>
+
+
+        <!--Modal for wallet-->
+
+        <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white ">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
+                        <button type="button" class="btn-close text-bg-light " data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label d-inline ">Balance In
+                                    Wallet: <span id="walletBalance"></span></label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label d-inline ">Payable Amount: <span
+                                        id="payableAmount"></span></label>
+                            </div>
+                            <div class="mb-3">
+                                <label for="recipient-name" class="col-form-label d-inline ">Balance Amount: <span
+                                        id="balanceAmount"></span></label>
+                            </div>
+
+                            <div id="balancePayment" class="d-none">
+                                <hr>
+                                <div>
+                                    <h4>Pay The Balance Using</h4>
+                                </div>
+                                <input type="radio" id="cashOnDeliveryWallet" name="paymentMethodWallet"
+                                    class="me-2 form-check-input "><label for="cashOnDeliveryWallet">Cash On
+                                    Delivery</label><br>
+                                <input type="radio" id="onlinePaymentWallet" name="paymentMethodWallet"
+                                    class="me-2 form-check-input "><label for="onlinePaymentWallet">UPI</label><br>
+                            </div>
+                    </div>
+                    <div id="walletFooter" class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="payUsingWalletButton" type="button" class="btn btn-primary">Pay Using
+                            Wallet</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="/javaScript/user/header.js"></script>
+        <script src="/javaScript/user/checkout.js"></script>
+        <%- include('../layout/user/footer') %>

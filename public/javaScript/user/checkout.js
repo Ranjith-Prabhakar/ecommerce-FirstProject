@@ -6,7 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
     //single product increament
     let increamentButton = document.getElementById('increament')
     console.log("increamentButton", increamentButton);
@@ -24,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 let productPrice = orderQuantity.getAttribute('data-product-price')
 
                 singleProductUnitPrice.innerText = increase * parseInt(productPrice)
-                
+
                 let cartSum = document.getElementById('cartSum')
                 cartSum.innerText = singleProductUnitPrice.innerText
 
@@ -256,7 +255,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 let adjustedValue = singleProductUnitPrice - couponValue;
                 valueAfterCoupon.innerText = adjustedValue.toFixed(2); // Convert to fixed decimal for display
                 valueAfterCoupon.setAttribute('data-coupon-id', couponId)
-                valueAfterCoupon.classList.remove('d-none')
+                let hiddenCouponDiv = document.getElementById('hiddenCouponDiv')
+                cartSumElement.innerText = adjustedValue.toFixed(2)
+                hiddenCouponDiv.classList.remove('d-none')
                 cartSumElement.setAttribute('data-coupon-id', couponId)
                 cartSumElement.setAttribute('data-coupon-value', couponValue)
             } else if (cartSumElement) {
@@ -264,7 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 let adjustedValue = cartSum - couponValue;
                 valueAfterCoupon.innerText = adjustedValue.toFixed(2);
                 valueAfterCoupon.setAttribute('data-coupon-id', couponId)
-                valueAfterCoupon.classList.remove('d-none')
+                let hiddenCouponDiv = document.getElementById('hiddenCouponDiv')
+                hiddenCouponDiv.classList.remove('d-none')
+                cartSumElement.innerText = adjustedValue.toFixed(2)
                 cartSumElement.setAttribute('data-coupon-id', couponId)
                 cartSumElement.setAttribute('data-coupon-value', couponValue)
             }

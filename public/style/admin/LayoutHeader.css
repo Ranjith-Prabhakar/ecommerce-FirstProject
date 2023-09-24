@@ -2,6 +2,7 @@
 @import "./orderSinglePage.css";
 @import "./userManagement.css";
 @import "./productManagement.css";
+@import "./salesReport.css";
 body{
     background-color:#08030f ;
 }

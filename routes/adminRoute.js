@@ -11,6 +11,7 @@ router.post('/adminLogin',adminSessionHandler,  adminRestriction, adminControlle
 // router.post('/adminOtpVerificationCode',adminSessionHandler,  adminRestriction, adminController.postAdminOtpVerificationCode)
 router.get('/adminPanel',adminValidation, adminSessionHandler,  adminController.getAdminPanel)///
 router.post('/adminLogout',adminValidation, adminSessionHandler,adminController.postAdminLogout)
+router.get('/salesReport',adminValidation,adminSessionHandler,adminController.getSalesReport)
 
 
 

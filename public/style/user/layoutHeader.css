@@ -10,6 +10,7 @@
 body{
     background-color:#08030f ;
     font-family: 'Poppins', sans-serif;
+    min-height: 80vh;
    
    
 }
@@ -85,8 +86,8 @@ body{
   .footer{
     background-color:#10091a ;
     color:#F9EFEF ;
-    position: relative;
-    bottom: -13px;
+   
+   
   }
 
 

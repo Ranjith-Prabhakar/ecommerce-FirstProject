@@ -1,0 +1,77 @@
+<%- include('../../layout/admin/header') %>
+  <%- include('../../layout/admin/generalManagement') %>
+    <div class="col container ">
+      <div class=" bg-dark text-white w-100 border-radius p-2 ">
+        <div class="d-flex justify-content-between ">
+          <div>
+            <input type="hidden" data-object="<%=JSON.stringify(delivered)%>" name="delivered">
+            <label for="fromDate">From</label>
+            <input class="rounded-2 px-2 border-black   " type="date" name="fromDate" id="fromDate" required>
+            <label for="toDate">To</label>
+            <input class="rounded-2 px-2 border-black   " type="date" name="toDate" id="toDate" required>
+            <input class="bg-success  rounded-3 border-black text-white " type="submit" value="Submit"
+              name="submitDate">
+            <button class="bg-secondary rounded-3 border-black text-white " name="resetDate">Reset</button>
+          </div>
+          <div>
+            <select name="export" id="export">
+              <option value="default" selected>Export</option>
+              <option value="excel">Excel</option>
+              <option value="pdf">Pdf</option>
+            </select>
+            
+          </div>
+        </div>
+        <hr>
+        <table id="table" class=" table table-dark table-striped ">
+          <thead class="fw-bolder ">
+            <tr>
+              <th class="px-5 ">Sl No</th>
+              <th class="px-5 ">Date</th>
+              <th class="px-5 ">Order Id</th>
+              <th class="px-5 ">Client</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <% locals.delivered || "" %>
+              <% if(locals.delivered) {%>
+                <%let count=1 %>
+                  <% delivered.forEach(sales=>{%>
+                    <tr>
+                      <td class="px-5 ">
+                        <%=count %>
+                      </td>
+                      <td><%=sales.orderDate.toLocaleDateString('en-US', { weekday: 'short' , month: 'short' ,
+                          day: 'numeric' , year: 'numeric' })%></td>
+
+                      <td>
+                        <%=sales.orderId %>
+                      </td>
+                      <td>
+                        <%=sales.firstName + " " + sales.lastName %>
+                      </td>
+                      <td>
+                        <%=sales.total %>
+                      </td>
+                    </tr>
+                    <% count++ %>
+                      <%}) %>
+                        <% } %>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+    </div>
+    </div>
+    <!-- Include the ExcelJS library an fileSaver for excel -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
+<!-- Include the pdf-lib library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.13.0/pdf-lib.js"></script>
+
+    <script src="/javaScript/admin/salesReport.js"></script>
+    <%- include('../../layout/admin/footer') %>
