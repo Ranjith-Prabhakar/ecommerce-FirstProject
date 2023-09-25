@@ -1248,9 +1248,16 @@ const getOrderSinglePage = async (req, res, next) => {
 }
 
 const postCancellOrder = async (req, res, next) => {
+    console.log("inside postCancellOrder");
     try {
+        console.log("req.body.newFormData", req.body.newFormData);
         const userId = req.session.userId;
-        const orderId = req.body.orderId;
+        const { orderId, cancelMessage, modeOfRefund } = req.body.newFormData;
+
+        console.log("userId:", userId);
+        console.log("orderId:", orderId);
+        console.log("cancelMessage:", cancelMessage);
+        console.log("modeOfRefund:", modeOfRefund);
 
         const updatedUser = await UserModal.updateOne(
             {
@@ -1259,23 +1266,28 @@ const postCancellOrder = async (req, res, next) => {
             },
             {
                 $set: {
-                    'orders.$.status': 'cancelledByClient' // Update the status of the matched order
+                    'orders.$.status': 'cancelledByClient', // Update the status of the matched order
+                    'orders.$.cancelMessage': cancelMessage,
+                    'orders.$.modeOfRefund': modeOfRefund
                 }
             }
         );
 
+        console.log("updatedUser:", updatedUser);
+
         if (updatedUser.nModified === 1) {
             // Check if an order was actually updated
             console.log('Order cancelled successfully');
+            res.status(200).json({ success: true });
         } else {
             console.log('Order not found or could not be cancelled');
+            res.status(400).json({ success: false, message: 'Order not found or could not be cancelled' });
         }
-
-        res.status(200).json({ success: true });
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 };
+
 
 const postOrderReturnRequest = async (req, res, next) => {
     try {

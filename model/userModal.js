@@ -146,6 +146,7 @@ const User = mongoose.Schema({
         couponValue:Number,
         walletDebit:Number,
         returnMessage: String,
+        cancelMessage: String,
         modeOfRefund: String
     }],
     wallet: {
