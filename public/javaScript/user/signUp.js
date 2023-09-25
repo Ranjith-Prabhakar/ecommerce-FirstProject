@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-//password matching
+    //password matching
 
     let confirmPassword = document.getElementById('Confirm_Password')
 
@@ -11,19 +11,49 @@ document.addEventListener('DOMContentLoaded', (event) => {
         let confirm_password_label = document.getElementById('confirm_password_label')
         let submitButton = document.getElementById("submitButton")
         if (passwordValue !== confirmPasswordValue) {
-            console.log('inside if');
-
             confirm_password_label.innerText = 'password not matching'
             confirm_password_label.classList.replace('text-white', 'text-danger')
-
             submitButton.setAttribute('disabled', 'disabled')
         } else {
-            console.log('inside else');
             confirm_password_label.innerText = confirm_password_label.getAttribute("data-value")
             confirm_password_label.classList.replace('text-danger', 'text-white')
             submitButton.removeAttribute('disabled')
         }
     })
 
+    //email checking
+
+    let email = document.getElementById("email")
+    email.addEventListener('change', async (e) => {
+        e.preventDefault()
+        console.log('email checker');
+        try {
+            let response = await fetch('/checkMail', {
+                method: 'post',
+                headers: {
+                    "content-type": 'application/json'
+                },
+                body: JSON.stringify({ email: email.value })
+            });
+            
+            if (response.ok) { // Check if the response status is OK (status code 200)
+                let result = await response.json(); // Parse the JSON response
+                console.log('result', result);
+                console.log('result.mailExist', result.mailExist);
+                
+                if (result.mailExist) {
+                    let emailLabel = document.getElementById('emailLabel')
+                    console.log("emailLabel", emailLabel);
+                    emailLabel.innerText = "email already exists"
+
+                    emailLabel.classList.replace('text-white','text-danger')
+                }
+            } else {
+                console.log('Response not OK');
+            }
+        } catch (error) {
+            console.log(error.message)
+        }
+    });
     
 })

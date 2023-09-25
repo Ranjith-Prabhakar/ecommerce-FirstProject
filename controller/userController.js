@@ -91,7 +91,7 @@ const getSearch = async (req, res, next) => {
 const getUserLogin = async (req, res, next) => {
     try {
         if (errorMessages) {
-            res.render('./users/userLogin', { errorMessages})
+            res.render('./users/userLogin', { errorMessages })
             errorMessages = ""
         }
         else {
@@ -352,7 +352,7 @@ const postUserOtpVerificationCode = async (req, res, next) => {
             req.session.userEmail = ''
             req.session.otp = ''
         } else {
-           errorMessages = 'invalid otp'
+            errorMessages = 'invalid otp'
             res.redirect('/userOtpVerificationCode')
         }
     } catch (err) {
@@ -1385,6 +1385,23 @@ const postAddWalletMoney = async (req, res, next) => {
     }
 }
 
+const postMailCheck = async (req, res, next) => {
+    console.log('out try');
+    try {
+        console.log('inside postMail');
+        console.log(req.body)
+        let validation = await UserModal.find({ email: req.body.email })
+        if (validation.length) {
+            console.log('inside validation.length');
+            res.json({ mailExist: true })
+        } else {
+            res.json({ mailExist: false })
+        }
+    } catch (error) {
+        errorHandler(error, req, res, next)
+
+    }
+}
 module.exports = {
     userHome,
     getSearch,
@@ -1417,5 +1434,6 @@ module.exports = {
     postOrderReturnRequest,
     postWallet,
     postRazorPayCreateOrder,
-    postAddWalletMoney
+    postAddWalletMoney,
+    postMailCheck
 }

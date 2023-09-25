@@ -57,5 +57,7 @@ router.post("/razorPayCreateOrder",userSessionHandler,userValidation,userControl
 
 //add money to wallet
 router.post('/addWalletMoney',userSessionHandler,userValidation,userController.postAddWalletMoney)
+//email checking for signup
+router.post('/checkMail',userController.postMailCheck)
 
 module.exports = router
