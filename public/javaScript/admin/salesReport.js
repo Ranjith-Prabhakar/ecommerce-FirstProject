@@ -79,13 +79,12 @@ document.addEventListener('DOMContentLoaded', () => {
   exportFile.addEventListener('click', async(e) => {
     e.preventDefault();
     if (exportFile.value === 'excel') {
-      console.log('Exporting as Excel...');
-      console.log('helow');
-      exportAsExcel(); // Call the exportAsExcel function
+   
+      exportAsExcel(); 
       exportFile.value = "default"
     } else if (exportFile.value === 'pdf') {
       console.log('Exporting as PDF...');
-      await exportAsPDF(); // Call the exportAsPDF function
+      await exportAsPDF(); 
       exportFile.value = "default"
     }
   });
@@ -126,56 +125,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // async function exportAsPDF() {
-  //   const doc = new jsPDF();
-  //   doc.text("Hello world!", 10, 10);
-  //   doc.save("a4.pdf");
-  // }
-
   async function exportAsPDF() {
-    const pdfDoc = await PDFDocument.create();
-    const page = pdfDoc.addPage([600, 400]);
+    const { jsPDF } = window.jspdf; // Get jsPDF from the window object
+    const doc = new jsPDF();
   
-    const { width, height } = page.getSize();
-    const fontSize = 15;
-    const textX = 50;
-    const textY = height - 50;
+    // Define the table options
+    const options = {
+      html: '#table', // Use the table with id "table"
+      startY: 20, // Set the starting Y position for the table
+      theme: 'striped', // Apply a striped theme to the table
+      headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255] }, // Header styles
+    };
   
-    page.drawText('Sales Report', {
-      x: textX,
-      y: textY,
-      size: fontSize,
-      color: rgb(0, 0, 0), // Black color
-    });
+    // Generate the PDF with the table
+    doc.autoTable(options);
   
-    let y = textY - fontSize - 10;
-  
-    // Access the table
-    const table = document.getElementById('table');
-    const headerRow = table.rows[0];
-    const rowCount = table.rows.length;
-  
-    // Loop through the table rows and cells to add data to the PDF
-    for (let i = 1; i < rowCount; i++) {
-      const row = table.rows[i];
-      const cells = row.cells;
-      const fullName = cells[3].innerText; // Assuming Client name is in the 4th column
-      const orderId = cells[2].innerText; // Assuming Order ID is in the 3rd column
-      const total = cells[4].innerText; // Assuming Total is in the 5th column
-  
-      page.drawText(`${orderId}: ${fullName} - Total: ${total}`, {
-        x: textX,
-        y: y,
-        size: fontSize,
-        color: rgb(0, 0, 0),
-      });
-  
-      y -= fontSize + 5;
-    }
-  
-    const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    saveAs(blob, 'sales_report.pdf'); // Download the file as 'sales_report.pdf'
+    // Save the PDF with the specified name
+    doc.save('sales_report.pdf');
   }
+  
+
+  // async function exportAsPDF() {
+  //   const pdfDoc = await PDFDocument.create();
+  //   const page = pdfDoc.addPage([600, 400]);
+  
+  //   const { width, height } = page.getSize();
+  //   const fontSize = 15;
+  //   const textX = 50;
+  //   const textY = height - 50;
+  
+  //   page.drawText('Sales Report', {
+  //     x: textX,
+  //     y: textY,
+  //     size: fontSize,
+  //     color: rgb(0, 0, 0), // Black color
+  //   });
+  
+  //   let y = textY - fontSize - 10;
+  
+  //   // Access the table
+  //   const table = document.getElementById('table');
+  //   const headerRow = table.rows[0];
+  //   const rowCount = table.rows.length;
+  
+  //   // Loop through the table rows and cells to add data to the PDF
+  //   for (let i = 1; i < rowCount; i++) {
+  //     const row = table.rows[i];
+  //     const cells = row.cells;
+  //     const fullName = cells[3].innerText; // Assuming Client name is in the 4th column
+  //     const orderId = cells[2].innerText; // Assuming Order ID is in the 3rd column
+  //     const total = cells[4].innerText; // Assuming Total is in the 5th column
+  
+  //     page.drawText(`${orderId}: ${fullName} - Total: ${total}`, {
+  //       x: textX,
+  //       y: y,
+  //       size: fontSize,
+  //       color: rgb(0, 0, 0),
+  //     });
+  
+  //     y -= fontSize + 5;
+  //   }
+  
+  //   const pdfBytes = await pdfDoc.save();
+  //   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+  //   saveAs(blob, 'sales_report.pdf'); // Download the file as 'sales_report.pdf'
+  // }
   
 });
