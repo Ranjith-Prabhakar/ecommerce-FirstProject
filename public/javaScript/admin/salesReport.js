@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+//datatable.net
+// let table = new DataTable('#table', {
+//   responsive: true
+// });
+$('#table').DataTable();
+
+
+
   const submitDate = document.getElementsByName('submitDate')[0];
   let filter
   submitDate.addEventListener('click', (event) => {
@@ -61,17 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  // let exportFile = document.getElementById('export');
-  // exportFile.addEventListener('change', async (e) => {
-  //   e.preventDefault();
-  //   if (exportFile.value === 'excel') {
-  //     console.log('Exporting as Excel...');
-  //     exportAsExcel(); // Call the exportAsExcel function
-  //   } else if (exportFile.value === 'pdf') {
-  //     console.log('Exporting as PDF...');
-  //     await exportAsPDF(); // Call the exportAsPDF function
-  //   }
-  // });
+
 
 
   let exportFile = document.getElementById('export');
@@ -145,50 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   
 
-  // async function exportAsPDF() {
-  //   const pdfDoc = await PDFDocument.create();
-  //   const page = pdfDoc.addPage([600, 400]);
   
-  //   const { width, height } = page.getSize();
-  //   const fontSize = 15;
-  //   const textX = 50;
-  //   const textY = height - 50;
-  
-  //   page.drawText('Sales Report', {
-  //     x: textX,
-  //     y: textY,
-  //     size: fontSize,
-  //     color: rgb(0, 0, 0), // Black color
-  //   });
-  
-  //   let y = textY - fontSize - 10;
-  
-  //   // Access the table
-  //   const table = document.getElementById('table');
-  //   const headerRow = table.rows[0];
-  //   const rowCount = table.rows.length;
-  
-  //   // Loop through the table rows and cells to add data to the PDF
-  //   for (let i = 1; i < rowCount; i++) {
-  //     const row = table.rows[i];
-  //     const cells = row.cells;
-  //     const fullName = cells[3].innerText; // Assuming Client name is in the 4th column
-  //     const orderId = cells[2].innerText; // Assuming Order ID is in the 3rd column
-  //     const total = cells[4].innerText; // Assuming Total is in the 5th column
-  
-  //     page.drawText(`${orderId}: ${fullName} - Total: ${total}`, {
-  //       x: textX,
-  //       y: y,
-  //       size: fontSize,
-  //       color: rgb(0, 0, 0),
-  //     });
-  
-  //     y -= fontSize + 5;
-  //   }
-  
-  //   const pdfBytes = await pdfDoc.save();
-  //   const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-  //   saveAs(blob, 'sales_report.pdf'); // Download the file as 'sales_report.pdf'
-  // }
   
 });

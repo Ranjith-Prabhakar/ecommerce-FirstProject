@@ -1,8 +1,8 @@
 <%- include('../../layout/admin/header') %>
   <%- include('../../layout/admin/generalManagement') %>
     <div class="col container ">
-      <div class=" bg-dark text-white w-100 border-radius p-2 ">
-        <div class="d-flex justify-content-between ">
+      <div class=" bg-dark  text-white w-100 border-radius p-2 ">
+        <div class="d-flex justify-content-between text-white ">
           <div>
             <input type="hidden" data-object="<%=JSON.stringify(delivered)%>" name="delivered">
             <label for="fromDate">From</label>
@@ -23,7 +23,11 @@
           </div>
         </div>
         <hr>
-        <table id="table" class=" table table-dark table-striped ">
+
+
+
+
+        <table id="table" class=" table table-dark table-striped text-white dark " >
           <thead class="fw-bolder ">
             <tr>
               <th class="px-5 ">Sl No</th>
@@ -71,16 +75,8 @@
 
 
     <!-- Include the pdf-lib library -->
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.13.0/pdf-lib.js"></script> -->
-
-
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.6.0/jspdf.plugin.autotable.min.js"></script>
-    
-
-    <!-- <script src="jspdf.min.js"></script> -->
-    <!-- <script src="jspdf.plugin.autotable.min.js"></script> -->
 
     <script src="/javaScript/admin/salesReport.js"></script>
     <%- include('../../layout/admin/footer') %>
