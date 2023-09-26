@@ -1,4 +1,5 @@
 const multer = require('multer')
+const fs = require('fs');
 const path = require('path')
 
 // multer for product
@@ -30,18 +31,32 @@ const profileStorage = multer.diskStorage({
 const profileImageUpload = multer({storage:profileStorage})
 
 // multer for banner ================================================
+
 const bannerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'public/bannerImages');
     },
     filename: (req, file, cb) => {
-        // Ensure the uploaded file will overwrite the existing one with the same name
-        cb(null, `${req.body.imageName}${path.extname(file.originalname)}`);
+        const filename = `${req.body.imageName}${path.extname(file.originalname)}`;
+        
+        // Check if any file with the same name (regardless of extension) exists, and if so, delete it
+        const directoryPath = 'public/bannerImages';
+        const filesInDirectory = fs.readdirSync(directoryPath);
+        
+        filesInDirectory.forEach((fileInDirectory) => {
+            if (fileInDirectory.startsWith(req.body.imageName)) {
+                const filePath = path.join(directoryPath, fileInDirectory);
+                fs.unlinkSync(filePath);
+            }
+        });
+
+        cb(null, filename);
     },
     overwrite: true, // Enable overwriting existing files
 });
 
-const bannerImageUpload = multer({storage:bannerStorage})
+const bannerImageUpload = multer({ storage: bannerStorage });
+
 
 
 
