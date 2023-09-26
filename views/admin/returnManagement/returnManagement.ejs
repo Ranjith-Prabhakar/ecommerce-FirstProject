@@ -2,9 +2,9 @@
     <%- include('../../layout/admin/generalManagement') %>
         <% locals.returnReq || "" %>
 
-            <div class="col">
+            <div class="col-9 bg-dark rounded-3 p-3 ">
                 <% if(locals.returnReq.length) {%>
-                    <table class="table table-dark table-striped">
+                    <table id="table" class="table table-dark table-striped">
                         <thead>
                             <tr>
                                 <td>User Name</td>

@@ -1,6 +1,6 @@
 <%- include('../../layout/admin/header') %>
     <%- include('../../layout/admin/generalManagement') %>
-        <div class="col">
+        <div class="col bg-dark p-3 rounded-3 ">
 
             <!-- <div class="bg-dark   p-2     rounded-1  m-1   text-start  position-absolute "
                 style="top: 300px; left: 18px;"><a class="nav-link text-white fs-5 " href="/createProduct">Create
@@ -10,13 +10,13 @@
 
 
             <!--  -->
-            <button class="btn btn-primary mb-2 ms-3" type="button" data-bs-toggle="offcanvas"
+            <button class="btn btn-primary mb-3 ms-3" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">New</button>
 
             <div class="offcanvas offcanvas-start text-bg-dark" data-bs-scroll="true" tabindex="-1"
                 id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
                 <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Backdrop with scrolling</h5>
+                    <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Create New Product</h5>
                     <button type="button" class="btn-close bg-white " data-bs-dismiss="offcanvas"
                         aria-label="Close"></button>
                 </div>
@@ -86,7 +86,7 @@
             <!--  -->
             <% if(products.length) {%>
                 <div class="container-fluid">
-                    <table class="table table-dark table-hover  box">
+                    <table id="table" class="table table-dark table-hover  box">
                         <thead>
                             <tr>
                                 <th scope="col">Number</th>
@@ -155,16 +155,7 @@
                                             </form>
                                         </td>
 
-                                        <!-- Inside the form in the table cell -->
-                                        <!-- <td>
 
-                                            <form action="/productAddOrRemove" class="quantity-form w-50 p-0 m-0 ">
-                                                <input type="hidden" name="productId" value="<%= product._id %>">
-                                                <input class="form-control w-50  d-inline" type="number" name="quantity"
-                                                    step="1" value="<%= product.quantity %>">
-                                                <button class="btn btn-outline-secondary" type="submit">Submit</button>
-                                            </form>
-                                        </td> -->
 
 
                                     </tr>
@@ -177,15 +168,14 @@
 
 
                 <!--  -->
-                <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@getbootstrap">Open modal for @getbootstrap</button> -->
 
                 <div class="modal fade" id="exampleModalImg" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content bg-dark text-white ">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                <button type="button" class="btn-close bg-light " data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -238,15 +228,18 @@
                                                     id="editQuantity">
                                                 <label for="" class="text-black ">Unit
                                                     price</label>
-                                                <input class="form-control w-75 " type="text" name="unitPrice" id="editUnitPrice">
+                                                <input class="form-control w-75 " type="text" name="unitPrice"
+                                                    id="editUnitPrice">
                                                 <label for="" class="text-black ">Front
                                                     Camera</label>
-                                                <input class="form-control w-75 " type="text" name="frontCamera" id="editFrontCamera">
+                                                <input class="form-control w-75 " type="text" name="frontCamera"
+                                                    id="editFrontCamera">
 
 
                                                 <label for="" class="text-black ">Back
                                                     Camera</label>
-                                                <input class="form-control w-75 " type="text" name="backCamera" id="editBackCamera">
+                                                <input class="form-control w-75 " type="text" name="backCamera"
+                                                    id="editBackCamera">
                                             </div>
                                             <div class="two mt-4">
                                                 <label for="" class="text-black ">RAM</label>
@@ -255,14 +248,18 @@
 
                                                 <label for="" class="text-black ">Internal
                                                     Storage</label>
-                                                <input class="form-control w-100 " type="text" name="internalStorage" id="editInternalStorage" >
+                                                <input class="form-control w-100 " type="text" name="internalStorage"
+                                                    id="editInternalStorage">
                                                 <label for="" class="text-black ">Battery</label>
-                                                <input class="form-control w-100 " type="text" name="battery" id="editBattery">
+                                                <input class="form-control w-100 " type="text" name="battery"
+                                                    id="editBattery">
                                                 <label for="" class="text-black ">Processor</label>
-                                                <input class="form-control w-100 " type="text" name="processor" id="editProcessor">
+                                                <input class="form-control w-100 " type="text" name="processor"
+                                                    id="editProcessor">
                                                 <label for="" class="text-black ">Charger
                                                     Type</label>
-                                                <input class="form-control w-100 mb-2 " type="text" name="chargerType" id="editChargerType">
+                                                <input class="form-control w-100 mb-2 " type="text" name="chargerType"
+                                                    id="editChargerType">
 
 
                                             </div>

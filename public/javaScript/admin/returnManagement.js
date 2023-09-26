@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', (e) => {
+  //datatable.net
+$('#table').DataTable();
   //read reason 
   const returnMessageButton = document.querySelectorAll('button[name="returnMessage"]')
   const modalMessageDiv = document.getElementById('returnMessageModalDiv')

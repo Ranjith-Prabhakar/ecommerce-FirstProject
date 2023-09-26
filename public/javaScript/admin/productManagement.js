@@ -1,4 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
+//datatable.net
+$('#table').DataTable();
+
     // stock updation
     const quantityForms = document.querySelectorAll('.quantity-form');
 

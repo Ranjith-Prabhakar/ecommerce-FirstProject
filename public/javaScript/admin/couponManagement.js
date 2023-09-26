@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', (e) => {
+  //datatable.net
+$('#table').DataTable();
   //criteria selection
   let criteria = document.getElementById('criteria');
   criteria.addEventListener('change', (event) => {

@@ -3,7 +3,7 @@
         <!-- coupon creation section -->
 
         <!--  -->
-        <div class="col">
+        <div class="col-9 bg-dark rounded-3 py-3 ">
             <button class="btn btn-primary mb-2" type="button" data-bs-toggle="offcanvas"
                 data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">New</button>
 
@@ -98,7 +98,7 @@
             <% locals.coupons || "" %>
 
                 <% if(locals.coupons) {%>
-                    <table class="table table-hover table-dark ">
+                    <table id="table" class="table table-hover table-dark ">
                         <thead>
                             <tr>
                                 <td>Generated date</td>
@@ -116,7 +116,7 @@
                         <tbody id="tableBody">
 
                             <% locals.coupons.forEach(coupon=>{%>
-                                <tr >
+                                <tr>
                                     <td>
                                         <%=new Date(coupon.generatedDate).toLocaleDateString('en-US', { weekday: 'short'
                                             , month: 'short' , day: 'numeric' , year: 'numeric' }) %>

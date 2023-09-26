@@ -1,10 +1,10 @@
 <%- include('../../layout/admin/header') %>
-
     <%- include('../../layout/admin/generalManagement') %>
-        <div class="col text-white">
-            <table class="table table-hover table-dark">
+        <div class="col-9 text-white bg-dark  rounded-3 p-3 ">
+            <table id="table" class="table table-hover table-striped  table-dark">
                 <thead>
                     <tr>
+                        <td>Sl No</td>
                         <td>Order Date</td>
                         <td>Order Id</td>
                         <td>User Name</td>
@@ -16,11 +16,17 @@
                     <% for (let i=0; i < orderObject.length; i++) { %>
                         <tr>
                             <td>
+                                <%= i + 1%>
+                            </td>
+                            <td>
                                 <%= orderObject[i].orderDate.toLocaleDateString('en-US', { weekday: 'short' ,
                                     month: 'short' , day: 'numeric' , year: 'numeric' }) %>
                             </td>
                             <td>
-                                <a class="nav-link " href="/orderDetailPage?userId=<%=orderObject[i].userId %>&orderId=<%= orderObject[i].orderId %>"><%= orderObject[i].orderId %></a>
+                                <a class="nav-link "
+                                    href="/orderDetailPage?userId=<%=orderObject[i].userId %>&orderId=<%= orderObject[i].orderId %>">
+                                    <%= orderObject[i].orderId %>
+                                </a>
                             </td>
                             <td>
                                 <%= orderObject[i].firstName + " " + orderObject[i].lastName %>
@@ -55,6 +61,8 @@
                         <% } %>
                 </tbody>
             </table>
+        </div>
+        </div>
         </div>
         <script src="/javaScript/admin/orderManagement.js"></script>
         <%- include('../../layout/admin/footer') %>

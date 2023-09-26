@@ -1,8 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 //datatable.net
-// let table = new DataTable('#table', {
-//   responsive: true
-// });
 $('#table').DataTable();
 
 

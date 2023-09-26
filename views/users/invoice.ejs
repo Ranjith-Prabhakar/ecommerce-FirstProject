@@ -1,0 +1,283 @@
+
+    <!-- Include jsPDF and jspdf-invoice-template libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
+   
+</head>
+<body>
+    <div class="container">
+        <div class="invoice-header">
+            <h1>Invoice</h1>
+        </div>
+        <div class="invoice-details">
+            <p><strong>Invoice Number:</strong> INV12345</p>
+            <p><strong>Date:</strong> September 25, 2023</p>
+            <p><strong>Due Date:</strong> October 10, 2023</p>
+            <p><strong>Bill To:</strong> John Doe</p>
+            <p><strong>Ship To:</strong> Jane Smith</p>
+        </div>
+        <table id="invoiceTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Product A</td>
+                    <td>Item description</td>
+                    <td>2</td>
+                    <td>$50.00</td>
+                    <td>$100.00</td>
+                </tr>
+                <tr>
+                    <td>Product B</td>
+                    <td>Another description</td>
+                    <td>3</td>
+                    <td>$40.00</td>
+                    <td>$120.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="totals">
+            <p><strong>Subtotal:</strong> $220.00</p>
+            <p><strong>Tax (10%):</strong> $22.00</p>
+            <p><strong>Total:</strong> $242.00</p>
+        </div>
+        <button id="generatePdfButton">Generate PDF</button>
+    </div>
+
+    <script>
+        document.getElementById('generatePdfButton').addEventListener('click', function() {
+            // Define your invoice properties
+            var props = {
+                outputType: jsPDFInvoiceTemplate.OutputType.Save,
+                returnJsPDFDocObject: true,
+                fileName: "Invoice.pdf",
+                orientationLandscape: false,
+                compress: true,
+                business: {
+                    name: "Your Business Name",
+                    address: "Your Business Address",
+                    phone: "(123) 456-7890",
+                    email: "contact@yourbusiness.com",
+                    website: "www.yourbusiness.com",
+                },
+                contact: {
+                    label: "Invoice issued for:",
+                    name: "Client Name",
+                    address: "Client Address",
+                    phone: "(987) 654-3210",
+                    email: "client@example.com",
+                    otherInfo: "www.clientwebsite.com",
+                },
+                invoice: {
+                    label: "Invoice #:",
+                    num: "INV12345",
+                    invDate: "September 25, 2023",
+                    invGenDate: "October 10, 2023",
+                    header: [
+                        { title: "Item", style: { width: 20 } },
+                        { title: "Description", style: { width: 40 } },
+                        { title: "Quantity", style: { width: 10 } },
+                        { title: "Unit Price", style: { width: 20 } },
+                        { title: "Total", style: { width: 20 } }
+                    ],
+                    table: [
+                        ["Product A", "Item description", "2", "$50.00", "$100.00"],
+                        ["Product B", "Another description", "3", "$40.00", "$120.00"]
+                    ],
+                    additionalRows: [
+                        { col1: 'Subtotal:', col2: '$220.00', col3: 'USD' },
+                        { col1: 'Tax (10%):', col2: '$22.00', col3: 'USD' },
+                        { col1: 'Total:', col2: '$242.00', col3: 'USD' }
+                    ],
+                    invDescLabel: "Invoice Note",
+                    invDesc: "Additional invoice details here.",
+                },
+                footer: {
+                    text: "The invoice is created on a computer and is valid without the signature and stamp.",
+                },
+                pageEnable: true,
+                pageLabel: "Page ",
+            };
+
+            // Generate the invoice PDF
+            var pdfObject = jsPDFInvoiceTemplate.default(props);
+
+            // Save the PDF with the specified name
+            pdfObject.jsPDFDocObject.save(props.fileName);
+        });
+    </script>
+</body>
+</html>
+
+
+<!-- working html -->
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://unpkg.com/jspdf-invoice-template@1.4.0/dist/index.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-details {
+            margin-bottom: 20px;
+        }
+        .invoice-details p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .totals {
+            text-align: right;
+        }
+        #generatePdfButton {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="invoice-header">
+            <h1>Invoice</h1>
+        </div>
+        <div class="invoice-details">
+            <p><strong>Invoice Number:</strong> INV12345</p>
+            <p><strong>Date:</strong> September 25, 2023</p>
+            <p><strong>Due Date:</strong> October 10, 2023</p>
+            <p><strong>Bill To:</strong> John Doe</p>
+            <p><strong>Ship To:</strong> Jane Smith</p>
+        </div>
+        <table id="invoiceTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Product A</td>
+                    <td>Item description</td>
+                    <td>2</td>
+                    <td>$50.00</td>
+                    <td>$100.00</td>
+                </tr>
+                <tr>
+                    <td>Product B</td>
+                    <td>Another description</td>
+                    <td>3</td>
+                    <td>$40.00</td>
+                    <td>$120.00</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="totals">
+            <p><strong>Subtotal:</strong> $220.00</p>
+            <p><strong>Tax (10%):</strong> $22.00</p>
+            <p><strong>Total:</strong> $242.00</p>
+        </div>
+        <button id="generatePdfButton">Generate PDF</button>
+    </div>
+
+    <script>
+        document.getElementById('generatePdfButton').addEventListener('click', function() {
+            // Define your invoice properties
+            var props = {
+                outputType: jsPDFInvoiceTemplate.OutputType.Save,
+                returnJsPDFDocObject: true,
+                fileName: "Invoice.pdf",
+                orientationLandscape: false,
+                compress: true,
+                business: {
+                    name: "Your Business Name",
+                    address: "Your Business Address",
+                    phone: "(123) 456-7890",
+                    email: "contact@yourbusiness.com",
+                    website: "www.yourbusiness.com",
+                },
+                contact: {
+                    label: "Invoice issued for:",
+                    name: "Client Name",
+                    address: "Client Address",
+                    phone: "(987) 654-3210",
+                    email: "client@example.com",
+                    otherInfo: "www.clientwebsite.com",
+                },
+                invoice: {
+                    label: "Invoice #:",
+                    num: "INV12345",
+                    invDate: "September 25, 2023",
+                    invGenDate: "October 10, 2023",
+                    header: [
+                        { title: "Item", style: { width: 20 } },
+                        { title: "Description", style: { width: 40 } },
+                        { title: "Quantity", style: { width: 10 } },
+                        { title: "Unit Price", style: { width: 20 } },
+                        { title: "Total", style: { width: 20 } }
+                    ],
+                    table: [
+                        ["Product A", "Item description", "2", "$50.00", "$100.00"],
+                        ["Product B", "Another description", "3", "$40.00", "$120.00"]
+                    ],
+                    additionalRows: [
+                        { col1: 'Subtotal:', col2: '$220.00', col3: 'USD' },
+                        { col1: 'Tax (10%):', col2: '$22.00', col3: 'USD' },
+                        { col1: 'Total:', col2: '$242.00', col3: 'USD' }
+                    ],
+                    invDescLabel: "Invoice Note",
+                    invDesc: "Additional invoice details here.",
+                },
+                footer: {
+                    text: "The invoice is created on a computer and is valid without the signature and stamp.",
+                },
+                pageEnable: true,
+                pageLabel: "Page ",
+            };
+
+            // Generate the invoice PDF
+            var pdfObject = jsPDFInvoiceTemplate.default(props);
+
+            // Save the PDF with the specified name
+            pdfObject.jsPDFDocObject.save(props.fileName);
+        });
+    </script>
+</body>
+</html> -->
+

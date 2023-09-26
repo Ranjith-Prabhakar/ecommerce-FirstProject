@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-
+//datatable.net
+$('#table').DataTable();
   // brand creation
   const createBrand = document.forms.createBrand
   createBrand.addEventListener('submit', async (event) => {

@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+  //data table 
+  $('#table').DataTable();
   //status
   let selectEl = document.querySelectorAll('select[name="status"]')
   

@@ -3,8 +3,10 @@
         <div class="col">
             <div class="row">
                 <div class="row align-items-center justify-content-between">
-                    <div class="col-3">
+                    <div class="col-4 mb-3">
                         <% locals.filterData || "" %>
+                            <h4 class="text-white border-bottom border-2 w-auto text-center pb-2 fw-semibold ">Sales
+                                Proportion</h4>
                             <div>
                                 <canvas data-result="<%=JSON.stringify(locals.filterData)%>" id="firstCan"
                                     class="text-white "></canvas>
@@ -18,11 +20,16 @@
 
             <div class="row mt-4 ">
                 <div class="col-6">
+                    <h4 class="text-white border-bottom border-2 w-auto text-center pb-3 mb-3 fw-semibold ">Sales and
+                        Return
+                        Proportion</h4>
                     <div>
                         <canvas id="secondCan"></canvas>
                     </div>
                 </div>
                 <div class="col-6">
+                    <h4 class="text-white border-bottom border-2 w-auto text-center pb-3 mb-3 fw-semibold ">Brand and No
+                        of Products</h4>
                     <div>
                         <canvas id="thirdCan"></canvas>
                     </div>
