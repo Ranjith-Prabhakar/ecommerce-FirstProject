@@ -26,9 +26,10 @@ const razorpayInstance = new Razorpay({
 const userHome = async (req, res, next) => {
     try {
         const page = req.params.paramName ? parseInt(req.params.paramName) : 1; // Parse the page number
-
+        
         const itemsPerPage = 5; // Number of products per page
-        const start = (page - 1) * itemsPerPage;
+        // const start = (page - 1) * itemsPerPage;
+        const start = Math.abs((page - 1) * itemsPerPage); 
         let user, brands, products, productsCount, banner;
         console.log("req.params.i", req.params);
         console.log("start,itemsPerPage", start, itemsPerPage);
@@ -38,7 +39,7 @@ const userHome = async (req, res, next) => {
             products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage);
             productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
             banner = await BannerModal.find()
-            res.render('./users/userHome', { user, brands, products, banner, productsCount })
+            res.render('./users/userHome', { user, brands, products, banner, productsCount,page })
         } else {
 
             brands = await BrandModal.distinct('brandName')
@@ -46,7 +47,7 @@ const userHome = async (req, res, next) => {
             productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
             banner = await BannerModal.find()
 
-            res.render('./users/userHome', { brands: brands, products, banner, productsCount })
+            res.render('./users/userHome', { brands: brands, products, banner, productsCount,page })
         }
     } catch (err) {
         errorHandler(err, req, res, next);

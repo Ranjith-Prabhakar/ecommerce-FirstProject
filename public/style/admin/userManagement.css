@@ -4,3 +4,7 @@
   padding: 1px 5px;
   border-radius: 5px;
 }
+.user-management-table{
+  background-color: rgba(125, 90, 170, 0.2);
+  color: white;  
+}

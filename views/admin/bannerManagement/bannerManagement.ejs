@@ -56,7 +56,7 @@
                 <% locals.banner || "" %>
                     <% locals.brand || "" %>
                         <% let count=1 %>
-                            <% if(locals.banner.length && locals.banner.length === 3) {%>
+                            <% if(locals.banner.length && locals.banner.length===3) {%>
                                 <div class="row">
                                     <% locals.banner.forEach(banner=>{%>
                                         <div class="col">
@@ -94,7 +94,7 @@
                                                 <% count++ %>
                                                     <%}) %>
 
-                                                        <%}  %>
+                                                        <%} %>
                                                             <!--  -->
                                                             <% for(let i=1 ;i<=3-locals.banner.length ;i++) {%>
                                                                 <div class="col">
@@ -160,19 +160,20 @@
         <!-- edit modal -->
 
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
+            <div class="modal-dialog ">
+                <div class="modal-content bg-dark text-white ">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">New message</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close bg-light" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body ">
                         <form action="/createBanner" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="imageName" id="changeImageName">
                             <input type="hidden" name="bannerId" id="bannerId">
                             <% if(locals.brand.length) {%>
                                 <br>
-                                <select class="form-select " id="brand" name="brandName">
+                                <select class="form-select bg-dark  text-white " id="brand" name="brandName">
 
                                     <% locals.brand.forEach(brandName=> {%>
                                         <option value="<%=brandName%>">
@@ -183,16 +184,17 @@
                                 <% } else{%>
                                     <input type="text" name="brandName" placeholder="brandName">
                                     <% } %>
-                                        <br><input class="form-control" type="text" name="productName"
-                                            placeholder="productName" id="">
-                                        <br><textarea class="form-control" type="text" name="description"
-                                            placeholder="description" id="changeDiscription"></textarea>
-                                        <br><input class="form-control" type="text" name="unitPrice"
-                                            placeholder="unitPrice" id="changeUnitPrice">
-                                        <br><input class="form-control" type="date" name="launchDate"
-                                            placeholder="launchDate" id="changeLaunchDate">
-                                        <br><input class="form-control" type="file" name="gallery" placeholder="images"
-                                            id="changeImage">
+                                        <br><input class="form-control bg-dark  text-white " type="text"
+                                            name="productName" placeholder="productName" id="">
+                                        <br><textarea class="form-control bg-dark  text-white " type="text"
+                                            name="description" placeholder="description"
+                                            id="changeDiscription"></textarea>
+                                        <br><input class="form-control bg-dark  text-white " type="text"
+                                            name="unitPrice" placeholder="unitPrice" id="changeUnitPrice">
+                                        <br><input class="form-control bg-dark  text-white " type="date"
+                                            name="launchDate" placeholder="launchDate" id="changeLaunchDate">
+                                        <br><input class="form-control bg-dark  text-white " type="file" name="gallery"
+                                            placeholder="images" id="changeImage">
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
                                                 data-bs-dismiss="modal">Close</button>

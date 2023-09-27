@@ -5,11 +5,11 @@
             <% locals.productList || "" %>
                 <% locals.user || "" %>
                     <% let sum=0 %>
-                        <div class="container mt-3 ">
+                        <div class="container  mt-3 ">
                             <div class="row">
                                 <div class="col-6">
                                     <% if(locals.singleProduct) {%>
-                                        <div class="container p-2  my-1 text-bg-dark  text-white rounded-3  ">
+                                        <div class="container p-2  my-1 checkOut-container-bg   text-white rounded-3  ">
                                             <div class="row justify-content-between  ">
                                                 <div class="col">
                                                     <img class="checkOut-img-size"
@@ -46,7 +46,7 @@
                                             <% for(let i=0;i<locals.productList.length;i++){ %>
                                                 <% sum +=productList[i].orderQuantity * productList[i].unitPrice %>
                                                     <div
-                                                        class="container p-2  my-1 text-bg-dark  text-white rounded-3  p-2 ">
+                                                        class="container p-2  my-1  checkOut-container-bg text-white rounded-3  p-2 ">
                                                         <div class="row justify-content-between  ">
                                                             <div class="col">
                                                                 <img class="checkOut-img-size"
@@ -90,7 +90,7 @@
                                 </div>
                                 <div class="col-6">
                                     <!-- payment section -->
-                                    <div class="payment-method container text-bg-dark  text-white rounded-3  p-2 mb-3 ">
+                                    <div class="payment-method checkOut-container-bg  text-white rounded-3  p-2 mb-3 ">
                                         <div class="row justify-content-between ">
                                             <div class="col-5">
                                                 <form action="" name="paymentOption">
@@ -175,7 +175,7 @@
 
     <div class="container mt-3 ">
 
-        <div class="row text-bg-dark  text-white rounded-3  p-2 ">
+        <div class="row checkOut-container-bg  text-white rounded-3  p-2 ">
             <!-- create new address -->
             <div class="createNewAddress">
                 <form action="" name="createAddress">
@@ -293,12 +293,13 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content bg-dark ">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title
+                        <h1 class="modal-title text-white  fs-5" id="staticBackdropLabel">Available Coupons
                         </h1>
                         <button type="button" class="btn-close bg-white " data-bs-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+
                         <% if(locals.singleProduct) {%>
                             <% locals. coupons.productCoupon || "" %>
                                 <%if(locals.coupons.productCoupon){%>

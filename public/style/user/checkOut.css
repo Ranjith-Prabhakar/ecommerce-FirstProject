@@ -25,3 +25,7 @@ font-size: 15px;
 .checkOut-price-buttons{
   width: 250px;
 }
+
+.checkOut-container-bg{
+  background-color: rgba(125, 90, 170, 0.2);  
+}

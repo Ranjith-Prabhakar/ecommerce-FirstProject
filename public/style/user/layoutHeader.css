@@ -3,7 +3,6 @@
 @import './checkOut.css';
 @import './order.css';
 @import './orderSinglePage.css';
-@import './invoice.css';
 
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
@@ -11,14 +10,16 @@
 body{
     background-color:#08030f ;
     font-family: 'Poppins', sans-serif;
-    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
    
    
 }
 .navbarBg{
+   
     /* background-color:#351a58 ; */
-    /* background-color: rgba(25, 16, 34, 0.2);  */
-    background-color:#351a58 ;
+    background-color:#170d24 ;
 }
 
 .navbar a{
@@ -87,8 +88,6 @@ body{
   .footer{
     background-color:#10091a ;
     color:#F9EFEF ;
-   
-   
   }
 
 
@@ -107,6 +106,12 @@ body{
     width: 20px;
 }
 
+.cursor-pointer{
+    cursor: pointer;
+}
+.margin-top{
+    margin-top: 60px;
+}
 
 
 /* profile image adder */
