@@ -63,6 +63,108 @@
                                             <% let count=1 %>
                                                 <% locals.products.forEach(product=>{%>
                                                     <!-- product image -->
+                                                    <% if(product.quantity < 1) {%>
+                                                        <div class="col-4">
+                                                            <img class="rounded-1 imgSize"
+                                                                src="/productImages/<%=product.gallery[0]%>" alt="phone"
+                                                                srcset="">
+                                                        </div>
+                                                        <!-- product data -->
+                                                        <div class="col-6">
+                                                            <form action="/singleProductPage" method="get">
+                                                                <input type="hidden" name="id" value="<%=product._id%>">
+                                                                <input class="fs-2 fw-bold nav-link " type="submit"
+                                                                    value="<%=product.productName %>">
+                                                            </form>
+                                                            <h5><span>
+                                                                    <%=product.specification.ram%>
+                                                                </span> | <span>
+                                                                    <%=product.specification.internalStorage%>
+                                                                </span> | <span>expandable upto
+                                                                    1
+                                                                    tb</span>
+                                                            </h5>
+                                                            <h4>display</h4>
+                                                            <h5><span>
+                                                                    <%=product.specification.frontCamera%>
+                                                                </span> | <span>
+                                                                    <%=product.specification.backCamera%> front
+                                                                        camera
+                                                                </span> </h5>
+                                                            <h5>
+                                                                <%=product.specification.battery%> Lithium iron
+                                                                    battery
+                                                            </h5>
+                                                            <h5>
+                                                                <%=product.specification.processor%>
+                                                            </h5>
+    
+                                                            <% if(product.quantity < 10 && product.quantity> 0) {%>
+                                                                <h5>instock : <span class="text-warning ">Left Only
+                                                                        <%=product.quantity %>
+                                                                    </span> </h5>
+                                                                <% } else if(product.quantity < 1){%>
+                                                                    <h5 class="text-danger ">out of stock </h5>
+                                                                    <% } else{ %>
+                                                                        <h5 class="text-success  ">instock </h5>
+                                                                        <% } %>
+                                                                            <!-- <div>
+                                                                                <a class="btn btn-outline-light "
+                                                                                    href='/checkOutPage?productId=<%=product._id%>'>Buy
+                                                                                    Now</a>
+    
+    
+    
+                                                                                <% let buttonName='Add To Cart' %>
+    
+                                                                                    <% if (locals.user) { %>
+                                                                                        <% if (locals.user.cart.length) { %>
+                                                                                            <% for (let i=0; i <
+                                                                                                locals.user.cart.length;
+                                                                                                i++) { %>
+                                                                                                <% if
+                                                                                                    (String(locals.user.cart[i].productId)===String(product._id))
+                                                                                                    { %>
+                                                                                                    <% buttonName='Go To Cart'
+                                                                                                        %>
+                                                                                                        <% } %>
+                                                                                                            <% } %>
+                                                                                                                <% } %>
+                                                                                                                    <a class="btn btn-outline-light productCount"
+                                                                                                                        data-product-id="<%= product._id %>"
+                                                                                                                        data-user-id="<%= locals.user._id %>"
+                                                                                                                        href="#">
+                                                                                                                        <%= buttonName
+                                                                                                                            %>
+                                                                                                                    </a>
+                                                                                                                    <% } else{
+                                                                                                                        %>
+                                                                                                                        <a class="btn btn-outline-light productCount"
+                                                                                                                            data-product-id="<%= product._id %>"
+                                                                                                                            href="#">Add
+                                                                                                                            To
+                                                                                                                            Cart</a>
+                                                                                                                        <% }
+                                                                                                                            %>
+    
+                                                                            </div> -->
+                                                        </div>
+                                                        <!-- product price -->
+                                                        <div class="col-2">
+                                                            <h5 class="text-success ">
+                                                                <%= Intl.NumberFormat('en-IN', { style: 'currency' ,
+                                                                    currency: 'INR' , minimumFractionDigits: 0
+                                                                    }).format(product.unitPrice) %>
+    
+                                                            </h5>
+                                                        </div>
+    
+                                                        <% if (count !==locals.products.length) { %>
+                                                            <hr class="mt-5">
+                                                            <% } %>
+                                                                <% count++ %>
+                                                        <% } else{ %>
+                                                            
                                                     <div class="col-4">
                                                         <img class="rounded-1 imgSize"
                                                             src="/productImages/<%=product.gallery[0]%>" alt="phone"
@@ -162,6 +264,7 @@
                                                         <hr class="mt-5">
                                                         <% } %>
                                                             <% count++ %>
+                                                            <% } %>
                                                                 <%}) %>
                                         </div>
 

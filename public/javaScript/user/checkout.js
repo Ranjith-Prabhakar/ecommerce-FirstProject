@@ -260,6 +260,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 hiddenCouponDiv.classList.remove('d-none')
                 cartSumElement.setAttribute('data-coupon-id', couponId)
                 cartSumElement.setAttribute('data-coupon-value', couponValue)
+                let couponModalClickButton = document.querySelector('button[name="couponModalClickButton"]')
+                couponModalClickButton.classList.add('d-none')
             } else if (cartSumElement) {
                 let cartSum = parseFloat(cartSumElement.innerText)
                 let adjustedValue = cartSum - couponValue;
@@ -270,6 +272,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 cartSumElement.innerText = adjustedValue.toFixed(2)
                 cartSumElement.setAttribute('data-coupon-id', couponId)
                 cartSumElement.setAttribute('data-coupon-value', couponValue)
+                let couponModalClickButton = document.querySelector('button[name="couponModalClickButton"]')
+                couponModalClickButton.classList.add('d-none')
             }
             $(myModal).modal("hide");
 
@@ -407,116 +411,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     })
 
-    ///order placement
-
-    // const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')
-
-    // const paymentOptionForm = document.forms.paymentOption
-
-    // console.log("paymentOptionForm", paymentOptionForm);
-    // paymentOptionForm.addEventListener('submit', async (event) => {
-    //     event.preventDefault()
-    //     let newFormData = {}
-    //     for (let i = 0; i < radioButtons.length; i++) { // radioButtons is the variable created above
-    //         if (radioButtons[i].checked === true) {
-
-    //             for (let j = 0; j < placeOrder.length; j++) {
-    //                 let formData = document.forms["addressList" + i]
-    //                 let formObject = new FormData(formData)
-    //                 for (let [key, value] of formObject) {
-    //                     newFormData[key] = value
-    //                 }
-    //                 if (placeOrder[j].checked === true) {
 
 
-    //                     newFormData.modeOfPayment = placeOrder[j].id
-    //                     newFormData.productData = []
-    //                     newFormData.total = 0
-    //                     if (increamentButton) {//took from above
-    //                         let productId = orderQuantity.getAttribute("data-productId")
-    //                         let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
-    //                         let productPrice = parseFloat(singleProductUnitPrice.innerText)
-    //                         let order_Quantity = parseFloat(orderQuantity.innerText)
-    //                         newFormData.productData[0] = {
-    //                             productId: productId,
-    //                             price: productPrice,
-    //                             orderQuantity: order_Quantity
-    //                         }
-    //                         newFormData.total = productPrice
 
-    //                     } else {
-    //                         let productList = document.getElementsByClassName('productList')
-
-    //                         for (i = 0; i < productList.length; i++) {
-    //                             let head4 = document.getElementById('orderQuantity' + i)
-    //                             newFormData.productData.unshift({
-    //                                 productId: head4.getAttribute('data-productId'),
-    //                                 price: head4.getAttribute('data-product-price'),
-    //                                 orderQuantity: head4.firstElementChild.innerText
-    //                             })
-    //                             newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
-    //                             console.log("newFormData.productData", newFormData.productData);
-    //                         }
-
-    //                     }
-    //                     console.log("newFormData", newFormData);
-
-    //                     break
-    //                 }
-
-    //             }
-
-    //         }
-    //     }
-    //     if (!newFormData.country) {
-    //         // alert("select an address for deliver ")
-    //         Swal.fire({
-    //             icon: 'error',
-    //             title: 'Oops...',
-    //             text: 'select an address for deliver ',
-    //             footer: '<a href="">Why do I have this issue?</a>'
-    //         })
-    //     } else if (!newFormData.modeOfPayment) {
-    //         // alert("select the mode of payment ")
-    //         Swal.fire({
-    //             icon: 'error',
-    //             title: 'Oops...',
-    //             text: 'select the mode of payment ',
-    //             footer: '<a href="">Why do I have this issue?</a>'
-    //         })
-    //     }
-    //     else {
-    //         try {
-    //             const response = await fetch('/orderPlacement', {
-    //                 method: 'post',
-    //                 headers: {
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 body: JSON.stringify({ newFormData })
-    //             })
-    //             const data = await response.json();
-    //             if (data.success) {
-    //                 // alert('the order has been placed')
-    //                 Swal.fire({
-    //                     icon: 'success',
-    //                     title: 'the order has been placed',
-    //                     footer: '<a href="">Why do I have this issue?</a>'
-    //                 })
-    //                 // Schedule an anonymous function to run after 1000 milliseconds (1 second)
-    //                 setTimeout(function () {
-    //                     window.location.href = '/orders'
-    //                 }, 2000);
-
-
-    //             }
-    //         } catch (error) {
-    //             console.log(error.message);
-    //         }
-
-    //     }
-
-
-    // })
 
     ///order placement
     const placeOrder = document.querySelectorAll('input[name="paymentMethod"]')

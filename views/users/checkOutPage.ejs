@@ -44,6 +44,7 @@
                                         </div>
                                         <%} else if(locals.productList.length) {%>
                                             <% for(let i=0;i<locals.productList.length;i++){ %>
+
                                                 <% sum +=productList[i].orderQuantity * productList[i].unitPrice %>
                                                     <div
                                                         class="container p-2  my-1  checkOut-container-bg text-white rounded-3  p-2 ">
@@ -118,8 +119,8 @@
                                             <div class="col-7">
                                                 <!-- coupon section -->
                                                 <% if(locals.singleProduct) {%>
-                                                    <button type="button"
-                                                        class="btn btn-success   checkOut-price-buttons"
+                                                    <button type="button" name="couponModalClickButton"
+                                                        class="btn btn-light    checkOut-price-buttons"
                                                         data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                                         Apply Coupons
                                                     </button>
@@ -127,29 +128,29 @@
                                                     <!-- <button id="valueAfterCoupon" class="btn btn-warning mt-2   d-none">
                                                     </button> -->
                                                     <button id="hiddenCouponDiv" style="font-size: 12px;"
-                                                        class="btn btn-warning  mt-2  d-none checkOut-price-buttons">
+                                                        class="btn btn-success   mt-2  d-none checkOut-price-buttons">
                                                         Atfer Coupon :<i class="bi bi-currency-rupee"></i><span
                                                             id="valueAfterCoupon"></span></button>
                                                     <br>
-                                                    <button class="btn btn-primary mt-2 checkOut-price-buttons">
+                                                    <button class="btn btn-light mt-2 checkOut-price-buttons">
                                                         Total :<i class="bi bi-currency-rupee"></i> <span id="cartSum">
                                                             <%=singleProduct.unitPrice %>
                                                         </span>
                                                     </button>
                                                     <%}else{%>
-                                                        <button type="button"
-                                                            class="btn btn-success  checkOut-price-buttons  "
+                                                        <button type="button" name="couponModalClickButton"
+                                                            class="btn btn-light   checkOut-price-buttons  "
                                                             data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                                                             Apply Coupons
                                                         </button>
                                                         <br>
                                                         <button id="hiddenCouponDiv" style="font-size: 12px;"
-                                                            class="btn btn-warning  mt-2   d-none checkOut-price-buttons">
+                                                            class="btn btn-success   mt-2   d-none checkOut-price-buttons">
                                                             Price Atfer Coupon : <i
                                                                 class="bi bi-currency-rupee"></i><span
                                                                 id="valueAfterCoupon"></span></button>
                                                         <br>
-                                                        <button class="btn btn-primary mt-2  checkOut-price-buttons">
+                                                        <button class="btn btn-light mt-2  checkOut-price-buttons">
                                                             Total : <i class="bi bi-currency-rupee"></i> <span
                                                                 id="cartSum">
                                                                 <%=sum %>
@@ -305,13 +306,13 @@
                                 <%if(locals.coupons.productCoupon){%>
                                     <li data-coupon-id="<%=locals.coupons.productCoupon._id%>"
                                         data-coupon-value="<%=locals.coupons.productCoupon.couponValue%>"
-                                        class="selectCoupon text-white ">
+                                        class="selectCoupon coupon-cursor text-white ">
                                         <%=locals.coupons.productCoupon.couponCode%>
                                     </li>
                                     <%} else if(locals. coupons.brandCoupon){%>
                                         <li data-coupon-id="<%=locals.coupons.brandCoupon._id%>"
                                             data-coupon-value="<%=locals.coupons.brandCoupon.couponValue%>"
-                                            class="selectCoupon text-white  ">
+                                            class="selectCoupon coupon-cursor text-white  ">
                                             <%=locals.coupons.brandCoupon.couponCode%>
                                         </li>
                                         <%}%>
@@ -325,7 +326,7 @@
                                                                     {%>
                                                                     <li data-coupon-id="<%=priceCoupon._id%>"
                                                                         data-coupon-value="<%=priceCoupon.couponValue%>"
-                                                                        class="selectCoupon text-white list-group-item bg-dark  ">
+                                                                        class="selectCoupon coupon-cursor text-white list-group-item bg-dark  ">
                                                                         <%= priceCoupon.couponCode%>
                                                                     </li>
                                                                     <%})%>

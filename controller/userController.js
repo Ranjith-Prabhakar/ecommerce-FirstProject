@@ -25,11 +25,11 @@ const razorpayInstance = new Razorpay({
 
 const userHome = async (req, res, next) => {
     try {
-        const page = req.params.paramName ? parseInt(req.params.paramName) : 1; // Parse the page number
-        
+        const page = req.params.paramName ? parseInt(req.params.paramName) : 0; // it was one before then it worked well
+
         const itemsPerPage = 5; // Number of products per page
         // const start = (page - 1) * itemsPerPage;
-        const start = Math.abs((page - 1) * itemsPerPage); 
+        const start = Math.abs((page - 1) * itemsPerPage);
         let user, brands, products, productsCount, banner;
         console.log("req.params.i", req.params);
         console.log("start,itemsPerPage", start, itemsPerPage);
@@ -39,7 +39,7 @@ const userHome = async (req, res, next) => {
             products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage);
             productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
             banner = await BannerModal.find()
-            res.render('./users/userHome', { user, brands, products, banner, productsCount,page })
+            res.render('./users/userHome', { user, brands, products, banner, productsCount, page })
         } else {
 
             brands = await BrandModal.distinct('brandName')
@@ -47,7 +47,7 @@ const userHome = async (req, res, next) => {
             productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
             banner = await BannerModal.find()
 
-            res.render('./users/userHome', { brands: brands, products, banner, productsCount,page })
+            res.render('./users/userHome', { brands: brands, products, banner, productsCount, page })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -774,13 +774,14 @@ const getCheckOutPage = async (req, res, next) => {
             })
             coupons.priceCoupons = matchingPriceCoupons
             res.render('./users/checkOutPage', { productList, user, brands, coupons });
+            console.log("productList selected cart", productList)
         } else if (req.query.cart) {//cart
             let coupons = {}
             const user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             const cart = user.cart;
             const productIds = cart.map((item) => item.productId);
-            const matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
+            const matchingProducts = await ProductModal.find({ _id: { $in: productIds }, quantity: { $gt: 0 } });
             let productList = matchingProducts.map((product) => {
                 cart.forEach((cart) => {
                     if (cart.productId.equals(product._id)) {
@@ -821,6 +822,8 @@ const getCheckOutPage = async (req, res, next) => {
             console.log('matchingPriceCouponsFiltered', matchingPriceCouponsFiltered);
             coupons.priceCoupons = matchingPriceCoupons
             res.render('./users/checkOutPage', { productList, user, brands, coupons });
+            console.log("productList whole cart", productList)
+
         }
     } catch (error) {
         errorHandler(error, req, res, next);

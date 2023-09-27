@@ -29,3 +29,6 @@ font-size: 15px;
 .checkOut-container-bg{
   background-color: rgba(125, 90, 170, 0.2);  
 }
+.coupon-cursor{
+  cursor: pointer;
+}

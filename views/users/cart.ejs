@@ -1,5 +1,5 @@
 <%- include('../layout/user/header') %>
-<div style="flex-grow: 1;">
+    <div style="flex-grow: 1;">
         <% locals.cartProducts || '' %>
             <% locals.cartValue || '' %>
                 <% if(locals.cartValue){ %>
@@ -208,7 +208,7 @@
                                                     <% } %>
 
                         </div>
-
-                        <script src="/javaScript/user/header.js"></script>
-                        <script src="/javaScript/user/cart.js"></script>
-                        <%- include('../layout/user/footer') %>
+    </div>
+    <script src="/javaScript/user/header.js"></script>
+    <script src="/javaScript/user/cart.js"></script>
+    <%- include('../layout/user/footer') %>
