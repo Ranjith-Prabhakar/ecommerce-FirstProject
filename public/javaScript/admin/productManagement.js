@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-//datatable.net
-$('#table').DataTable();
+    //datatable.net
+    $('#table').DataTable();
 
     // stock updation
     const quantityForms = document.querySelectorAll('.quantity-form');
@@ -212,6 +212,41 @@ $('#table').DataTable();
         }
     })
 
+    //new product image validation
+    let newProductImages = document.getElementById('newProductImages')
+    newProductImages.addEventListener('change', (e) => {
+        e.preventDefault()
+        let newProductImagesList = newProductImages.files
+        const imageFormats = [
+            'image/jpeg',
+            'image/png',
+            'image/gif',
+            'image/bmp',
+            'image/webp',
+            'image/tiff',
+            'image/svg+xml',
+            'image/avif',
+            'image/heif',
+            'image/heic',
+        ];
+        for (let i = 0; i < newProductImagesList.length; i++) {
+            if (!imageFormats.includes(newProductImagesList[i].type)) {
+                let invalidImages = document.getElementById('invalidImages')
+                console.log(invalidImages);
+                invalidImages.classList.remove('d-none')
+                console.log("fail")
+                let newProductSubmitButton = document.getElementById('newProductSubmitButton')
+                newProductSubmitButton.setAttribute('disabled',true)
+                break
+            } else {
+                let invalidImages = document.getElementById('invalidImages')
+                invalidImages.classList.add('d-none')
+                let newProductSubmitButton = document.getElementById('newProductSubmitButton')
+                newProductSubmitButton.removeAttribute('disabled');
+            }
+        }
+
+    });
 
 
 });

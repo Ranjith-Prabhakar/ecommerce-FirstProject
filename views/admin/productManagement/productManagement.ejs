@@ -53,8 +53,10 @@
                                                             placeholder="quantity" id="quantity"><br>
                                                         <input class="form-control w-75 " type="text" name="unitPrice"
                                                             placeholder="unitPrice"><br>
-                                                        <input class="form-control w-75 " type="file" name="gallery"
-                                                            placeholder="gallery" multiple><br>
+                                                        <label id="invalidImages" for="" class="text-danger d-none mb-2  ">Invalid Image Format</label>
+                                                        <input id="newProductImages" class="form-control w-75 "
+                                                            type="file" name="gallery" placeholder="gallery"
+                                                            multiple><br>
                                                         <textarea rows="4" cols="50" class="form-control w-75 "
                                                             name="discription"
                                                             placeholder="discription">discription </textarea>
@@ -76,7 +78,7 @@
                                     placeholder="processor"><br>
                                 <input class="form-control w-100 " type="text" name="chargerType"
                                     placeholder="chargerType"><br>
-                                <input class="btn w-75 btn-outline-secondary " type="submit" value="submit">
+                                <input id="newProductSubmitButton" class="btn w-75 btn-outline-secondary " type="submit" value="submit">
 
                             </div>
                         </div>
