@@ -3,31 +3,61 @@
   <% if (locals.order && locals.order.length> 0) { %>
     <% locals.addressToShip || "" %>
       <div class="container text-white p-1 pt-4  ">
-        <div class="row">
+        <div class="row ">
           <div class="col">
 
             <% let total=0 %>
               <% locals.order.forEach(order=> { %>
 
-                <div class="row orderSinglePage-item-background mb-2 align-items-center">
-                  <div class="col">
+                <div class="row orderSinglePage-item-background mb-2 align-items-center justify-content-evenly ">
+                  <div class="col-2 ">
                     <img class="orderSinglePage-img-size" src="/productImages/<%= order.gallery[0] %>" alt="" srcset="">
 
                   </div>
-                  <div class="col">
-                    <a class="nav-link fs-3" href='/singleProductPage?id=<%=order.productId %>'>
+                  <div class="col-3">
+                    <a class="nav-link fs-5" href='/singleProductPage?id=<%=order.productId %>'>
                       <%= order.productName %>
                     </a>
 
-                    <h4>
+                    <h6>
                       Quantity : <%= order.orderQuantity %>
-                    </h4>
-                    <h4>
+                    </h6>
+                    <h6>
                       Total : <%= order.price %>
-                    </h4>
+                    </h6>
                     <% total +=parseInt(order.price) %>
 
+
                   </div>
+                  <!--  -->
+                  <div class="col-7 text-start ">
+                    <h6 class="mt-1 ">Rate and Review</h6>
+                    <hr class="w-75 bg-white mt-0 ">
+                    <input id="reviewRateUserId" type="hidden" name="user" value="<%=locals.user._id %>"
+                      data-orderId="<%=locals.orderId %>" data-productId="<%=order.productId %>"
+                      data-userName="<%=locals.user.firstName + " "+locals.user.lastName %>">
+                    <div id="customerRate">
+                      <% if(order.rating) {%>
+                        <%for(let i=1;i<6;i++) {%>
+                          <% if(i<=order.rating) {%>
+                            <i name="rate" class="bi bi-star-fill"></i>
+                            <% } else{%>
+                              <i name="rate" class="bi bi-star"></i>
+                              <% } %>
+                                <% } %>
+
+                                  <% } else{%>
+                                    <%for(let i=1;i<6;i++) {%>
+                                      <i name="rate" class="bi bi-star"></i>
+                                      <% } %>
+                                        <% } %>
+
+                    </div>
+                    <textarea class="orderSinglePage-textArea-background rounded-2   p-3  text-white " name="review" id="reviewMessage"
+                      cols="40" rows="2"></textarea>
+                    <i id="submitReview" class="bi bi-send d-none "></i>
+                  </div>
+                  <!--  -->
                 </div>
                 <% }); %>
 
@@ -69,10 +99,28 @@
 
 
         </div>
+
+        <!-- <div class="row">
+          <div class="col-3">
+            <h4>Rate and Review</h4>
+            <hr class="w-75 bg-white mt-0 ">
+          </div>
+        </div>
+        <input type="hidden" name="user" value="<%=locals.user._id %>">
+        <div id="customerRate" class="row">
+          <div class="col-12">
+            <%for(let i=1;i<6;i++) {%>
+              <i name="rate" class="bi bi-star"></i>
+              <% } %>
+          </div>
+          <textarea class="orderSinglePage-textArea-background rounded-2  mt-3 p-3  text-white " name="" id="" cols="30"
+            rows="10"></textarea>
+        </div> -->
       </div>
       <% } else { %>
         <p>No orders to display.</p>
         <% } %>
 
+          <script src="/javaScript/user/orderSinglePage.js"></script>
           <script src="/javaScript/user/header.js"></script>
           <%- include('../layout/user/footer') %>

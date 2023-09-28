@@ -42,7 +42,8 @@ const getOrderManagement = async (req, res, next) => {
 const postOrderStatusEdit = async (req, res, next) => {
   try {
     let { userId, orderId, status } = req.body.orderData
-    await UserModal.updateOne({ _id: userId, "orders._id": orderId }, { "orders.$.status": status })
+
+    await UserModal.updateOne({ _id: userId, "orders._id": orderId }, { "orders.$.status": status, "orders.$.balanceToSettle.settledMode":"byCash","orders.$.balanceToSettle.balance":0})
     res.json({ success: true })
     console.log("success");
   } catch (error) {

@@ -59,5 +59,8 @@ router.post("/razorPayCreateOrder",userSessionHandler,userValidation,userControl
 router.post('/addWalletMoney',userSessionHandler,userValidation,userController.postAddWalletMoney)
 //email checking for signup
 router.post('/checkMail',userController.postMailCheck)
+//product  rating and review
+router.post('/rateProduct',userSessionHandler,userValidation,userController.postRateProduct)
+router.post('/reviewProduct',userSessionHandler,userValidation,userController.postReviewProduct)
 
 module.exports = router

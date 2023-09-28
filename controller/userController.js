@@ -445,12 +445,38 @@ const getSingleProductPage = async (req, res, next) => {
 
             let brands = await BrandModal.distinct('brandName')
             let product = await ProductModal.findOne({ _id: req.query.id })
-            res.render('./users/singleProduct', { brands, product })
+            let rating = {}
+
+            if (product && product.rating && product.rating.length > 0) {
+                rating.rateLength = product.rating.length
+                rating.rateSum = product.rating.reduce((rate, element) => {
+                    return rate + element.rate
+                }, 0)
+
+            } else {
+                console.log("Rating data is missing or empty.");
+            }
+            let avg =  (rating.rateSum /(rating.rateLength*5) )*100
+            let ratingAvg = (5/100)*avg
+            
+            res.render('./users/singleProduct', { brands, product ,ratingAvg})
         } else {
             let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             let product = await ProductModal.findOne({ _id: req.query.id })
-            res.render('./users/singleProduct', { brands, product, user })
+            let rating = {}
+            if (product && product.rating && product.rating.length > 0) {
+                rating.rateLength = product.rating.length
+                rating.rateSum = product.rating.reduce((rate, element) => {
+                    return rate + element.rate
+                }, 0)
+
+            } else {
+                console.log("Rating data is missing or empty.");
+            }
+            let avg =  (rating.rateSum /(rating.rateLength*5) )*100
+            let ratingAvg = (5/100)*avg
+            res.render('./users/singleProduct', { brands, product, user,ratingAvg })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -1245,7 +1271,8 @@ const getOrderSinglePage = async (req, res, next) => {
 
 
 
-        res.render('./users/orderSinglePage', { order: completeData, addressToShip, brands, user });
+        res.render('./users/orderSinglePage', { order: completeData, addressToShip, brands, user, orderId });
+        console.log("completeData", completeData)
     } catch (error) {
         errorHandler(error, req, res, next);
     }
@@ -1418,6 +1445,123 @@ const postMailCheck = async (req, res, next) => {
 
     }
 }
+
+
+const postRateProduct = async (req, res, next) => {
+    try {
+        console.log("req.body.rating", req.body.rating);
+        let { userId, rating, orderId, productId, userName } = req.body.rating;
+
+        // Validate 'rating' to ensure it's a valid integer
+        rating = parseInt(rating);
+        if (isNaN(rating)) {
+            return res.status(400).json({ error: 'Invalid rating value' });
+        }
+
+        // Update the rating in the user's order
+        const result = await UserModal.findOneAndUpdate(
+            {
+                _id: userId,
+                "orders._id": orderId,
+                "orders.product.productId": productId
+            },
+            {
+                $set: { "orders.$[orderElem].product.$[productElem].rating": rating }
+            },
+            {
+                arrayFilters: [
+                    { "orderElem._id": orderId },
+                    { "productElem.productId": productId }
+                ]
+            }
+        );
+
+
+        if (!result) {
+            return res.status(404).json({ error: 'Record not found' });
+        }
+
+        const product = await ProductModal.findOne({ _id: productId, "rating.userId": userId });
+
+        if (product) {
+            // User has already rated the product, update the existing rating
+            await ProductModal.updateOne(
+                { _id: productId, "rating.userId": userId },
+                { $set: { "rating.$.rate": rating } }
+            );
+        } else {
+            // User hasn't rated the product, unshift a new rating entry
+            await ProductModal.updateOne(
+                { _id: productId },
+                { $push: { rating: { rate: rating, userName: userName, userId } } }
+            );
+        }
+
+
+        res.status(200).json({ message: 'Rating updated successfully' });
+
+
+    } catch (error) {
+        errorHandler(error, req, res, next);
+    }
+}
+
+
+const postReviewProduct = async (req, res, next) => {
+    try {
+        console.log("req.body.rating", req.body.review);
+        let { userId, review, orderId, productId, userName } = req.body.review;
+        review = trim(review)
+
+        const result = await UserModal.findOneAndUpdate(
+            {
+                _id: userId,
+                "orders._id": orderId,
+                "orders.product.productId": productId
+            },
+            {
+                $set: { "orders.$[orderElem].product.$[productElem].review": review }
+            },
+            {
+                arrayFilters: [
+                    { "orderElem._id": orderId },
+                    { "productElem.productId": productId }
+                ]
+            }
+        );
+
+
+        if (!result) {
+            console.log('!result');
+            return res.status(404).json({ error: 'Record not found' });
+        }
+
+        const product = await ProductModal.findOne({ _id: productId, "review.userId": userId });
+
+        if (product) {
+            // User has already rated the product, update the existing rating
+            await ProductModal.updateOne(
+                { _id: productId, "review.userId": userId },
+                { $set: { "review.$.review": review } }
+            );
+        } else {
+            // User hasn't rated the product, unshift a new rating entry
+            await ProductModal.updateOne(
+                { _id: productId },
+                { $push: { review: { review: review, userName: userName, userId } } }
+            );
+        }
+
+
+        res.status(200).json({ message: 'Rating updated successfully' });
+
+
+    } catch (error) {
+        errorHandler(error, req, res, next);
+    }
+}
+
+
 module.exports = {
     userHome,
     getSearch,
@@ -1451,5 +1595,7 @@ module.exports = {
     postWallet,
     postRazorPayCreateOrder,
     postAddWalletMoney,
-    postMailCheck
+    postMailCheck,
+    postRateProduct,
+    postReviewProduct
 }

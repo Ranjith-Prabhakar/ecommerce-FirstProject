@@ -65,7 +65,21 @@ const Product = mongoose.Schema({
         required: true,
         default: "active"
     },
-    coupon:{couponId:ObjectId,amount:Number}
+    coupon:{couponId:ObjectId,amount:Number},
+    rating:[
+        {
+            rate:Number,
+            userName:String,
+            userId:ObjectId
+        }
+    ],
+    review:[
+        {
+            review:String,
+            userName:String,
+            userId:ObjectId
+        }
+    ]
 
 }, {
     timestamps: true // Add timestamps option

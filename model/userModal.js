@@ -121,6 +121,8 @@ const User = mongoose.Schema({
             productId: ObjectId,
             orderQuantity: String,
             price: String,
+            rating:Number,
+            review:String,
         }],
         grossTotal: String,
         netTotal:String,
@@ -137,8 +139,7 @@ const User = mongoose.Schema({
             enum: ['placed', 'cancelledByAdmin', 'cancelledByClient', 'packed', 'inTransit', "deliverd", "returnInProgress", "returned"],
             default: 'placed'
         },
-        rating: String,
-        review: String,
+       
         addressToShip: ObjectId,
         razorpay_payment_id: String,
         razorpay_order_id: String,
