@@ -3,8 +3,8 @@
     <!-- filter and product -->
     <div class="container-fluid" style="flex-grow: 1;">
         <div class="row">
-            <!-- filter -->
             <div class="col-2 filter rounded-1 text-center text-white ">
+                <!-- filter -->
                 <% if(locals.brands.length) {%>
                     <h5 class="mt-2 ">Brand</h5>
 
@@ -19,6 +19,25 @@
                                 <hr>
                     </form>
                     <% } %>
+                        <!-- sort price-->
+                        <label for="price" class="d-inline mb-3">Price Sort
+                            <select class="form-select d-inline  " name="price" id="price" data-brand="<%=brand%>">
+                                <option value="0">Choose One</option>
+                                <option value="-1">Higher to Lower</option>
+                                <option value="1">Lower to Higher </option>
+                            </select>
+                        </label>
+
+                        <!-- sort Date-->
+
+                        <label for="date" class="d-inline mb-3">Date Sort
+                            <select class="form-select d-inline  " name="date" id="date" data-brand="<%=brand%>">
+                                <option value="0">Choose One</option>
+                                <option value="-1">New to Old</option>
+                                <option value="1">Old to New </option>
+                            </select>
+                        </label>
+
             </div>
             <!-- products-->
             <% locals.filterProducts || "" %>
@@ -124,7 +143,7 @@
 
         </div>
     </div>
-
+    <script src="/javaScript/user/brandPage.js"></script>
     <script src="/javaScript/user/header.js"></script>
     <script src="/javaScript/user/cart.js"></script>
     <%- include('../layout/user/footer') %>

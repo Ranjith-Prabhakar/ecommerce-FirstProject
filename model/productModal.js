@@ -14,7 +14,7 @@ const Product = mongoose.Schema({
         required: true
     },
     unitPrice: {
-        type: String,
+        type:Number,
         required: true
     },
     gallery: {

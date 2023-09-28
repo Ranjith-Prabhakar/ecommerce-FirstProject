@@ -29,9 +29,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
       try {
         //
 
-       let newFormData={balaceToPay : orderData.amount}
+        let newFormData = { balaceToPay: orderData.amount }
         $.ajax({
-          
+
           url: "/returnRazorPay", //it will goes to user router and controller
           type: "POST",
           data: newFormData,
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', (e) => {
               };
               const razorpayObject = new Razorpay(options);
               razorpayObject.on('payment.failed', function (response) {
-                alert("Payment Failed");
+                Swal.fire('Payment Failed')
               });
               razorpayObject.open();
             }
