@@ -456,10 +456,10 @@ const getSingleProductPage = async (req, res, next) => {
             } else {
                 console.log("Rating data is missing or empty.");
             }
-            let avg =  (rating.rateSum /(rating.rateLength*5) )*100
-            let ratingAvg = (5/100)*avg
-            
-            res.render('./users/singleProduct', { brands, product ,ratingAvg})
+            let avg = (rating.rateSum / (rating.rateLength * 5)) * 100
+            let ratingAvg = (5 / 100) * avg
+
+            res.render('./users/singleProduct', { brands, product, ratingAvg })
         } else {
             let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
@@ -474,9 +474,9 @@ const getSingleProductPage = async (req, res, next) => {
             } else {
                 console.log("Rating data is missing or empty.");
             }
-            let avg =  (rating.rateSum /(rating.rateLength*5) )*100
-            let ratingAvg = (5/100)*avg
-            res.render('./users/singleProduct', { brands, product, user,ratingAvg })
+            let avg = (rating.rateSum / (rating.rateLength * 5)) * 100
+            let ratingAvg = (5 / 100) * avg
+            res.render('./users/singleProduct', { brands, product, user, ratingAvg })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -1266,6 +1266,10 @@ const getOrderSinglePage = async (req, res, next) => {
             }
         }));
 
+        completeData.forEach((item, index) => {
+            item.status = order.status; // Assuming 'status' is the correct field name
+        });
+
         const addressToShip = user.shippingAddress.find((shippingAddress) => shippingAddress._id.toString() === order.addressToShip.toString())
 
 
@@ -1511,7 +1515,10 @@ const postReviewProduct = async (req, res, next) => {
     try {
         console.log("req.body.rating", req.body.review);
         let { userId, review, orderId, productId, userName } = req.body.review;
-        review = trim(review)
+        console.log("====", review, productId, userId, userName, orderId);
+        console.log("====", typeof review);
+        console.log(review);
+        console.log(typeof review);
 
         const result = await UserModal.findOneAndUpdate(
             {

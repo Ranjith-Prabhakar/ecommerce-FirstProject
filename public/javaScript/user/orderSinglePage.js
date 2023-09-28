@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   //submitting the review
-  submitReview.addEventListener('click', async(e) => {
+  submitReview.addEventListener('click', async (e) => {
     e.preventDefault()
 
     if (reviewMessage.value.trim() !== "") {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         orderId: reviewRateUserId.getAttribute('data-orderId'),
         productId: reviewRateUserId.getAttribute('data-productId'),
         userName: reviewRateUserId.getAttribute('data-userName'),
-        reviewMessage:reviewMessage.value
+        review: reviewMessage.value
       }
 
 
@@ -80,11 +80,11 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: {
             "content-type": "application/json"
           },
-          body: JSON.stringify({ review})
+          body: JSON.stringify({ review })
         })
         let data = await response.json()
-        if (data.success) {
-          console.log('success');
+        if (data.message) {
+          Swal.fire('review has been updated')
         }
       } catch (error) {
         console.log(error.message);
