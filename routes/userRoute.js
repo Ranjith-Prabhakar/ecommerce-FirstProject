@@ -6,6 +6,7 @@ const { profileImageUpload } = require('../middleWare/multer')
 
 router.get('/', userSessionHandler, userController.userHome)
 router.get('/home/:paramName', userSessionHandler, userController.userHome)
+router.get('/userHomeSort',userSessionHandler, userController.getUserHomeSort)/////////////////////////////////////////////////////////////////
 router.get('/search', userController.getSearch)
 router.get('/brandSort',userController.getBrandSort)
 router.get('/filterBrandSort',userController.getFilterBrandSort)

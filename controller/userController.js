@@ -53,6 +53,58 @@ const userHome = async (req, res, next) => {
         errorHandler(err, req, res, next);
     }
 }
+
+
+const getUserHomeSort = async (req, res, next) => {
+    try {
+        const page = parseInt(req.query.page)  // it was one before then it worked well
+
+        const itemsPerPage = 5; // Number of products per page
+        // const start = (page - 1) * itemsPerPage;
+        const start = Math.abs((page - 1) * itemsPerPage);
+        let user, brands, products, productsCount, banner;
+        let sortValue = parseInt(req.query.sortValue)
+        if(req.query.criteria === "unitPrice"){
+            if (req.session.userId) {
+                user = await UserModal.findOne({ _id: req.session.userId });
+                brands = await BrandModal.distinct('brandName')
+                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({unitPrice:sortValue});
+                productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
+                banner = await BannerModal.find()
+                res.render('./users/sortUserHome', { user, brands, products, banner, productsCount, page,sortValue,criteria:req.query.criteria })
+            } else {
+    
+                brands = await BrandModal.distinct('brandName')
+                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({unitPrice:sortValue});
+                productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
+                banner = await BannerModal.find()
+    
+                res.render('./users/sortUserHome', { brands: brands, products, banner, productsCount, page,sortValue,criteria:req.query.criteria  })
+            }
+        }else{
+            if (req.session.userId) {
+                user = await UserModal.findOne({ _id: req.session.userId });
+                brands = await BrandModal.distinct('brandName')
+                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({createdAt:sortValue});
+                productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
+                banner = await BannerModal.find()
+                res.render('./users/sortUserHome', { user, brands, products, banner, productsCount, page,sortValue,criteria:req.query.criteria })
+            } else {
+    
+                brands = await BrandModal.distinct('brandName')
+                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({createdAt:sortValue});
+                productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
+                banner = await BannerModal.find()
+    
+                res.render('./users/sortUserHome', { brands: brands, products, banner, productsCount, page,sortValue,criteria:req.query.criteria  })
+            }
+        } 
+       
+    } catch (err) {
+        errorHandler(err, req, res, next);
+    }
+}
+
 ///have to check it
 const getSearch = async (req, res, next) => {
     try {
@@ -1661,6 +1713,7 @@ const postReviewProduct = async (req, res, next) => {
 
 module.exports = {
     userHome,
+    getUserHomeSort,
     getSearch,
     getBrandSort,
     getFilterBrandSort,
