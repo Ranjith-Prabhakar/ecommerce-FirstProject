@@ -7,9 +7,10 @@
           <div class="col">
 
             <% let total=0 %>
-              <% locals.order.forEach(order=> { %>
+              <% locals.order.forEach((order,index)=> { %>
 
-                <div class="row orderSinglePage-item-background mb-2 align-items-center justify-content-evenly ">
+                <div name="index"
+                  class="row orderSinglePage-item-background mb-2 align-items-center justify-content-evenly ">
                   <div class="col-2 ">
                     <img class="orderSinglePage-img-size" src="/productImages/<%= order.gallery[0] %>" alt="" srcset="">
 
@@ -35,34 +36,37 @@
                     <div class="col-7 text-start ">
                       <h6 class="mt-1 ">Rate and Review</h6>
                       <hr class="w-75 bg-white mt-0 ">
-                      <input id="reviewRateUserId" type="hidden" name="user" value="<%=locals.user._id %>"
-                        data-orderId="<%=locals.orderId %>" data-productId="<%=order.productId %>"
-                        data-userName="<%=locals.user.firstName + " "+locals.user.lastName %>">
+
                       <div id="customerRate">
+                        <input id="reviewRateUserId<%=index %>" type="hidden" name="user"
+                        value="<%=locals.user._id %>" data-orderId="<%=locals.orderId %>"
+                        data-productId="<%=order.productId %>"
+                        data-userName="<%=locals.user.firstName + " "+locals.user.lastName %>">
                         <% if(order.rating) {%>
                           <%for(let i=1;i<6;i++) {%>
+                          
                             <% if(i<=order.rating) {%>
-                              <i name="rate" class="bi bi-star-fill"></i>
+                              <i name="rate<%=index%>" class="bi bi-star-fill"></i>
                               <% } else{%>
-                                <i name="rate" class="bi bi-star"></i>
+                                <i name="rate<%=index%>" class="bi bi-star"></i>
                                 <% } %>
                                   <% } %>
 
                                     <% } else{%>
                                       <%for(let i=1;i<6;i++) {%>
-                                        <i name="rate" class="bi bi-star"></i>
+                                        <i name="rate<%=index%>" class="bi bi-star"></i>
                                         <% } %>
                                           <% } %>
 
                       </div>
                       <% if(order.review) {%>
                         <textarea class="orderSinglePage-textArea-background rounded-2   p-3  text-white " name="review"
-                          id="reviewMessage" cols="40" rows="2" placeholder="<%=order.review  %>"></textarea>
-                        <i id="submitReview" class="bi bi-send d-none "></i>
+                          id="reviewMessage<%=index%>" cols="40" rows="2" placeholder="<%=order.review  %>"></textarea>
+                        <i id="submitReview<%=index%>" class="bi bi-send d-none "></i>
                         <% }else{ %>
                           <textarea class="orderSinglePage-textArea-background rounded-2   p-3  text-white "
-                            name="review" id="reviewMessage" cols="40" rows="2"></textarea>
-                          <i id="submitReview" class="bi bi-send d-none "></i>
+                            name="review" id="reviewMessage<%=index%>" cols="40" rows="2"></textarea>
+                          <i id="submitReview<%=index%>" class="bi bi-send d-none "></i>
                           <% } %>
                     </div>
                     <% } %>

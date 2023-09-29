@@ -64,42 +64,42 @@ const getUserHomeSort = async (req, res, next) => {
         const start = Math.abs((page - 1) * itemsPerPage);
         let user, brands, products, productsCount, banner;
         let sortValue = parseInt(req.query.sortValue)
-        if(req.query.criteria === "unitPrice"){
+        if (req.query.criteria === "unitPrice") {
             if (req.session.userId) {
                 user = await UserModal.findOne({ _id: req.session.userId });
                 brands = await BrandModal.distinct('brandName')
-                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({unitPrice:sortValue});
+                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({ unitPrice: sortValue });
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
-                res.render('./users/sortUserHome', { user, brands, products, banner, productsCount, page,sortValue,criteria:req.query.criteria })
+                res.render('./users/sortUserHome', { user, brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             } else {
-    
+
                 brands = await BrandModal.distinct('brandName')
-                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({unitPrice:sortValue});
+                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({ unitPrice: sortValue });
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
-    
-                res.render('./users/sortUserHome', { brands: brands, products, banner, productsCount, page,sortValue,criteria:req.query.criteria  })
+
+                res.render('./users/sortUserHome', { brands: brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             }
-        }else{
+        } else {
             if (req.session.userId) {
                 user = await UserModal.findOne({ _id: req.session.userId });
                 brands = await BrandModal.distinct('brandName')
-                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({createdAt:sortValue});
+                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({ createdAt: sortValue });
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
-                res.render('./users/sortUserHome', { user, brands, products, banner, productsCount, page,sortValue,criteria:req.query.criteria })
+                res.render('./users/sortUserHome', { user, brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             } else {
-    
+
                 brands = await BrandModal.distinct('brandName')
-                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({createdAt:sortValue});
+                products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({ createdAt: sortValue });
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
-    
-                res.render('./users/sortUserHome', { brands: brands, products, banner, productsCount, page,sortValue,criteria:req.query.criteria  })
+
+                res.render('./users/sortUserHome', { brands: brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             }
-        } 
-       
+        }
+
     } catch (err) {
         errorHandler(err, req, res, next);
     }
@@ -600,7 +600,7 @@ const getSingleProductPage = async (req, res, next) => {
             }
             let avg = (rating.rateSum / (rating.rateLength * 5)) * 100
             let ratingAvg = (5 / 100) * avg
-
+            console.log("product", product)
             res.render('./users/singleProduct', { brands, product, ratingAvg })
         } else {
             let user = await UserModal.findOne({ _id: req.session.userId });
@@ -618,6 +618,7 @@ const getSingleProductPage = async (req, res, next) => {
             }
             let avg = (rating.rateSum / (rating.rateLength * 5)) * 100
             let ratingAvg = (5 / 100) * avg
+            console.log("product", product)
             res.render('./users/singleProduct', { brands, product, user, ratingAvg })
         }
     } catch (err) {
