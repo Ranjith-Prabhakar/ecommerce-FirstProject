@@ -122,17 +122,17 @@
 
                         <% if(locals.brands && locals.brands.length) { %>
                             <% let brandChunks=[]; %>
-                                <% for (let i=0; i < locals.brands.length; i +=5) { %>
-                                    <% brandChunks.push(locals.brands.slice(i, i + 5)); %>
+                                <% for (let i=0; i < locals.brands.length; i +=6) { %>
+                                    <% brandChunks.push(locals.brands.slice(i, i + 6)); %>
                                         <% } %>
 
                                             <% brandChunks.forEach((chunk, index)=> { %>
                                                 <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
                                                     <div class="d-flex text-white">
                                                         <% chunk.forEach(brand=> { %>
-                                                            <div class=" col-2  p-0 rounded-4  m-3 mt-4   ">
+                                                            <div class=" col-2  p-0 rounded-4  m-1 mb-3 mt-4   ">
                                                                 <form class="p-0   " action="/brandPage" method="get">
-                                                                    <input class="fs-3 fw-bold nav-link " type="submit"
+                                                                    <input class="fs-6 fw-bold nav-link " type="submit"
                                                                         name="brandName" value="<%= brand %>">
                                                                 </form>
                                                             </div>
