@@ -9,7 +9,7 @@ const getBannerManagement = async(req, res,next) => {
             let banner = await BannerModal.find().limit(3) 
             let brand = await BrandModal.distinct('brandName')
             console.log(banner);
-            res.render('./admin/bannerManagement/bannerManagement',{banner,brand})
+            res.render('admin/bannerManagement/bannerManagement',{banner,brand})
         } else {
             req.session.loginErrorMessage = 'Login First'
             res.redirect('/adminLogin')

@@ -33,7 +33,7 @@ const getOrderManagement = async (req, res, next) => {
     console.log("orderObject", orderObject);
 
 
-    res.render('./admin/orderManagement/orderManagement', { orderObject })
+    res.render('admin/orderManagement/orderManagement', { orderObject })
   } catch (error) {
     errorHandler(error, req, res, next);
   }
@@ -90,7 +90,7 @@ const getOrderDetailPage = async (req, res, next) => {
     console.log(order.addressToShip);
     console.log("addressToShip", addressToShip);
 
-    res.render('./admin/orderManagement/orderSinglePage', { order: completeData, addressToShip });
+    res.render('admin/orderManagement/orderSinglePage', { order: completeData, addressToShip });
   } catch (error) {
     errorHandler(error, req, res, next);
   }

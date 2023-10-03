@@ -9,7 +9,7 @@ const getCouponManagement = async (req, res, next) => {
     const brands = await BrandModal.distinct('brandName')
     const products = await ProductModal.find({})
     const coupons = await CouponModal.find({}).sort({ createdAt: -1 })
-    res.render('./admin/couponManagement/couponManagement', { brands, products, coupons })
+    res.render('admin/couponManagement/couponManagement', { brands, products, coupons })
 
   } catch (error) {
     errorHandler(error, req, res, next)

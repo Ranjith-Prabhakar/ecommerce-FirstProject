@@ -22,10 +22,10 @@ const getProductManagement = async (req, res, next) => {
         if (req.session.existingProduct) {
             const brand = await BrandModal.distinct('brandName')
             // res.render('./admin/productManagement/createProduct', { brand, existingProduct: req.session.existingProduct })
-            res.render('./admin/productManagement/productManagement', { products, productManagement: true, brand })
+            res.render('admin/productManagement/productManagement', { products, productManagement: true, brand })
         } else {
             const brand = await BrandModal.distinct('brandName')
-            res.render('./admin/productManagement/productManagement', { products, productManagement: true, brand })
+            res.render('admin/productManagement/productManagement', { products, productManagement: true, brand })
             // res.render('./admin/productManagement/createProduct', { brand })
         }
 

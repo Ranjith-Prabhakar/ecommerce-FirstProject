@@ -16,7 +16,7 @@ const getReturnmanagement = async (req, res, next) => {
   try {
     const returnReq = await UserModal.aggregate([{ $match: { "orders.status": 'returnInProgress' } }, { $unwind: "$orders" }, { $match: { 'orders.status': 'returnInProgress' } }, { $project: { orders: true, firstName: true, lastName: true } }])
     console.log("returnReq", returnReq);
-    res.render('./admin/returnManagement/returnManagement', { returnReq })
+    res.render('admin/returnManagement/returnManagement', { returnReq })
   } catch (error) {
     errorHandler(error, req, res, next)
 

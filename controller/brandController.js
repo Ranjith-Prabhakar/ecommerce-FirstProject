@@ -7,7 +7,7 @@ const getBrandManagement = async (req, res) => {
         if (req.session.isAdmin) {
            
             const brands = await BrandModal.find()
-            res.render('./admin/catagoryManagement/catagoryManagement', { catagoryManagement: true, brands });
+            res.render('admin/catagoryManagement/catagoryManagement', { catagoryManagement: true, brands });
         } else {
             req.session.loginErrorMessage = 'Login First';
             res.redirect('/adminLogin');

@@ -7,7 +7,7 @@ const errorHandler = require('../middleWare/errorMiddleWare')
 const getUserManagement = async (req, res) => {
     try {
         const users = await UserModal.find()
-        res.render('./admin/userManagement/userManagement', { users, userManagement: true })
+        res.render('admin/userManagement/userManagement', { users, userManagement: true })
     } catch (err) {
         errorHandler(err, req, res, next);
     }

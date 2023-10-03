@@ -2,6 +2,7 @@
 const express = require('express')
 const app = express()
 require('dotenv').config()
+const path=require('path')
 const PORT = process.env.PORT || 5000
 
 // data base
@@ -41,6 +42,7 @@ app.use(express.json())
 
 //view engine activation
 app.set('view engine', 'ejs')
+// app.set('views', path.join(__dirname, 'views'));
 
 // logger
 const logger = (req, res, next) => {

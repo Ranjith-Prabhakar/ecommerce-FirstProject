@@ -39,7 +39,7 @@ const userHome = async (req, res, next) => {
             products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage);
             productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
             banner = await BannerModal.find()
-            res.render('./users/userHome', { user, brands, products, banner, productsCount, page })
+            res.render('users/userHome', { user, brands, products, banner, productsCount, page })
         } else {
 
             brands = await BrandModal.distinct('brandName')
@@ -47,7 +47,7 @@ const userHome = async (req, res, next) => {
             productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
             banner = await BannerModal.find()
 
-            res.render('./users/userHome', { brands: brands, products, banner, productsCount, page })
+            res.render('users/userHome', { brands: brands, products, banner, productsCount, page })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -71,7 +71,7 @@ const getUserHomeSort = async (req, res, next) => {
                 products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({ unitPrice: sortValue });
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
-                res.render('./users/sortUserHome', { user, brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
+                res.render('users/sortUserHome', { user, brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             } else {
 
                 brands = await BrandModal.distinct('brandName')
@@ -79,7 +79,7 @@ const getUserHomeSort = async (req, res, next) => {
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
 
-                res.render('./users/sortUserHome', { brands: brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
+                res.render('users/sortUserHome', { brands: brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             }
         } else {
             if (req.session.userId) {
@@ -88,7 +88,7 @@ const getUserHomeSort = async (req, res, next) => {
                 products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({ createdAt: sortValue });
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
-                res.render('./users/sortUserHome', { user, brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
+                res.render('users/sortUserHome', { user, brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             } else {
 
                 brands = await BrandModal.distinct('brandName')
@@ -96,7 +96,7 @@ const getUserHomeSort = async (req, res, next) => {
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
 
-                res.render('./users/sortUserHome', { brands: brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
+                res.render('users/sortUserHome', { brands: brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             }
         }
 
@@ -120,7 +120,7 @@ const getSearch = async (req, res, next) => {
             });
 
             // let banner = await BannerModal.find()
-            res.render('./users/productSearch', { user, brands: brands, products, brand: req.query.search })/// 
+            res.render('users/productSearch', { user, brands: brands, products, brand: req.query.search })/// 
             console.log('req.query.search ===>', req.query.search);
         } else {
             let brands = await BrandModal.distinct('brandName')
@@ -132,7 +132,7 @@ const getSearch = async (req, res, next) => {
             });
 
             // let banner = await BannerModal.find()
-            res.render('./users/productSearch', { brands: brands, products, brand: req.query.search })
+            res.render('users/productSearch', { brands: brands, products, brand: req.query.search })
             console.log('req.query.search ===>', req.query.search);
         }
     } catch (err) {
@@ -154,14 +154,14 @@ const getBrandSort = async (req, res, next) => {
                 ).sort({ unitPrice: parseInt(req.query.sortValue) });
 
                 console.log('products', products)
-                res.render('./users/productSearch', { user, brands: brands, products, brand: req.query.brand })/// 
+                res.render('users/productSearch', { user, brands: brands, products, brand: req.query.brand })/// 
             } else {
                 let brands = await BrandModal.distinct('brandName')
                 let products = await ProductModal.find({ brandName: { $regex: new RegExp(`^${req.query.brand}`, 'i') }, freez: 'active' }
                 ).sort({ unitPrice: parseInt(req.query.sortValue) });
                 console.log("parseInt(req.query.sortValue)", parseInt(req.query.sortValue))
                 console.log('products', products)
-                res.render('./users/productSearch', { brands: brands, products, brand: req.query.brand })
+                res.render('users/productSearch', { brands: brands, products, brand: req.query.brand })
             }
         } else if (criteria === "createdAt") {
             if (req.session.userId) {
@@ -172,14 +172,14 @@ const getBrandSort = async (req, res, next) => {
                 ).sort({ createdAt: req.query.sortValue });
 
                 console.log('products', products)
-                res.render('./users/productSearch', { user, brands: brands, products, brand: req.query.brand })/// 
+                res.render('users/productSearch', { user, brands: brands, products, brand: req.query.brand })/// 
             } else {
                 let brands = await BrandModal.distinct('brandName')
                 let products = await ProductModal.find({ brandName: { $regex: new RegExp(`^${req.query.brand}`, 'i') }, freez: 'active' }
                 ).sort({ createdAt: req.query.sortValue });
                 console.log("parseInt(req.query.sortValue)", parseInt(req.query.sortValue))
                 console.log('products', products)
-                res.render('./users/productSearch', { brands: brands, products, brand: req.query.brand })
+                res.render('users/productSearch', { brands: brands, products, brand: req.query.brand })
             }
         }
 
@@ -198,22 +198,22 @@ const getFilterBrandSort = async (req, res, next) => {
                 let user = await UserModal.findOne({ _id: req.session.userId });
                 let brands = await BrandModal.distinct('brandName')
                 let filterProducts = await ProductModal.find({ brandName: { $in: brandString } }).sort({ unitPrice: parseInt(req.query.sortValue) });
-                res.render('./users/productFilter', { user, brands: brands, filterProducts, brand: brandString })/// 
+                res.render('users/productFilter', { user, brands: brands, filterProducts, brand: brandString })/// 
             } else {
                 let brands = await BrandModal.distinct('brandName')
                 let filterProducts = await ProductModal.find({ brandName: { $in: brandString } }).sort({ unitPrice: parseInt(req.query.sortValue) });
-                res.render('./users/productFilter', { brands: brands, filterProducts, brand: brandString })
+                res.render('users/productFilter', { brands: brands, filterProducts, brand: brandString })
             }
         } else if (criteria === "createdAt") {
             if (req.session.userId) {
                 let user = await UserModal.findOne({ _id: req.session.userId });
                 let brands = await BrandModal.distinct('brandName')
                 let filterProducts = await ProductModal.find({ brandName: { $in: brandString } }).sort({ createdAt: parseInt(req.query.sortValue) });
-                res.render('./users/productFilter', { user, brands: brands, filterProducts, brand: brandString })/// 
+                res.render('users/productFilter', { user, brands: brands, filterProducts, brand: brandString })/// 
             } else {
                 let brands = await BrandModal.distinct('brandName')
                 let filterProducts = await ProductModal.find({ brandName: { $in: brandString } }).sort({ createdAt: parseInt(req.query.sortValue) });
-                res.render('./users/productFilter', { brands: brands, filterProducts, brand: brandString })
+                res.render('users/productFilter', { brands: brands, filterProducts, brand: brandString })
             }
         }
 
@@ -227,11 +227,11 @@ const getFilterBrandSort = async (req, res, next) => {
 const getUserLogin = async (req, res, next) => {
     try {
         if (errorMessages) {
-            res.render('./users/userLogin', { errorMessages })
+            res.render('users/userLogin', { errorMessages })
             errorMessages = ""
         }
         else {
-            res.render('./users/userLogin')
+            res.render('users/userLogin')
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -312,10 +312,10 @@ const postUserLogin = async (req, res, next) => {
 const getUserSignUp = async (req, res, next) => {
     try {
         if (req.session.errorMessage) {
-            res.render('./users/userSignUp', { errorMessage: req.session.errorMessage, signUp: true })
+            res.render('users/userSignUp', { errorMessage: req.session.errorMessage, signUp: true })
             req.session.errorMessage = ''
         } else {
-            res.render('./users/userSignUp', { signUp: true })
+            res.render('users/userSignUp', { signUp: true })
         }
 
     } catch (err) {
@@ -408,14 +408,14 @@ const postUserSignUp = async (req, res, next) => {
 const getUserOtpVerificationCode = async (req, res, next) => {
     try {
         if (errorMessages) {
-            res.render('./users/userOtpVerificationCode', { errorMessages })
+            res.render('users/userOtpVerificationCode', { errorMessages })
             errorMessages = ''
         } else if (errorMessages) {
-            res.render('./users/userOtpVerificationCode', { errorMessages })
+            res.render('users/userOtpVerificationCode', { errorMessages })
             errorMessages = ''
         }
         else {
-            res.render('./users/userOtpVerificationCode')
+            res.render('users/userOtpVerificationCode')
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -530,12 +530,12 @@ const getBrandPage = async (req, res, next) => {
             let brands = await BrandModal.distinct('brandName')
 
             let products = await ProductModal.find({ brandName: req.query.brandName, freez: { $eq: 'active' } })
-            res.render('./users/brandPage', { brands, products, brand: req.query.brandName })
+            res.render('users/brandPage', { brands, products, brand: req.query.brandName })
         } else {
             let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({ brandName: req.query.brandName, freez: { $eq: 'active' } })
-            res.render('./users/brandPage', { brands, products, user, brand: req.query.brandName })
+            res.render('users/brandPage', { brands, products, user, brand: req.query.brandName })
         }
 
 
@@ -558,7 +558,7 @@ const getBrandFilter = async (req, res, next) => {
             }
             let brands = await BrandModal.distinct('brandName')
             const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] }, freez: 'active' }).sort({ brandName: 1 })
-            res.render('./users/productFilter', { filterProducts, brands, brand })
+            res.render('users/productFilter', { filterProducts, brands, brand })
 
 
         } else {
@@ -573,7 +573,7 @@ const getBrandFilter = async (req, res, next) => {
 
             let brands = await BrandModal.distinct('brandName')
             const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] } }).sort({ brandName: 1 })
-            res.render('./users/productFilter', { brands, filterProducts, user, brand })
+            res.render('users/productFilter', { brands, filterProducts, user, brand })
 
         }
     } catch (err) {
@@ -601,7 +601,7 @@ const getSingleProductPage = async (req, res, next) => {
             let avg = (rating.rateSum / (rating.rateLength * 5)) * 100
             let ratingAvg = (5 / 100) * avg
             console.log("product", product)
-            res.render('./users/singleProduct', { brands, product, ratingAvg })
+            res.render('users/singleProduct', { brands, product, ratingAvg })
         } else {
             let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
@@ -619,7 +619,7 @@ const getSingleProductPage = async (req, res, next) => {
             let avg = (rating.rateSum / (rating.rateLength * 5)) * 100
             let ratingAvg = (5 / 100) * avg
             console.log("product", product)
-            res.render('./users/singleProduct', { brands, product, user, ratingAvg })
+            res.render('users/singleProduct', { brands, product, user, ratingAvg })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -630,7 +630,7 @@ const getProfile = async (req, res, next) => {
     try {
         const user = await UserModal.findOne({ _id: req.session.userId })
         let brands = await BrandModal.distinct('brandName')
-        res.render('./users/userProfile', { user, brands })
+        res.render('users/userProfile', { user, brands })
     } catch (error) {
         errorHandler(error, req, res, next)
 
@@ -755,7 +755,7 @@ const getCart = async (req, res, next) => {
 
 
 
-        res.render('./users/cart', { cartProducts, cartValue, user, brands }); // Pass cartProducts to the EJS template
+        res.render('users/cart', { cartProducts, cartValue, user, brands }); // Pass cartProducts to the EJS template
     } catch (error) {
         errorHandler(error, req, res, next);
     }
@@ -901,7 +901,7 @@ const getCheckOutPage = async (req, res, next) => {
             console.log("user", user);
             console.log("user wallet", user.wallet.balance);
             let brands = await BrandModal.distinct('brandName')
-            res.render('./users/checkOutPage', { singleProduct, user, brands, coupons });
+            res.render('users/checkOutPage', { singleProduct, user, brands, coupons });
             req.query.productId = '';
         } else if (req.session.selectedProducts && req.session.selectedProducts.length) {//selected cart
             let coupons = {}
@@ -942,7 +942,7 @@ const getCheckOutPage = async (req, res, next) => {
                 return priceCoupon.amountRange < total
             })
             coupons.priceCoupons = matchingPriceCoupons
-            res.render('./users/checkOutPage', { productList, user, brands, coupons });
+            res.render('users/checkOutPage', { productList, user, brands, coupons });
             console.log("productList selected cart", productList)
         } else if (req.query.cart) {//cart
             let coupons = {}
@@ -990,7 +990,7 @@ const getCheckOutPage = async (req, res, next) => {
             }, priceCoupon[0])
             console.log('matchingPriceCouponsFiltered', matchingPriceCouponsFiltered);
             coupons.priceCoupons = matchingPriceCoupons
-            res.render('./users/checkOutPage', { productList, user, brands, coupons });
+            res.render('users/checkOutPage', { productList, user, brands, coupons });
             console.log("productList whole cart", productList)
 
         }
@@ -1315,7 +1315,7 @@ const getOrders = async (req, res, next) => {
         const user = await UserModal.findOne({ _id: req.session.userId })
         const orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: true })
 
-        res.render('./users/order', { orders, brands, user });
+        res.render('users/order', { orders, brands, user });
     } catch (error) {
         errorHandler(error, req, res, next)
     }
@@ -1418,7 +1418,7 @@ const getOrderSinglePage = async (req, res, next) => {
 
 
 
-        res.render('./users/orderSinglePage', { order: completeData, addressToShip, brands, user, orderId });
+        res.render('users/orderSinglePage', { order: completeData, addressToShip, brands, user, orderId });
         console.log("completeData", completeData)
     } catch (error) {
         errorHandler(error, req, res, next);

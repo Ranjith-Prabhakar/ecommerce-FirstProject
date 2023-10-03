@@ -37,14 +37,14 @@ const getAdminLogin = (req, res, next) => {
     try {
         if (req.session.unAutherisedAdmin) {
 
-            res.render('./admin/adminLogin', { unAutherisedAdmin: req.session.unAutherisedAdmin, login: true })////
+            res.render('admin/adminLogin', { unAutherisedAdmin: req.session.unAutherisedAdmin, login: true })////
             req.session.unAutherisedAdmin = ""
         } else if (req.session.loginErrorMessage) {
-            res.render('./admin/adminLogin', { loginErrorMessage: req.session.loginErrorMessage, login: true })////
+            res.render('admin/adminLogin', { loginErrorMessage: req.session.loginErrorMessage, login: true })////
             req.session.loginErrorMessage = ""
         }
         else {
-            res.render('./admin/adminLogin', { login: true })////
+            res.render('admin/adminLogin', { login: true })////
         }
     } catch (err) {
         errorHandler(err, req, res, next);
@@ -107,7 +107,7 @@ const getAdminLogin = (req, res, next) => {
 //         errorHandler(err, req, res, next);
 //     }
 // }
-const postAdminLogin = async (req, res) => {
+const postAdminLogin = async (req, res,next) => {
     try {
         const adminData = await AdminModal.findOne({ userName: req.body.userName, isAdmin: true })
         if (adminData) {
@@ -136,7 +136,7 @@ const postAdminLogin = async (req, res) => {
 
 
     } catch (error) {
-        errorHandler(err, req, res, next);
+        errorHandler(error, req, res, next);
     }
 }
 
