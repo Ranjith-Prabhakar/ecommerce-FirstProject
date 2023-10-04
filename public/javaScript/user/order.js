@@ -8,51 +8,22 @@ document.addEventListener("DOMContentLoaded", () => {
       let modeOfPayment = event.target.getAttribute("data-modeOfPayment")
       let submitCancellInput = document.getElementById('submitCancellInput')
       submitCancellInput.value = orderId
-      // submitCancellInput.setAttribute('modeOfPayment',modeOfPayment)
       if (modeOfPayment !== "cashOnDelivery") {
         let refundNeed = document.getElementById('refundNeed')
         refundNeed.classList.remove('d-none')
       }
-      // try {
-      //   const response = await fetch('/cancellOrder', {
-      //     method: "post",
-      //     headers: {
-      //       "Content-Type": "application/json"
-      //     },
-      //     body: JSON.stringify({ orderId })
-      //   })
-      //   let data = await response.json()
-      //   if (data.success) {
-      //     // alert('Order Has Been Cancelled Successfully')
-      //     Swal.fire({
-      //       icon: 'success',
-      //       title: 'Order Has Been Cancelled Successfully',
-      //       footer: '<a href="">Why do I have this issue?</a>'
-      //     })
-      //     setTimeout(() => {
-
-      //       window.location.reload()
-      //     }, 2000)
-      //   }
-      // } catch (error) {
-      //   console.log(error.message);
-
-      // }
     })
   })
 
   //cancel submit 
   let submitCancelEl = document.forms["submitCancell"]
-  console.log("submitCancelEl>>>>>", submitCancelEl);
   submitCancelEl.addEventListener("submit", async (event) => {
-    console.log("inside submit return");
     event.preventDefault()
     let formData = new FormData(submitCancelEl)
     let newFormData = {}
     for (let [key, value] of formData.entries()) {
       newFormData[key] = value
     }
-    console.log("newFormData", newFormData);
     try {
       const response = await fetch('/cancellOrder', {
         method: 'post',
@@ -89,27 +60,22 @@ document.addEventListener("DOMContentLoaded", () => {
   let returnRequestEl = document.querySelectorAll('button[name="Delivered"]')
   returnRequestEl.forEach(returnRequest => {
     returnRequest.addEventListener('click', (event) => {
-      console.log('========');
       event.preventDefault()
       let orderId = event.target.getAttribute('data-orderid')
       let submitReturnInputEl = document.getElementById('submitReturnInput')
       submitReturnInputEl.value = orderId
-      console.log("submitReturnInputEl", submitReturnInputEl);
 
     })
   })
   //return submit
   let submitReturnEl = document.forms["submitReturn"]
-  console.log("submitReturnEl>>>>>", submitReturnEl);
   submitReturnEl.addEventListener("submit", async (event) => {
-    console.log("inside submit return");
     event.preventDefault()
     let formData = new FormData(submitReturnEl)
     let newFormData = {}
     for (let [key, value] of formData.entries()) {
       newFormData[key] = value
     }
-    console.log("newFormData", newFormData);
     try {
       const response = await fetch('/orderReturnRequest', {
         method: 'post',
@@ -140,36 +106,4 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
   })
-  // let returnRequestEl = document.querySelectorAll('button[name="Delivered"]')
-  // returnRequestEl.forEach(returnRequest=>{
-  //   returnRequest.addEventListener('click',async(event)=>{
-  //     event.preventDefault()
-  //     let orderId = event.target.getAttribute('data-orderid')
-  //     try {
-  //       const response = await fetch('/orderReturnRequest',{
-  //         method:'post',
-  //         headers:{
-  //           "content-type":"application/json"
-  //         },
-  //         body:JSON.stringify({orderId})
-  //       }).then((success)=>{
-  //         Swal.fire({
-  //           icon: 'success',
-  //           title: 'Order Cancellation Request Has Been Recorded Successfully',
-  //           // footer: '<a href="">Why do I have this issue?</a>'
-  //       })
-  //         window.location.reload()
-  //       }).catch(err=>{
-  //         Swal.fire({
-  //           icon: 'error',
-  //           title: 'Order Cancellation Request Has Been Failed',
-  //           // footer: '<a href="">Why do I have this issue?</a>'
-  //       })
-  //       })
-  //     } catch (error) {
-  //       console.log(error.message);
-
-  //     }
-  //   })
-  // })
 })

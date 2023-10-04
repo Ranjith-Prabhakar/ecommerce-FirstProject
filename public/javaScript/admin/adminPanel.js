@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const canvasEl = document.getElementById('firstCan')
   let resultObj = canvasEl.getAttribute('data-result')
   resultObj = JSON.parse(resultObj)
-  console.log('resultObj',resultObj);
   let brandLabels = resultObj.order.map(brands => brands._id)
   let brandOrderCount = resultObj.order.flatMap(brands => brands.totalSales);
   let brandSalesCount = resultObj.sold.flatMap(brands => brands.totalSales);

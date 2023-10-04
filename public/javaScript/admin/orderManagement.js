@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
   $('#table').DataTable();
   // order status
   let status = document.querySelectorAll('select')
-  console.log(status);
   status.forEach(status => {
     status.addEventListener('change', async (event) => {
       event.preventDefault()

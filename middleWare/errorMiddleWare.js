@@ -1,4 +1,3 @@
-
 const errorHandler = ((error, req, res, next) => {
     error.statusCode = error.statusCode || 500;
     error.status = error.status || 'error';
@@ -7,8 +6,6 @@ const errorHandler = ((error, req, res, next) => {
         "message": error.message
     });
 });
-
-
 module.exports = {
     errorHandler
 }

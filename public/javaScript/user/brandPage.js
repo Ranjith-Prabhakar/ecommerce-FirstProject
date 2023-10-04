@@ -13,12 +13,9 @@ document.addEventListener('DOMContentLoaded', (e) => {
 let dateSort = document.querySelector('select[name="date"]');
 
 dateSort.addEventListener('change', (e) => {
-    console.log('inside the listener');
     e.preventDefault();
     let sortValue = dateSort.value; // Use "value" instead of "Value"
     let brand = dateSort.getAttribute('data-brand');
-    console.log("sortValue", sortValue);
-    console.log("brand", brand);
     window.location.href = `/brandSort?brand=${brand}&sortValue=${sortValue}&criteria=createdAt`;
 });
 

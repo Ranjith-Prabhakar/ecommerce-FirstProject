@@ -91,6 +91,15 @@
 
                                 <table class="table table-dark table-striped table-hover col ">
                                     <tbody>
+                                        <% if(locals.user.shippingAddress[i].country) {%>
+
+                                            <tr>
+                                                <th>Name</th>
+                                                <td>
+                                                    <%= locals.user.shippingAddress[i].name %>
+                                                </td>
+                                            </tr>
+                                            <% } %>
 
                                         <% if(locals.user.shippingAddress[i].country) {%>
 
@@ -166,31 +175,8 @@
                                                                                                         </td>
                                                                                                     </tr>
                                                                                                     <% } %>
-                                                                                                        <% if(locals.user.shippingAddress[i].buildingNo)
-                                                                                                            {%>
-                                                                                                            <tr>
-                                                                                                                <th>Building
-                                                                                                                    No
-                                                                                                                </th>
-                                                                                                                <td>
-                                                                                                                    <%= locals.user.shippingAddress[i].buildingNo
-                                                                                                                        %>
-                                                                                                                </td>
-                                                                                                            </tr>
-                                                                                                            <% } %>
-                                                                                                                <% if(locals.user.shippingAddress[i].landMark)
-                                                                                                                    {%>
-                                                                                                                    <tr>
-                                                                                                                        <th>Land
-                                                                                                                            Mark
-                                                                                                                        </th>
-                                                                                                                        <td>
-                                                                                                                            <%= locals.user.shippingAddress[i].landMark
-                                                                                                                                %>
-                                                                                                                        </td>
-                                                                                                                    </tr>
-                                                                                                                    <% }
-                                                                                                                        %>
+                                                                                                       
+                                                                                                              
 
                                     </tbody>
                                 </table>
@@ -204,6 +190,9 @@
                                         <div>
                                             <input class="form-control  " type="hidden" name="userId"
                                                 value="<%= locals.user._id %>">
+                                                <label for="country">Name</label>
+                                            <input class="form-control  " id="name" type="text" name="name"
+                                                value="<%= locals.user.shippingAddress[i].name %>">
                                             <label for="country">Country</label>
                                             <input class="form-control  " id="country" type="text" name="country"
                                                 value="<%= locals.user.shippingAddress[i].country %>">
@@ -232,9 +221,7 @@
                                             <label for="Building No">Building No</label>
                                             <input class="form-control  " id="Building No" type="text" name="buildingNo"
                                                 value="<%= locals.user.shippingAddress[i].buildingNo %>">
-                                            <label for="Land Mark">Land Mark</label>
-                                            <input class="form-control  " id="Land Mark" type="text" name="landMark"
-                                                value="<%= locals.user.shippingAddress[i].landMark %>">
+                                           
                                             <input class="btn btn-outline-light submitProfileEdit mt-4 ms-4"
                                                 type="submit" value="submit">
 
@@ -262,20 +249,23 @@
                         <div class="me-4 ">
                             <input class="form-control mb-2    " type="hidden" name="userId"
                                 value="<%= locals.user._id %>">
+                                <input class="form-control mb-2    " type="text" name="name" placeholder="name">
                             <input class="form-control mb-2    " type="text" name="country" placeholder="country">
                             <input class="form-control mb-2    " type="text" name="state" placeholder="state">
-                            <input class="form-control mb-2    " type="text" name="district" placeholder="district">
+                           
                         </div>
                         <div class="me-4 ">
+                            <input class="form-control mb-2    " type="text" name="district" placeholder="district">
                             <input class="form-control mb-2    " type="text" name="city" placeholder="city">
                             <input class="form-control mb-2    " type="text" name="pincode" placeholder="pincode">
-                            <input class="form-control mb-2    " type="text" name="street" placeholder="street">
+                            
 
                         </div>
                         <div>
+                            <input class="form-control mb-2    " type="text" name="street" placeholder="street">
                             <input class="form-control mb-2    " type="text" name="houseName" placeholder="houseName">
                             <input class="form-control mb-2    " type="text" name="buildingNo" placeholder="buildingNo">
-                            <input class="form-control mb-2    " type="text" name="landMark" placeholder="landMark">
+                            
 
                         </div>
 

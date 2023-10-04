@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         let formRawObj = document.forms.productEdit;
         let formObj = new FormData(formRawObj);
         let finalformObj = {};
-
         for (let [key, value] of formObj) {
             finalformObj[key] = value;
         }
@@ -201,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify({ productData })
         }).then(data => {
-            console.log(data);
             window.location.reload()
         }).catch(error => console.log(error.message))
         try {
@@ -232,9 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < newProductImagesList.length; i++) {
             if (!imageFormats.includes(newProductImagesList[i].type)) {
                 let invalidImages = document.getElementById('invalidImages')
-                console.log(invalidImages);
                 invalidImages.classList.remove('d-none')
-                console.log("fail")
                 let newProductSubmitButton = document.getElementById('newProductSubmitButton')
                 newProductSubmitButton.setAttribute('disabled',true)
                 break

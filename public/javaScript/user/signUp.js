@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     let email = document.getElementById("email")
     email.addEventListener('change', async (e) => {
         e.preventDefault()
-        console.log('email checker');
         try {
             let response = await fetch('/checkMail', {
                 method: 'post',
@@ -38,12 +37,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             
             if (response.ok) { // Check if the response status is OK (status code 200)
                 let result = await response.json(); // Parse the JSON response
-                console.log('result', result);
-                console.log('result.mailExist', result.mailExist);
                 
                 if (result.mailExist) {
                     let emailLabel = document.getElementById('emailLabel')
-                    console.log("emailLabel", emailLabel);
                     emailLabel.innerText = "email already exists"
 
                     emailLabel.classList.replace('text-white','text-danger')

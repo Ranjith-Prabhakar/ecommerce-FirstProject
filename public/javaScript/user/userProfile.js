@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let bioDataEditForm = document.forms.bioDataEditForm
     if (bioDataEditForm) {
-        console.log("bioDataEditForm", bioDataEditForm);
         bioDataEditForm.addEventListener('submit', async (event) => {
             event.preventDefault()
             const userObject = {
@@ -147,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
         cancellProfileEdit.addEventListener('click', (event) => {
             event.preventDefault()
             const index = cancellProfileEdit.getAttribute('data-address-cancell-index')
-            console.log(index);
             let addressHiddenDiv = document.getElementById('addressHiddenDiv' + index);
             addressHiddenDiv.classList.toggle('d-none');
         })

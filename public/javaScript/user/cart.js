@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     parseCartQuantity++;
                     let productId = cartQuantity.getAttribute('data-product-id');
                     let findIfInSelectedProducts = selectedProducts.find(element => element.productId === productId);
-                    console.log("findIfInSelectedProducts in increment", findIfInSelectedProducts);
                     if (findIfInSelectedProducts) {
                         sum += parseFloat(findIfInSelectedProducts.productPrice);
                         let selectedProductPrice = document.getElementById('selectedProductPrice');
@@ -89,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         let cartPrice = document.getElementById('cartPrice');
                         let cartAmout = parseFloat(cartPrice.getAttribute('data-cartPrice'))
                         let productPrice = parseFloat(increaseButtons[i].getAttribute('data-product-price'))
-                        cartPrice.innerHTML = `cart value :<span id="cartPriceSpan">${cartAmout + productPrice} </span>`
+                        cartPrice.innerHTML = `cart value : ₹ <span id="cartPriceSpan">${cartAmout + productPrice} </span>`
                         cartPrice.setAttribute('data-cartPrice', `${cartAmout + productPrice}`)
 
 
@@ -102,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         let cartPrice = document.getElementById('cartPrice');
                         let cartAmout = parseFloat(cartPrice.getAttribute('data-cartPrice'))
                         let productPrice = parseFloat(increaseButtons[i].getAttribute('data-product-price'))
-                        cartPrice.innerHTML = `cart value :<span id="cartPriceSpan">${cartAmout + productPrice} </span>`
+                        cartPrice.innerHTML = `cart value : ₹ <span id="cartPriceSpan">${cartAmout + productPrice} </span>`
                         cartPrice.setAttribute('data-cartPrice', `${cartAmout + productPrice}`)
                         let price = document.getElementById('productPrice' + i)
                         let parsePrice = parseFloat(price.innerText)
@@ -150,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 let productId = cartQuantity.getAttribute('data-product-id');
                 let findIfInSelectedProducts = selectedProducts.find(element => element.productId === productId);
-                console.log("findIfInSelectedProducts in decrement", findIfInSelectedProducts);
                 if (findIfInSelectedProducts) {
                     sum -= parseFloat(findIfInSelectedProducts.productPrice);
                     let selectedProductPrice = document.getElementById('selectedProductPrice');
@@ -159,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let cartPrice = document.getElementById('cartPrice');
                     let cartAmout = parseFloat(cartPrice.getAttribute('data-cartPrice'))
                     let productPrice = parseFloat(increaseButtons[i].getAttribute('data-product-price'))
-                    cartPrice.innerHTML = `cart value :<span id="cartPriceSpan">${cartAmout - productPrice} </span>`
+                    cartPrice.innerHTML = `cart value : ₹ <span id="cartPriceSpan">${cartAmout - productPrice} </span>`
                     cartPrice.setAttribute('data-cartPrice', `${cartAmout - productPrice}`)
 
 
@@ -186,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     let cartPrice = document.getElementById('cartPrice');
                     let cartAmout = parseFloat(cartPrice.getAttribute('data-cartPrice'))
                     let productPrice = parseFloat(increaseButtons[i].getAttribute('data-product-price'))
-                    cartPrice.innerHTML = `cart value :<span id="cartPriceSpan">${cartAmout - productPrice}</span>`
+                    cartPrice.innerHTML = `cart value : ₹ <span id="cartPriceSpan">${cartAmout - productPrice}</span>`
                     cartPrice.setAttribute('data-cartPrice', `${cartAmout - productPrice}`)
                     let price = document.getElementById('productPrice' + i)
                     let parsePrice = parseFloat(price.innerText)
@@ -277,7 +275,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const productPrice = parseFloat(this.getAttribute('data-product-price')); // Convert to a float
             const productIndex = this.getAttribute('data-index');
             const productQuantity = document.getElementById('cartUpdate' + productIndex).value
-            console.log("productQuantity", productQuantity);
             if (this.checked) {
                 // Checkbox is checked, add the product to the selectedProducts array
                 selectedProducts.push({ productId, productPrice, productQuantity });

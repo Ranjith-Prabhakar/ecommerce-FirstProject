@@ -14,25 +14,17 @@ let errorMessages
 const Razorpay = require('razorpay');
 const userModal = require('../model/userModal')
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
-
 const razorpayInstance = new Razorpay({
     key_id: RAZORPAY_ID_KEY,
     key_secret: RAZORPAY_SECRET_KEY
 });
-
-
-
-
 const userHome = async (req, res, next) => {
     try {
         const page = req.params.paramName ? parseInt(req.params.paramName) : 0; // it was one before then it worked well
-
         const itemsPerPage = 5; // Number of products per page
         // const start = (page - 1) * itemsPerPage;
         const start = Math.abs((page - 1) * itemsPerPage);
         let user, brands, products, productsCount, banner;
-        console.log("req.params.i", req.params);
-        console.log("start,itemsPerPage", start, itemsPerPage);
         if (req.session.userId) {
             user = await UserModal.findOne({ _id: req.session.userId });
             brands = await BrandModal.distinct('brandName')
@@ -41,24 +33,19 @@ const userHome = async (req, res, next) => {
             banner = await BannerModal.find()
             res.render('users/userHome', { user, brands, products, banner, productsCount, page })
         } else {
-
             brands = await BrandModal.distinct('brandName')
             products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage);
             productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
             banner = await BannerModal.find()
-
             res.render('users/userHome', { brands: brands, products, banner, productsCount, page })
         }
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
-
 const getUserHomeSort = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page)  // it was one before then it worked well
-
         const itemsPerPage = 5; // Number of products per page
         // const start = (page - 1) * itemsPerPage;
         const start = Math.abs((page - 1) * itemsPerPage);
@@ -73,12 +60,10 @@ const getUserHomeSort = async (req, res, next) => {
                 banner = await BannerModal.find()
                 res.render('users/sortUserHome', { user, brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             } else {
-
                 brands = await BrandModal.distinct('brandName')
                 products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({ unitPrice: sortValue });
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
-
                 res.render('users/sortUserHome', { brands: brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             }
         } else {
@@ -90,25 +75,19 @@ const getUserHomeSort = async (req, res, next) => {
                 banner = await BannerModal.find()
                 res.render('users/sortUserHome', { user, brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             } else {
-
                 brands = await BrandModal.distinct('brandName')
                 products = await ProductModal.find({ freez: 'active' }).skip(start).limit(itemsPerPage).sort({ createdAt: sortValue });
                 productsCount = await ProductModal.find({ freez: { $eq: 'active' } }).count() / 5
                 banner = await BannerModal.find()
-
                 res.render('users/sortUserHome', { brands: brands, products, banner, productsCount, page, sortValue, criteria: req.query.criteria })
             }
         }
-
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
-///have to check it
 const getSearch = async (req, res, next) => {
     try {
-
         if (req.session.userId) {
             let user = await UserModal.findOne({ _id: req.session.userId });
             let brands = await BrandModal.distinct('brandName')
@@ -118,10 +97,7 @@ const getSearch = async (req, res, next) => {
                     { brandName: { $regex: new RegExp(`^${req.query.search}`, 'i') }, freez: 'active' }
                 ]
             });
-
-            // let banner = await BannerModal.find()
             res.render('users/productSearch', { user, brands: brands, products, brand: req.query.search })/// 
-            console.log('req.query.search ===>', req.query.search);
         } else {
             let brands = await BrandModal.distinct('brandName')
             let products = await ProductModal.find({
@@ -130,65 +106,46 @@ const getSearch = async (req, res, next) => {
                     { brandName: { $regex: new RegExp(`^${req.query.search}`, 'i') }, freez: 'active' }
                 ]
             });
-
-            // let banner = await BannerModal.find()
             res.render('users/productSearch', { brands: brands, products, brand: req.query.search })
-            console.log('req.query.search ===>', req.query.search);
         }
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
 const getBrandSort = async (req, res, next) => {
     try {
-
-        console.log("req.query", req.query);
         let criteria = req.query.criteria
         if (criteria === "unitPrice") {
             if (req.session.userId) {
-
                 let user = await UserModal.findOne({ _id: req.session.userId });
                 let brands = await BrandModal.distinct('brandName')
                 let products = await ProductModal.find({ brandName: { $regex: new RegExp(`^${req.query.brand}`, 'i') }, freez: 'active' }
                 ).sort({ unitPrice: parseInt(req.query.sortValue) });
-
-                console.log('products', products)
                 res.render('users/productSearch', { user, brands: brands, products, brand: req.query.brand })/// 
             } else {
                 let brands = await BrandModal.distinct('brandName')
                 let products = await ProductModal.find({ brandName: { $regex: new RegExp(`^${req.query.brand}`, 'i') }, freez: 'active' }
                 ).sort({ unitPrice: parseInt(req.query.sortValue) });
-                console.log("parseInt(req.query.sortValue)", parseInt(req.query.sortValue))
-                console.log('products', products)
                 res.render('users/productSearch', { brands: brands, products, brand: req.query.brand })
             }
         } else if (criteria === "createdAt") {
             if (req.session.userId) {
-
                 let user = await UserModal.findOne({ _id: req.session.userId });
                 let brands = await BrandModal.distinct('brandName')
                 let products = await ProductModal.find({ brandName: { $regex: new RegExp(`^${req.query.brand}`, 'i') }, freez: 'active' }
                 ).sort({ createdAt: req.query.sortValue });
-
-                console.log('products', products)
                 res.render('users/productSearch', { user, brands: brands, products, brand: req.query.brand })/// 
             } else {
                 let brands = await BrandModal.distinct('brandName')
                 let products = await ProductModal.find({ brandName: { $regex: new RegExp(`^${req.query.brand}`, 'i') }, freez: 'active' }
                 ).sort({ createdAt: req.query.sortValue });
-                console.log("parseInt(req.query.sortValue)", parseInt(req.query.sortValue))
-                console.log('products', products)
                 res.render('users/productSearch', { brands: brands, products, brand: req.query.brand })
             }
         }
-
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
-
 const getFilterBrandSort = async (req, res, next) => {
     try {
         let brandString = req.query.brand.split(',')
@@ -216,14 +173,10 @@ const getFilterBrandSort = async (req, res, next) => {
                 res.render('users/productFilter', { brands: brands, filterProducts, brand: brandString })
             }
         }
-
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 };
-
-
 const getUserLogin = async (req, res, next) => {
     try {
         if (errorMessages) {
@@ -237,7 +190,6 @@ const getUserLogin = async (req, res, next) => {
         errorHandler(err, req, res, next);
     }
 }
-
 const postUserLogin = async (req, res, next) => {
     try {
         const userData = await UserModal.findOne({ email: req.body.email })
@@ -254,7 +206,6 @@ const postUserLogin = async (req, res, next) => {
                         pass: process.env.nodeMailerEmailPassword
                     }
                 })
-
                 // Generate a random OTP
                 const otp = randomString.generate({
                     length: 6,
@@ -297,7 +248,6 @@ const postUserLogin = async (req, res, next) => {
                     }
                 });
             }
-
         } else {
             errorMessages = 'invalid username or password'
             res.redirect('/userLogin')
@@ -306,9 +256,6 @@ const postUserLogin = async (req, res, next) => {
         errorHandler(err, req, res, next);
     }
 }
-
-
-
 const getUserSignUp = async (req, res, next) => {
     try {
         if (req.session.errorMessage) {
@@ -317,15 +264,10 @@ const getUserSignUp = async (req, res, next) => {
         } else {
             res.render('users/userSignUp', { signUp: true })
         }
-
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
-
-
-
 const postUserSignUp = async (req, res, next) => {
     try {
         // Create a Nodemailer transporter
@@ -336,7 +278,6 @@ const postUserSignUp = async (req, res, next) => {
                 pass: process.env.nodeMailerEmailPassword
             }
         })
-
         // Generate a random OTP
         const otp = randomString.generate({
             length: 6,
@@ -349,7 +290,6 @@ const postUserSignUp = async (req, res, next) => {
             subject: 'OTP Verification Code',
             text: `Your OTP is: ${otp}`,
         };
-
         const { email } = req.body
         // const validation = await UserModal.findOne({ $or: [{ userName: userName }, { email: email }] })
         const validation = await UserModal.findOne({ email: email })
@@ -365,11 +305,6 @@ const postUserSignUp = async (req, res, next) => {
                     }
                 });
             }
-            //  else {
-            //     req.session.errorMessage = 'invalid userName or password'
-            //     res.redirect('/userSignUp')
-            // }
-
         } else {
             let hash = await bcrypt.hash(req.body.password, 4)
             req.session.userEmail = req.body.email
@@ -378,33 +313,23 @@ const postUserSignUp = async (req, res, next) => {
                 lastName: req.body.lastName,
                 email: req.body.email,
                 phone: req.body.phone,
-                // userName: req.body.userName,
                 password: hash,
             })
             const user = await newUser.save()
-
-
             // Send the email
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                     console.log('Error sending email:', error);
                 } else {
                     req.session.otp = otp
-
                     res.redirect('/userOtpVerificationCode')
                 }
             });
         }
-        console.log('inside postUserSignUp');
-        console.log('inside postUserSignUp');
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
-
-
-
 const getUserOtpVerificationCode = async (req, res, next) => {
     try {
         if (errorMessages) {
@@ -420,14 +345,9 @@ const getUserOtpVerificationCode = async (req, res, next) => {
     } catch (err) {
         errorHandler(err, req, res, next);
     }
-
 }
-
 const getResendOtp = async (req, res, next) => {
     try {
-        console.log('inside postResendOtp');
-        console.log("req.session.email", req.session.userEmail);
-
         // Create a Nodemailer transporter
         let transporter = nodeMailer.createTransport({
             service: "gmail",
@@ -436,13 +356,11 @@ const getResendOtp = async (req, res, next) => {
                 pass: process.env.nodeMailerEmailPassword
             }
         })
-
         // Generate a random OTP
         let reotp = randomString.generate({
             length: 6,
             charset: 'numeric',
         });
-        console.log("This is the reotp: ", reotp)
         // Define the email content
         const mailOptions = {
             from: process.env.nodeMailerEmail, // Sender email
@@ -465,22 +383,13 @@ const getResendOtp = async (req, res, next) => {
 
         });
         req.session.otp = reotp
-
         res.json({ success: true })
     } catch (error) {
         errorHandler(req, res, next)
-
     }
 }
-
 const postUserOtpVerificationCode = async (req, res, next) => {
-    setTimeout(() => { console.log("set req.session.otp", req.session.otp) }, 10000)
-
     try {
-
-        console.log("req.body.otp", req.body.otp);
-        console.log("req.session.otp , RE", req.session.otp);
-        console.log("req.session ---->", req.session);
         if (req.body.otp === req.session.otp) {
             await UserModal.updateOne({ email: req.session.userEmail }, { $set: { isVerified: true } })
             errorMessages = 'signedUp successfully, Login Now'
@@ -494,14 +403,10 @@ const postUserOtpVerificationCode = async (req, res, next) => {
     } catch (err) {
         errorHandler(err, req, res, next);
     }
-
 }
-
-
 const postUserLogOut = (req, res, next) => {
     try {
         if (req.session.isAdmin) {
-
             delete req.session.userId;
             res.clearCookie('userId')
             res.redirect('/')
@@ -515,20 +420,15 @@ const postUserLogOut = (req, res, next) => {
                 }
             })
         }
-
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
-
-
 // brand page
 const getBrandPage = async (req, res, next) => {
     try {
         if (!req.session.userId) {
             let brands = await BrandModal.distinct('brandName')
-
             let products = await ProductModal.find({ brandName: req.query.brandName, freez: { $eq: 'active' } })
             res.render('users/brandPage', { brands, products, brand: req.query.brandName })
         } else {
@@ -537,18 +437,13 @@ const getBrandPage = async (req, res, next) => {
             let products = await ProductModal.find({ brandName: req.query.brandName, freez: { $eq: 'active' } })
             res.render('users/brandPage', { brands, products, user, brand: req.query.brandName })
         }
-
-
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
 // filter
 const getBrandFilter = async (req, res, next) => {
-    console.log('inside getbrand')
     try {
-
         if (!req.session.userId) {
             let brand = []
             if (typeof req.query.brand === 'string') {
@@ -559,48 +454,38 @@ const getBrandFilter = async (req, res, next) => {
             let brands = await BrandModal.distinct('brandName')
             const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] }, freez: 'active' }).sort({ brandName: 1 })
             res.render('users/productFilter', { filterProducts, brands, brand })
-
-
         } else {
             let brand = []
-
             if (typeof req.query.brand === 'string') {
                 brand.push(req.query.brand)
             } else {
                 brand = [...req.query.brand]
             }
             let user = await UserModal.findOne({ _id: req.session.userId });
-
             let brands = await BrandModal.distinct('brandName')
             const filterProducts = await ProductModal.find({ brandName: { $in: [...brand] } }).sort({ brandName: 1 })
             res.render('users/productFilter', { brands, filterProducts, user, brand })
-
         }
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
 const getSingleProductPage = async (req, res, next) => {
     try {
         if (!req.session.userId) {
-
             let brands = await BrandModal.distinct('brandName')
             let product = await ProductModal.findOne({ _id: req.query.id })
             let rating = {}
-
             if (product && product.rating && product.rating.length > 0) {
                 rating.rateLength = product.rating.length
                 rating.rateSum = product.rating.reduce((rate, element) => {
                     return rate + element.rate
                 }, 0)
-
             } else {
                 console.log("Rating data is missing or empty.");
             }
             let avg = (rating.rateSum / (rating.rateLength * 5)) * 100
             let ratingAvg = (5 / 100) * avg
-            console.log("product", product)
             res.render('users/singleProduct', { brands, product, ratingAvg })
         } else {
             let user = await UserModal.findOne({ _id: req.session.userId });
@@ -612,13 +497,11 @@ const getSingleProductPage = async (req, res, next) => {
                 rating.rateSum = product.rating.reduce((rate, element) => {
                     return rate + element.rate
                 }, 0)
-
             } else {
                 console.log("Rating data is missing or empty.");
             }
             let avg = (rating.rateSum / (rating.rateLength * 5)) * 100
             let ratingAvg = (5 / 100) * avg
-            console.log("product", product)
             res.render('users/singleProduct', { brands, product, user, ratingAvg })
         }
     } catch (err) {
@@ -633,10 +516,8 @@ const getProfile = async (req, res, next) => {
         res.render('users/userProfile', { user, brands })
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
-
 const postaddProfileImage = async (req, res, next) => {
     try {
         await UserModal.updateOne({ _id: req.body.userId }, { $set: { profImage: req.file.filename } })
@@ -645,30 +526,19 @@ const postaddProfileImage = async (req, res, next) => {
         errorHandler(error, req, res, next);
     }
 }
-
 const postCreateAddress = async (req, res, next) => {
     try {
-
         const formDataObject = req.body.formDataObject; // Assign formDataObject from request body
-
-        // await UserModal.updateOne(
-        //     { _id: formDataObject.userId },
-        //     { $push: { shippingAddress: formDataObject } }
-        // );
-
         await UserModal.updateOne(
-            // { _id: formDataObject.userId },
             { _id: req.session.userId },
             { $push: { shippingAddress: { $each: [formDataObject], $position: 0 } } }
         );
-
         res.json({ success: true })
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 };
 const postEditAddress = async (req, res, next) => {
-    console.log('inside postEditAddress ');
     try {
         if (req.body.userObject) {
             let { firstName, lastName, email, phone } = req.body.userObject
@@ -678,21 +548,15 @@ const postEditAddress = async (req, res, next) => {
                     lastName: lastName,
                     email: email,
                     phone: phone,
-
                 }
             })
-
             userObject = ""
             res.json({ success: true })
         } else {
             let userId = req.session.userId
-            console.log("userId", userId);
             let index = req.body.index
-            console.log("index", index);
             let newObject = req.body.newAddressFormData
-            console.log("newObject", newObject);
             delete newObject.userId
-            console.log("after delete ", newObject);
             await UserModal.updateOne({ _id: userId }, { $set: { [`shippingAddress.${index}`]: newObject } })
             res.json({ success: true })
         }
@@ -700,30 +564,9 @@ const postEditAddress = async (req, res, next) => {
         errorHandler(error, req, res, next)
     }
 }
-// const postEditAddress = async (req, res, next) => {
-//     console.log('inside postEditAddress ');
-//     try {
-//         let userId = req.body.newAddressFormData.userId
-//         console.log("userId",userId);
-//         let index = req.body.index
-//         console.log("index",index);
-//         let newObject = req.body.newAddressFormData
-//         console.log("newObject",newObject);
-//         delete newObject.userId
-//         console.log("after delete ",newObject);
-//         await UserModal.updateOne({ _id: userId }, { $set: { [`shippingAddress.${index}`]: newObject } })
-//         res.json({ success: true })
-//     } catch (error) {
-//         errorHandler(error, req, res, next)
-//     }
-// }
-
-
-
 const postDeleteAddress = async (req, res, next) => {
     try {
         const { userId, index, objectId } = req.body
-        console.log(objectId);
         await UserModal.updateOne({ _id: req.session.userId }, { $pull: { shippingAddress: { _id: objectId } } });
         res.json({ success: true })
     } catch (error) {
@@ -739,37 +582,23 @@ const getCart = async (req, res, next) => {
         let cartValue = 0
         // Create an array to hold cart items with product data and quantity
         const cartProductPromises = cartItems.map(async (cartItem) => {
-
-
             const product = await ProductModal.findOne({ _id: cartItem.productId });
-
-
             product.cartQuantity = cartItem.quantity; // Set the quantity property of the product
             cartValue += parseFloat(product.unitPrice * product.cartQuantity)
             return product;
         });
-
-
         // Use Promise.all to wait for all product data to be fetched
         const cartProducts = await Promise.all(cartProductPromises);
-
-
-
         res.render('users/cart', { cartProducts, cartValue, user, brands }); // Pass cartProducts to the EJS template
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 };
-
-
-
-
 const postAddToCart = async (req, res, next) => {
     try {
         let count = req.body.count ? req.body.count : 1
         let result = await UserModal.updateOne({ _id: req.body.userId, "cart": { $not: { $elemMatch: { productId: req.body.productId } } } },
             { $addToSet: { cart: { productId: req.body.productId, quantity: count } } })
-        console.log(result);
         if (result.modifiedCount === 1) {
             res.json({ success: true })
         } else if (result.modifiedCount === 0) {
@@ -779,11 +608,9 @@ const postAddToCart = async (req, res, next) => {
         errorHandler(error, req, res, next)
     }
 }
-
 const postUpdateCartProductQty = async (req, res, next) => {
     try {
         const userId = req.session.userId;
-
         const productId = req.body.productId;
         const quantity = req.body.quantity;
         const result = await UserModal.updateOne(
@@ -799,7 +626,6 @@ const postUpdateCartProductQty = async (req, res, next) => {
         errorHandler(error, req, res, next);
     }
 };
-
 const postRemoveFromCart = async (req, res, next) => {
     try {
         const result = await UserModal.updateOne({ _id: req.session.userId, cart: { $elemMatch: { productId: req.body.productId } } }, { $pull: { cart: { productId: req.body.productId } } });
@@ -810,73 +636,12 @@ const postRemoveFromCart = async (req, res, next) => {
         }
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
-
-// const getCheckOutPage = async (req, res, next) => {
-//     try {
-//         if (req.query.productId) {//singleProduct
-//             let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
-//             let user = await UserModal.findOne({ _id: req.session.userId })
-//             let brands = await BrandModal.distinct('brandName')
-//             res.render('./users/checkOutPage', { singleProduct, user, brands });
-//             req.query.productId = '';
-//         } else if (req.session.selectedProducts && req.session.selectedProducts.length) {//selected cart
-//             let user = await UserModal.findOne({ _id: req.session.userId })
-//             let brands = await BrandModal.distinct('brandName')
-//             let productIds = req.session.selectedProducts.map((product) => product.productId);
-//             let matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
-
-//             let productList = matchingProducts.map((product) => {
-//                 let selectedProduct = req.session.selectedProducts.find((selected) => selected.productId === product._id.toString());
-//                 if (selectedProduct) {
-//                     return {
-//                         ...product.toObject(),
-//                         orderQuantity: selectedProduct.productQuantity,
-//                     };
-//                 } else {
-//                     return product.toObject();
-//                 }
-//             });
-//             req.session.selectedProducts.length = 0;
-//             req.session.productList = productList
-//             res.render('./users/checkOutPage', { productList, user, brands });
-//         } else if (req.query.cart) {
-//             const user = await UserModal.findOne({ _id: req.session.userId });
-//             let brands = await BrandModal.distinct('brandName')
-//             const cart = user.cart;
-//             const productIds = cart.map((item) => item.productId);
-
-//             const matchingProducts = await ProductModal.find({ _id: { $in: productIds } });
-
-
-//             let productList = matchingProducts.map((product) => {
-//                 cart.forEach((cart) => {
-
-//                     if (cart.productId.equals(product._id)) {
-//                         let orderQuantity = cart.quantity
-//                         product.orderQuantity = orderQuantity
-//                     }
-//                 })
-//                 return product
-//             })
-
-//             req.query.cart = false;
-//             req.session.productList = productList
-//             console.log("req.session.productList[0].orderQuantity", req.session.productList[0].orderQuantity);
-//             res.render('./users/checkOutPage', { productList, user, brands });
-//         }
-//     } catch (error) {
-//         errorHandler(error, req, res, next);
-//     }
-// };
-
 const getCheckOutPage = async (req, res, next) => {
     try {
         if (req.query.productId) {//singleProduct
             let singleProduct = await ProductModal.findOne({ _id: req.query.productId });
-
             let coupons = {}
             const productCoupon = await CouponModal.find({ active: true, criteria: 'product' })
             if (productCoupon) {
@@ -898,8 +663,6 @@ const getCheckOutPage = async (req, res, next) => {
                 }
             }
             let user = await UserModal.findOne({ _id: req.session.userId })
-            console.log("user", user);
-            console.log("user wallet", user.wallet.balance);
             let brands = await BrandModal.distinct('brandName')
             res.render('users/checkOutPage', { singleProduct, user, brands, coupons });
             req.query.productId = '';
@@ -943,7 +706,6 @@ const getCheckOutPage = async (req, res, next) => {
             })
             coupons.priceCoupons = matchingPriceCoupons
             res.render('users/checkOutPage', { productList, user, brands, coupons });
-            console.log("productList selected cart", productList)
         } else if (req.query.cart) {//cart
             let coupons = {}
             const user = await UserModal.findOne({ _id: req.session.userId });
@@ -966,62 +728,42 @@ const getCheckOutPage = async (req, res, next) => {
             let total = productList.reduce((sum, productListElement) => {
                 let orderQuantity = productListElement.orderQuantity;
                 let unitPrice = productListElement.unitPrice;
-
                 // Check if orderQuantity and unitPrice are defined and not empty
                 if (orderQuantity && unitPrice) {
                     orderQuantity = orderQuantity;
                     unitPrice = unitPrice;
-
                     // Check if the parsing was successful and both values are numbers
                     if (!isNaN(orderQuantity) && !isNaN(unitPrice)) {
                         return sum + (orderQuantity * unitPrice);
                     }
                 }
-
                 // If any check fails, return the current sum without adding anything
                 return sum;
             }, 0);
-
             let matchingPriceCoupons = priceCoupon.filter((priceCoupon) => {
                 return priceCoupon.amountRange < total
             })
             let matchingPriceCouponsFiltered = matchingPriceCoupons.reduce((max, obj) => {
                 return obj.amountRange > max.amountRange ? obj : max
             }, priceCoupon[0])
-            console.log('matchingPriceCouponsFiltered', matchingPriceCouponsFiltered);
             coupons.priceCoupons = matchingPriceCoupons
             res.render('users/checkOutPage', { productList, user, brands, coupons });
-            console.log("productList whole cart", productList)
-
         }
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 };
-
-
-
 const postBuySelectedProducts = (req, res, next) => {
     try {
         req.session.selectedProducts = req.body.selectedProducts
         res.json({ success: true })
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
 //////
 const postOrderPlacement = async (req, res, next) => {
     try {
-
-        if (req.body.newFormData.walletDebit) {
-            console.log("req.body.newFormData.walletDebit", req.body.newFormData.walletDebit);
-            console.log("req.body.newFormData.walletDebit typeof", typeof req.body.newFormData.walletDebit);
-            console.log("req.body.newFormData.walletDebit typeof", typeof -(parseFloat(req.body.newFormData.walletDebit)));
-            console.log("req.body.newFormData.walletDebit ", -(parseFloat(req.body.newFormData.walletDebit)));
-        }
-
-
         if (req.body.newFormData) {
             if (req.body.newFormData.razorpay_payment_id && req.body.newFormData.razorpay_order_id) {
                 if (req.body.newFormData.couponId) {
@@ -1154,9 +896,6 @@ const postOrderPlacement = async (req, res, next) => {
             } else {////////////////////////////////////////////////
                 if (req.body.newFormData.couponId) {
                     if (req.body.newFormData.walletDebit) {
-
-                        console.log('with coupon and wallet');
-                        console.log("req.body.newFormData", req.body.newFormData);
                         await UserModal.updateOne({ _id: req.session.userId }, {
                             $push: {
                                 orders: {
@@ -1275,19 +1014,6 @@ const postOrderPlacement = async (req, res, next) => {
                     }
                 }
             }
-
-
-
-            // await UserModal.updateOne({ _id: req.session.userId }, {
-            //     $push: {
-            //         orders: {
-            //             product: req.body.newFormData.productData,
-            //             modeOfPayment: req.body.newFormData.modeOfPayment,
-            //             addressToShip: req.body.newFormData.addressId,
-            //             total: req.body.newFormData.total
-            //         }
-            //     }
-            // })
             await Promise.all(req.body.newFormData.productData.map(async (product) => {
                 let count = product.orderQuantity;
                 try {
@@ -1308,76 +1034,16 @@ const postOrderPlacement = async (req, res, next) => {
 
     }
 }
-
 const getOrders = async (req, res, next) => {
     try {
         let brands = await BrandModal.distinct('brandName')
         const user = await UserModal.findOne({ _id: req.session.userId })
         const orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: true })
-
         res.render('users/order', { orders, brands, user });
     } catch (error) {
         errorHandler(error, req, res, next)
     }
 };
-
-// const getOrderSinglePage = async (req, res, next) => {
-//     try {
-//         let brands = await BrandModal.distinct('brandName')
-//         const user = await UserModal.findOne({ _id: req.session.userId })
-//         let orderId = req.query.Id
-//         let orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: 1 })
-//         let order = orders.orders.find((order) => order._id.toString() === orderId.toString())
-//         console.log("order", order);
-//         console.log("order.product", order.product);
-
-//         let completeData = await Promise.all(order.product.map(async (products) => {
-//             try {
-//                 let product = await ProductModal.findOne({ _id: products.productId }).lean();
-//                 console.log("inside map", product);
-//                 return { ...product, ...products };
-//             } catch (error) {
-//                 console.log(error.message);
-//             }
-//         }));
-//         console.log("completeData", completeData[0].product);
-
-//         res.render('./users/orderSinglePage', { order, brands, user })
-
-//     } catch (error) {
-//         errorHandler(error, req, res, next)
-
-//     }
-// }
-
-// const getOrderSinglePage = async (req, res, next) => {
-//     try {
-//         let brands = await BrandModal.distinct('brandName');
-//         const user = await UserModal.findOne({ _id: req.session.userId });
-//         let orderId = req.query.Id;
-//         let orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: 1 }).lean();
-//         let order = orders.orders.find((order) => order._id.toString() === orderId.toString());
-//         console.log("order", order);
-//         console.log("order.product", order.product);
-
-//         // Populate the 'product' field within each 'order'
-//         await Promise.all(order.product.map(async (products) => {
-//             try {
-//                 await ProductModal.populate(products, { path: 'productId' });
-//             } catch (error) {
-//                 console.log(error.message);
-//             }
-//         }));
-
-//         console.log("order.product (after populating)", order.product);
-
-//         res.render('./users/orderSinglePage', { order, brands, user });
-//     } catch (error) {
-//         errorHandler(error, req, res, next);
-//     }
-// }
-
-
 const getOrderSinglePage = async (req, res, next) => {
     try {
         let brands = await BrandModal.distinct('brandName');
@@ -1385,22 +1051,17 @@ const getOrderSinglePage = async (req, res, next) => {
         let orderId = req.query.Id;
         let orders = await UserModal.findOne({ _id: req.session.userId }, { _id: 0, orders: 1 }).lean();
         let order = orders.orders.find((order) => order._id.toString() === orderId.toString());
-
-
         let completeData = await Promise.all(order.product.map(async (products) => {
             try {
                 const product = await ProductModal.findOne({ _id: products.productId }).lean();
-
                 if (product) {
                     // Populate the 'gallery' and 'specification' fields
                     const populatedProduct = await ProductModal.populate(product, {
                         path: 'gallery', // Assuming 'gallery' is an array of strings
                         select: 'specification' // Specify the fields to populate
                     });
-
                     // Merge the populated fields into the original product
                     const mergedProduct = { ...product, ...populatedProduct };
-
                     // Merge with the product-specific order data
                     return { ...mergedProduct, ...products };
                 }
@@ -1408,35 +1069,19 @@ const getOrderSinglePage = async (req, res, next) => {
                 console.log(error.message);
             }
         }));
-
         completeData.forEach((item, index) => {
             item.status = order.status; // Assuming 'status' is the correct field name
         });
-
         const addressToShip = user.shippingAddress.find((shippingAddress) => shippingAddress._id.toString() === order.addressToShip.toString())
-
-
-
-
         res.render('users/orderSinglePage', { order: completeData, addressToShip, brands, user, orderId });
-        console.log("completeData", completeData)
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 }
-
 const postCancellOrder = async (req, res, next) => {
-    console.log("inside postCancellOrder");
     try {
-        console.log("req.body.newFormData", req.body.newFormData);
         const userId = req.session.userId;
         const { orderId, cancelMessage, modeOfRefund } = req.body.newFormData;
-
-        console.log("userId:", userId);
-        console.log("orderId:", orderId);
-        console.log("cancelMessage:", cancelMessage);
-        console.log("modeOfRefund:", modeOfRefund);
-
         const updatedUser = await UserModal.updateOne(
             {
                 _id: userId,
@@ -1450,30 +1095,20 @@ const postCancellOrder = async (req, res, next) => {
                 }
             }
         );
-
-        console.log("updatedUser:", updatedUser);
-
         if (updatedUser.nModified === 1) {
             // Check if an order was actually updated
-            console.log('Order cancelled successfully');
             res.status(200).json({ success: true });
         } else {
-            console.log('Order not found or could not be cancelled');
             res.status(400).json({ success: false, message: 'Order not found or could not be cancelled' });
         }
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 };
-
-
 const postOrderReturnRequest = async (req, res, next) => {
     try {
-
         const userId = req.session.userId;
         const { orderId, returnMessage, modeOfRefund } = req.body.newFormData
-        console.log("returnMessage", returnMessage);
-
         await UserModal.updateOne(
             {
                 _id: userId,
@@ -1488,37 +1123,26 @@ const postOrderReturnRequest = async (req, res, next) => {
             }
         );
         res.status(200).json({ success: true });
-
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
-
 const postWallet = async (req, res, next) => {
     try {
         let wallet = await UserModal.find({ _id: req.session.userId }, { _id: 0, "wallet.balance": 1 })
-        console.log("wallet", wallet);
         res.json({ wallet })
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
-
-
 const postRazorPayCreateOrder = async (req, res, next) => {
     try {
-        console.log('inside postRazorPayCreateOrder');
-        console.log('req.body.newFormData.total', req.body.total);
-
         const amount = req.body.balaceToPay * 100
         const options = {
             amount: amount,
             currency: 'INR',
             receipt: 'razorUser@gmail.com'
         }
-
         razorpayInstance.orders.create(options,
             (err, order) => {
                 if (!err) {
@@ -1540,16 +1164,12 @@ const postRazorPayCreateOrder = async (req, res, next) => {
                 }
             }
         );
-
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
-
 const postAddWalletMoney = async (req, res, next) => {
     try {
-        console.log("req.body.newFormData", req.body.newFormData);
         let result = await UserModal.updateOne({ _id: req.session.userId }, {
             $inc: {
                 "wallet.balance": (parseFloat(req.body.newFormData.amount))
@@ -1567,44 +1187,31 @@ const postAddWalletMoney = async (req, res, next) => {
             }
         })
         let wallet = await UserModal.find({ _id: req.session.userId }, { _id: 0, "wallet.balance": 1 })
-        console.log(result);
         res.json({ success: true, wallet })
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
-
 const postMailCheck = async (req, res, next) => {
-    console.log('out try');
     try {
-        console.log('inside postMail');
-        console.log(req.body)
         let validation = await UserModal.find({ email: req.body.email })
         if (validation.length) {
-            console.log('inside validation.length');
             res.json({ mailExist: true })
         } else {
             res.json({ mailExist: false })
         }
     } catch (error) {
         errorHandler(error, req, res, next)
-
     }
 }
-
-
 const postRateProduct = async (req, res, next) => {
     try {
-        console.log("req.body.rating", req.body.rating);
         let { userId, rating, orderId, productId, userName } = req.body.rating;
-
         // Validate 'rating' to ensure it's a valid integer
         rating = parseInt(rating);
         if (isNaN(rating)) {
             return res.status(400).json({ error: 'Invalid rating value' });
         }
-
         // Update the rating in the user's order
         const result = await UserModal.findOneAndUpdate(
             {
@@ -1622,14 +1229,10 @@ const postRateProduct = async (req, res, next) => {
                 ]
             }
         );
-
-
         if (!result) {
             return res.status(404).json({ error: 'Record not found' });
         }
-
         const product = await ProductModal.findOne({ _id: productId, "rating.userId": userId });
-
         if (product) {
             // User has already rated the product, update the existing rating
             await ProductModal.updateOne(
@@ -1643,26 +1246,14 @@ const postRateProduct = async (req, res, next) => {
                 { $push: { rating: { rate: rating, userName: userName, userId } } }
             );
         }
-
-
         res.status(200).json({ message: 'Rating updated successfully' });
-
-
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 }
-
-
 const postReviewProduct = async (req, res, next) => {
     try {
-        console.log("req.body.rating", req.body.review);
         let { userId, review, orderId, productId, userName } = req.body.review;
-        console.log("====", review, productId, userId, userName, orderId);
-        console.log("====", typeof review);
-        console.log(review);
-        console.log(typeof review);
-
         const result = await UserModal.findOneAndUpdate(
             {
                 _id: userId,
@@ -1679,15 +1270,10 @@ const postReviewProduct = async (req, res, next) => {
                 ]
             }
         );
-
-
         if (!result) {
-            console.log('!result');
             return res.status(404).json({ error: 'Record not found' });
         }
-
         const product = await ProductModal.findOne({ _id: productId, "review.userId": userId });
-
         if (product) {
             // User has already rated the product, update the existing rating
             await ProductModal.updateOne(
@@ -1701,17 +1287,11 @@ const postReviewProduct = async (req, res, next) => {
                 { $push: { review: { review: review, userName: userName, userId } } }
             );
         }
-
-
         res.status(200).json({ message: 'Rating updated successfully' });
-
-
     } catch (error) {
         errorHandler(error, req, res, next);
     }
 }
-
-
 module.exports = {
     userHome,
     getUserHomeSort,

@@ -78,7 +78,6 @@ $('#table').DataTable();
       exportAsExcel(); 
       exportFile.value = "default"
     } else if (exportFile.value === 'pdf') {
-      console.log('Exporting as PDF...');
       await exportAsPDF(); 
       exportFile.value = "default"
     }

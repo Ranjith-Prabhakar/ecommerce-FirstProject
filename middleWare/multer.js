@@ -65,12 +65,9 @@ const bannerImageUpload = multer({ storage: bannerStorage });
 
 const productImageUpdation = multer.diskStorage({
     destination: (req, file, cb) => {
-        console.log(req.body);
         cb(null, "public/productImages")
     },
     filename: (req, file, cb) => {
-        console.log("im in multer req.body", req);
-        console.log("im in multer req.body.oldImage", req.body.oldImage);
         cb(null, `${req.body.oldImage}`); 
     },
     overwrite: true,

@@ -1,9 +1,5 @@
 const UserModal = require('../model/userModal')
 const errorHandler = require('../middleWare/errorMiddleWare')
-
-
-
-
 const getUserManagement = async (req, res) => {
     try {
         const users = await UserModal.find()
@@ -12,11 +8,6 @@ const getUserManagement = async (req, res) => {
         errorHandler(err, req, res, next);
     }
 }
-
-
-
-
-
 const postEditConfirm = async (req, res) => {
     try {
         let {userId,status} = req.body.userData
@@ -26,20 +17,14 @@ const postEditConfirm = async (req, res) => {
         errorHandler(err, req, res, next);
     }
 }
-
-
-
 const postDeleteConfirm = async (req, res) => {
     try {
         await UserModal.deleteOne({ _id: req.body.userId })
         res.json({success:true})
-      
-
     } catch (err) {
         errorHandler(err, req, res, next);
     }
 }
-
 module.exports = {
     getUserManagement,
     postEditConfirm,

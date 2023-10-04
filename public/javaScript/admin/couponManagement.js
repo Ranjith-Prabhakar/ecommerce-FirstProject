@@ -6,8 +6,6 @@ $('#table').DataTable();
   criteria.addEventListener('change', (event) => {
     event.preventDefault();
     let criteriaValue = criteria.value;
-    console.log(criteriaValue);
-
     // Get all the divs with class 'hiddenDiv'
     let hiddenDivs = document.querySelectorAll('.hiddenDiv');
 
@@ -63,12 +61,10 @@ $('#table').DataTable();
     cancell.addEventListener('click', async (event) => {
       event.preventDefault()
       let button = event.target
-      console.log("button", button);
       let couponData = {
         couponId: button.getAttribute('data-coupon-id'),
         value: button.innerText
       }
-      console.log("couponData", couponData);
 
       if (button.innerText === "Cancell") {
         try {
@@ -79,7 +75,6 @@ $('#table').DataTable();
             },
             body: JSON.stringify({ couponData })
           }).then(data => {
-            console.log("fetch success");
             button.innerText = "Expired"
             button.setAttribute('disabled', 'true');
             button.classList.add('bg-danger')
@@ -92,10 +87,3 @@ $('#table').DataTable();
     })
   })
 })
-
-// let couponUl = document.getElementById('couponUl')
-// let childEl = document.createElement('tr')
-// let td1 = document.createElement('td')
-// td1.innerText = newFormData.couponCode
-// childEl.appendChild(td1)
-// couponUl.prepend(childEl)

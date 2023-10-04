@@ -6,7 +6,6 @@ $('#table').DataTable();
   createBrand.addEventListener('submit', async (event) => {
     event.preventDefault()
     let brandName = createBrand.elements.brandName.value
-
     try {
       const response = await fetch("/createBrand", {
         method: 'post',

@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
   const confirmReturn = document.querySelectorAll('button[name="confirmReturn"]')
   confirmReturn.forEach(confirmReturn => {
     confirmReturn.addEventListener('click', async (event) => {
-      console.log("in", event.target);
       event.preventDefault()
       let orderData = {
         userId: event.target.getAttribute('data-userId'),
@@ -25,7 +24,6 @@ document.addEventListener('DOMContentLoaded', (e) => {
         modeOfRefund: event.target.getAttribute('data-mode-of-refund'),
         amount: event.target.getAttribute('data-amout')
       }
-      console.log(orderData);
       try {
         //
 

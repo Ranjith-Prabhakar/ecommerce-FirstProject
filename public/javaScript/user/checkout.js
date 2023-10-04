@@ -1,20 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-
-
-
-
-
-
     //single product increament
     let increamentButton = document.getElementById('increament')
-    console.log("increamentButton", increamentButton);
     let orderQuantity = document.querySelector('button[name="orderQuantity"]');
     if (increamentButton) {
         increamentButton.addEventListener('click', async (event) => {
             event.preventDefault()
             let increase = parseInt(orderQuantity.innerText)
-            console.log("increase", increase);
             let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
             increase++
             if (parseFloat(data_stock_availability) >= increase) {
@@ -33,15 +24,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     //single product decreament
     let decreamentButton = document.getElementById('decreament')
-    console.log("decreamentButton", decreamentButton);
     if (decreamentButton) {
         decreamentButton.addEventListener('click', async (event) => {
             event.preventDefault()
             let decrease = parseInt(orderQuantity.innerText);// took from above
             decrease--
-            console.log("decrease", decrease);
-            // let data_stock_availability = orderQuantity.getAttribute("data-stock-availability")
-
             if (decrease > 0) {
                 orderQuantity.innerText = decrease
                 let singleProductUnitPrice = document.getElementById('singleProductUnitPrice')
@@ -97,8 +84,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 for (let [key, value] of newAddressForm.entries()) {
                     newAddressFormData[key] = value
                 }
-
-                console.log(newAddressFormData);
                 try {
                     let response = await fetch('/editAddress', {
                         method: 'post',
@@ -118,10 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 } catch (error) {
                     console.log(error.message);
                 }
-
-                console.log(addressForm);
-
-
             })
         }
     })
@@ -156,8 +137,6 @@ document.addEventListener("DOMContentLoaded", () => {
         addressDelete[i].addEventListener('click', async (event) => {
             event.preventDefault()
             let data_objectId = addressDelete[i].getAttribute('data-objectId')
-            console.log(data_objectId);
-
             try {
                 let response = await fetch('/deleteAddress', {
                     method: 'post',
@@ -286,9 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let payableAmountEl = document.getElementById('payableAmount')
     let balanceAmountEl = document.getElementById('balanceAmount')
     if (wallet) {
-        console.log("wallet", wallet);
         let walletBalance = wallet.getAttribute('data-wallet-balance')
-        console.log("walletBalance", walletBalance);
         wallet.addEventListener('click', (event) => {
             let singleProductSum = document.getElementById('singleProductUnitPrice')
             let singleProductPrice = 0
@@ -342,10 +319,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         cartSumElement.innerText = balanceAmountEl.innerText
         if (parseFloat(balanceAmountEl.innerText) !== 0) {
-            console.log('inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${walletBalanceEl.innerText}`)
         } else {
-            console.log('else of inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${payableAmountEl.innerText}`)
         }
 
@@ -371,10 +346,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // }
         cartSumElement.innerText = balanceAmountEl.innerText
         if (parseFloat(balanceAmountEl.innerText) !== 0) {
-            console.log('inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${walletBalanceEl.innerText}`)
         } else {
-            console.log('else of inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${payableAmountEl.innerText}`)
         }
 
@@ -391,17 +364,10 @@ document.addEventListener("DOMContentLoaded", () => {
     onlinePaymentWallet.addEventListener('click', (event) => {
         event.preventDefault()
         paymentMethodRadioButtonUpi.checked = true
-        // valueAfterCoupon.innerText = balanceAmountEl.innerText
-        // valueAfterCoupon.setAttribute('data-wallet-money', `${balanceAmountEl.innerText}`)
-        // if(cartSumElement){
-        //     cartSumElement.innerText = balanceAmountEl.innerText
-        // }
         cartSumElement.innerText = balanceAmountEl.innerText
         if (parseFloat(balanceAmountEl.innerText) !== 0) {
-            console.log('inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${walletBalanceEl.innerText}`)
         } else {
-            console.log('else of inside balanceAmountEl !== 0');
             cartSumElement.setAttribute('data-wallet-money', `${payableAmountEl.innerText}`)
         }
         wallet.classList.add('d-none')
@@ -456,8 +422,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             } else {
                                 newFormData.total = productPrice
                             }
-                            console.log("newFormData ====", newFormData);
-                            console.log("cartSumElement ====", cartSumElement);
                         } else {
                             let productList = document.getElementsByClassName('productList')
                             let price = parseFloat(valueAfterCoupon.innerText)
@@ -478,8 +442,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                     newFormData.total += parseFloat(head4.getAttribute('data-product-price'))
                                 }
                             }
-                            console.log("newFormData-----", newFormData);
-
                         }
                         break
                     }

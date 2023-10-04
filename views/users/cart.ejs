@@ -6,7 +6,7 @@
 
                     <!-- cart value -->
                     <div class="d-flex justify-content-around my-4 text-white bg-dark container rounded-1 ">
-                        <h1 id="cartPrice" data-cartPrice="<%=cartValue %>">Cart Value :<span id="cartPriceSpan">
+                        <h1 id="cartPrice" data-cartPrice="<%=cartValue %>">Cart Value : ₹ <span id="cartPriceSpan">
                                 <%=cartValue %>
                             </span> </h1>
                         <a href='/checkOutPage?cart=true' class="btn btn-success mt-2 h-25 "><i class="bi bi-bag-fill ">
@@ -35,15 +35,6 @@
                                                     class="read-only row mb-3 cart-item-background justify-content-center align-items-center ">
                                                     <div class="col-3">
                                                         <div class="d-flex">
-                                                            <!-- Example checkbox for a product -->
-                                                            <!-- <div id="checkbox" class="me-2 ">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                id="productCheckbox_<%=cartProducts[i]._id%>"
-                                                                data-index="<%=i%>"
-                                                                data-product-id="<%=cartProducts[i]._id%>"
-                                                                data-product-price="<%=cartProducts[i].unitPrice  %>">
-                                                        </div> -->
-
                                                             <!-- product image -->
                                                             <div id="image">
                                                                 <img class="rounded-1  cart-Product-Image"
@@ -87,7 +78,8 @@
                                                     </div>
                                                     <div class="col">
                                                         <div id="data-2">
-                                                            <h5 id="productPrice<%=i %>">
+                                                            <p class="d-inline ">₹ </p>
+                                                            <h5 class="d-inline " id="productPrice<%=i %>">
                                                                 <%=cartProducts[i].unitPrice *
                                                                     cartProducts[i].cartQuantity%>
                                                             </h5>
@@ -179,7 +171,8 @@
                                                         </div>
                                                         <div class="col">
                                                             <div id="data-2">
-                                                                <h5 id="productPrice<%=i %>">
+                                                                <p class="d-inline ">₹ </p>
+                                                                <h5 class="d-inline " id="productPrice<%=i %>">
                                                                     <%=cartProducts[i].unitPrice *
                                                                         cartProducts[i].cartQuantity%>
                                                                 </h5>
