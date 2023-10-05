@@ -58,13 +58,26 @@
                                           <% } %>
 
                       </div>
-                      <% if(order.review) {%>
-                        <textarea class="orderSinglePage-textArea-background rounded-2   p-3  text-white " name="review"
-                          id="reviewMessage<%=index%>" cols="40" rows="2" placeholder="<%=order.review%>"></textarea>
-                        <i id="submitReview<%=index%>" class="bi bi-send d-none "></i>
+                      <% if(order.review && order.review.length ) {%>
+
+                        <% for(let i =0;i<order.review.length;i++) {%>
+                          <% if(order.review[i].userId === user.userId) {%>
+                            <textarea class="orderSinglePage-textArea-background rounded-2   p-3  text-white " name="review"
+                            id="reviewMessage<%=index%>" cols="40" rows="2" placeholder="<%=order.review%>"></textarea>
+                          <i id="submitReview<%=index%>" class="bi bi-send d-none "></i>
+                          <% break %>
+                          <% }else{ %>
+                            <textarea class="orderSinglePage-textArea-background rounded-2   p-3  text-white "
+                              name="review" id="reviewMessage<%=index%>" cols="40" rows="2"
+                              placeholder="enter the review"></textarea>
+                            <i id="submitReview<%=index%>" class="bi bi-send d-none "></i>
+                            <% } %>
+                          <% } %>
+                        
                         <% }else{ %>
                           <textarea class="orderSinglePage-textArea-background rounded-2   p-3  text-white "
-                            name="review" id="reviewMessage<%=index%>" cols="40" rows="2"></textarea>
+                            name="review" id="reviewMessage<%=index%>" cols="40" rows="2"
+                            placeholder="enter the review"></textarea>
                           <i id="submitReview<%=index%>" class="bi bi-send d-none "></i>
                           <% } %>
                     </div>
