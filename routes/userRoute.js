@@ -2,6 +2,7 @@ const router = require('express').Router()
 const userController = require('../controller/userController')
 const { userRestriction, userSessionHandler, userValidation } = require('../middleWare/userValidator')
 const { profileImageUpload } = require('../middleWare/multer')
+const couponExpiry = require('../middleWare/couponExpiry')
 
 router.get('/', userSessionHandler, userController.userHome)
 router.get('/home/:paramName', userSessionHandler, userController.userHome)
@@ -35,7 +36,7 @@ router.post('/addToCart',userSessionHandler, userValidation,userController.postA
 router.post('/updateCartProductQty',userSessionHandler, userValidation,userController.postUpdateCartProductQty)
 router.post('/removeFromCart',userSessionHandler, userValidation,userController.postRemoveFromCart)
 // checkOut
-router.get('/checkOutPage',userSessionHandler,userValidation,userController.getCheckOutPage)
+router.get('/checkOutPage',userSessionHandler,userValidation,couponExpiry,userController.getCheckOutPage)
 router.post('/buySelectedProducts',userSessionHandler,userValidation,userController.postBuySelectedProducts)
 router.post('/orderPlacement',userSessionHandler,userValidation,userController.postOrderPlacement)
 // order

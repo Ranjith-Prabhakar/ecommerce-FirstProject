@@ -8,8 +8,7 @@ const PORT = process.env.PORT || 5000
 // data base
 const  mongoDb = require('./configuration/mongoDb')
 mongoDb()
-//cron-for scheduling a middleware
-const cron = require('node-cron')
+
 
 //importing routers
 const adminRoute = require('./routes/adminRoute')
@@ -21,15 +20,6 @@ const productRoute = require('./routes/productRoute')
 const orderRoute = require('./routes/orderRoute')
 const couponRoute = require('./routes/couponRoute')
 const returnRoute = require('./routes/returnRoute')
-//importing scheduling middleware
-const couponExpiryMiddleWare = require('./middleWare/couponExpiry')
-//activation of coupon scheduling using corn
-cron.schedule('0 0 * * *', () => {//it will call every day at midnight
-    couponExpiryMiddleWare.updateExpiredCoupons();
-  });
-
-
-
 //static file managment
 app.use(express.static('public'))
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
