@@ -31,7 +31,7 @@
 
                   </div>
                   <!--  -->
-                  <% if(order.status !=='returned' ) {%>
+                  <% if(order.status ==='delivered') {%>
 
                     <div class="col-7 text-start ">
                       <h6 class="mt-1 ">Rate and Review</h6>
@@ -59,7 +59,6 @@
 
                       </div>
                       <% if(order.review && order.review.length ) {%>
-
                         <% for(let i =0;i<order.review.length;i++) {%>
                           <% if(order.review[i].userId === user.userId) {%>
                             <textarea class="orderSinglePage-textArea-background rounded-2   p-3  text-white " name="review"
@@ -71,6 +70,7 @@
                               name="review" id="reviewMessage<%=index%>" cols="40" rows="2"
                               placeholder="enter the review"></textarea>
                             <i id="submitReview<%=index%>" class="bi bi-send d-none "></i>
+                            <% break %>
                             <% } %>
                           <% } %>
                         

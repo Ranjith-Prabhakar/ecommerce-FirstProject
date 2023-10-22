@@ -136,7 +136,7 @@ const User = mongoose.Schema({
         modeOfPayment: String,
         status: {
             type: String,
-            enum: ['placed', 'cancelledByAdmin', 'cancelledByClient', 'packed', 'inTransit', "deliverd", "returnInProgress", "returned"],
+            enum: ['placed', 'cancelledByAdmin', 'cancelledByClient', 'packed', 'inTransit', "delivered", "returnInProgress", "returned"],
             default: 'placed'
         },
        

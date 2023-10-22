@@ -1074,6 +1074,7 @@ const getOrderSinglePage = async (req, res, next) => {
         });
         const addressToShip = user.shippingAddress.find((shippingAddress) => shippingAddress._id.toString() === order.addressToShip.toString())
         res.render('users/orderSinglePage', { order: completeData, addressToShip, brands, user, orderId });
+        console.log("completeData",completeData)
     } catch (error) {
         errorHandler(error, req, res, next);
     }
