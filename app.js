@@ -12,7 +12,6 @@ mongoDb()
 
 //importing routers
 const adminRoute = require('./routes/adminRoute')
-const userRoute = require('./routes/userRoute')
 const userManagementRoute = require('./routes/userManagementRoute')
 const bannerRoute = require('./routes/bannerRoute')
 const brandRoute = require('./routes/brandRoute')
@@ -20,6 +19,11 @@ const productRoute = require('./routes/productRoute')
 const orderRoute = require('./routes/orderRoute')
 const couponRoute = require('./routes/couponRoute')
 const returnRoute = require('./routes/returnRoute')
+const userRoute = require('./routes/userRoute')
+const userProfileRoute = require('./routes/userProfileRoute')
+const userCartRoute = require('./routes/userCartRoute')
+const userCheckOutRoute = require('./routes/userCheckOutRoute')
+const userOrderRoute = require('./routes/userOrderRoute')
 //static file managment
 app.use(express.static('public'))
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
@@ -69,6 +73,10 @@ app.use(productRoute)
 app.use(orderRoute)
 app.use(couponRoute)
 app.use(returnRoute)
+app.use(userProfileRoute)
+app.use(userCartRoute)
+app.use(userCheckOutRoute)
+app.use(userOrderRoute)
 
 
 
