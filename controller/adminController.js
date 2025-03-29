@@ -10,23 +10,23 @@ const moment = require('moment');
 
 ////////////////==============================================================================================
 
-// const getAdminSignUp  = (req,res)=>{
-//     res.render('./admin/adminSignUp')
-// }
+const getAdminSignUp  = (req,res)=>{
+    res.render('./admin/adminSignUp')
+}
 
-// const postAdminSignUp =async(req,res)=>{
-//     let hash = await bcrypt.hash(req.body.password, 4)
-//     const admin = await AdminModal({
-//         firstName:req.body.firstName,
-//         lastName:req.body.lastName,
-//         email:req.body.email,
-//         phone:req.body.phone,
-//         userName:req.body.userName,
-//         password:hash,
-//     })
-//     const Admin = await admin.save()
-//     res.end()
-// }
+const postAdminSignUp =async(req,res)=>{
+    let hash = await bcrypt.hash(req.body.password, 4)
+    const admin = await AdminModal({
+        firstName:req.body.firstName,
+        lastName:req.body.lastName,
+        email:req.body.email,
+        phone:req.body.phone,
+        userName:req.body.userName,
+        password:hash,
+    })
+    const Admin = await admin.save()
+    res.end()
+}
 
 
 ////////////////==============================================================================================
@@ -46,14 +46,16 @@ const getAdminLogin = (req, res, next) => {
         errorHandler(err, req, res, next);
     }
 }
-const postAdminLogin = async (req, res,next) => {
+const postAdminLogin = async (req, res, next) => {
     try {
         const adminData = await AdminModal.findOne({ userName: req.body.userName, isAdmin: true })
+        console.log('user obj', adminData)
         if (adminData) {
             bcrypt.compare(req.body.password, adminData.password, async (err, result) => {
                 if (err) {
                     console.error('Error comparing passwords:', err);
                 } else {
+                    console.log('inside else j====> ',result)
                     if (result) {
                         req.session.isAdmin = true
                         let hash = await bcrypt.hash('helloworld', 2)
@@ -68,7 +70,8 @@ const postAdminLogin = async (req, res,next) => {
             });
         } else {
             req.session.loginErrorMessage = 'invalid username or password'
-            res.redirect('/digiWorld/admin/adminLogin')
+            // res.redirect('/digiWorld/admin/adminLogin') // changed TOI
+            res.redirect('/adminLogin')
         }
     } catch (error) {
         errorHandler(error, req, res, next);
@@ -241,30 +244,30 @@ const postAdminLogout = (req, res) => {
 }
 const getSalesReport = async (req, res, next) => {
     try {
-            let orders = await UserModal.find({}, { firstName: 1, lastName: 1, orders: 1 });
-            let salesReport = []
-            for (let i = 0; i < orders.length; i++) {
-              for (let j = 0; j < orders[i].orders.length; j++) {
+        let orders = await UserModal.find({}, { firstName: 1, lastName: 1, orders: 1 });
+        let salesReport = []
+        for (let i = 0; i < orders.length; i++) {
+            for (let j = 0; j < orders[i].orders.length; j++) {
                 salesReport.push({
-                  userId: orders[i]._id,
-                  firstName: orders[i].firstName,
-                  lastName: orders[i].lastName,
-                  total: orders[i].orders[j].grossTotal,
-                  orderId: orders[i].orders[j]._id,
-                  orderDate: orders[i].orders[j].orderDate,
-                  status: orders[i].orders[j].status
+                    userId: orders[i]._id,
+                    firstName: orders[i].firstName,
+                    lastName: orders[i].lastName,
+                    total: orders[i].orders[j].grossTotal,
+                    orderId: orders[i].orders[j]._id,
+                    orderDate: orders[i].orders[j].orderDate,
+                    status: orders[i].orders[j].status
                 })
-              }
             }
-            let delivered = salesReport.filter(salesReport=>salesReport.status === "delivered")
-        res.render('./admin/salesReport/salesReport', { delivered})
+        }
+        let delivered = salesReport.filter(salesReport => salesReport.status === "delivered")
+        res.render('./admin/salesReport/salesReport', { delivered })
     } catch (error) {
         errorHandler(error, req, res, next)
     }
 }
 module.exports = {
-    // getAdminSignUp,
-    // postAdminSignUp,
+    getAdminSignUp,
+    postAdminSignUp,
     getAdminLogin,
     postAdminLogin,
     getAdminPanel,
