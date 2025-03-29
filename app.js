@@ -24,8 +24,12 @@ const userProfileRoute = require('./routes/userProfileRoute')
 const userCartRoute = require('./routes/userCartRoute')
 const userCheckOutRoute = require('./routes/userCheckOutRoute')
 const userOrderRoute = require('./routes/userOrderRoute')
+
 //static file managment
-app.use(express.static('public'))
+// app.use(express.static('public'))
+app.use('/style', express.static(path.join(__dirname, 'public/style')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/css', express.static(__dirname + '/node_modules/bootstrap/dist/css'));
 app.use('/js', express.static(__dirname + '/node_modules/bootstrap/dist/js'));
 
